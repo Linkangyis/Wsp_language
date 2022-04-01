@@ -30,7 +30,7 @@ type Builds_Parameter struct {
 var debugs int
 func DLS_So_Start(){
     debugs = 0
-    data, _ := ioutil.ReadFile("./wsp.ini")
+    data, _ := ioutil.ReadFile(os.Getenv("WSPPATH")+"/wsp.ini")
     inis:=strings.Split(string(data),"\n" )
     for i:=0;i<=len(inis)-1;i++{
         iniss:=strings.Split(inis[i],"=" )
