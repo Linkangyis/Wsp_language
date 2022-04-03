@@ -1,0 +1,106 @@
+print(Time())
+$t1 = Time()
+$a = 1
+$c = 100
+$b = $a = $c
+$c=1
+$rr=ADD($a,$b,$c)
+$c = 11
+
+$num = ADD($a,$b,$c)$b = $a = print(123456)
+print("测试")
+print(1)    print($num)
+print("cs")
+$C[1][1][2][3] = $rr
+
+
+$C[1][1][2]=$C[1][1][2][3]
+
+$Cc = $C[1][1][2]
+
+print(10010)
+$SSS=$C[A][A][A]=$C[B][B][B]=$PPP=print(10010)
+
+$C[A][1][2]="1"
+
+$wense = $C[A][1][2]
+
+$wense = 458
+$C[A][1][2] = $wense
+
+$aaa=$bbb=$ccc=print("s")
+print($C[A][1][2])
+
+function aaa ($a,$b,$c){
+    $num = ADD($a,$b,$c)
+    print($num)
+    $num = ADD(18000,$num)
+    print("nmsl")
+    return $num
+}
+$i=789789789
+for ($i=0;$i<=150;1;$i++){
+    print($i)
+}
+aaa(1,2,3)
+
+$cft = aaa(10,10,10)
+
+print($cft)
+
+Test("456456")
+
+Test("456456") 
+Test("456456")
+Test("456456")
+
+if ($cft==0){
+    print(1)
+}else if(2==2){
+    print(2)
+}else{
+    print(3)
+}
+
+if ($cft==18030){
+    print(1)
+}else if(2==2){
+    print(2)
+}else{
+    print(3)
+}
+if (print(2)){
+    print("ls");
+}else if(print(2)){
+        print("ls1");
+}else{
+        print("ls2");
+}
+
+if (1){
+    print(1433223);
+}
+$sssk = TRUE
+if (TRUE){
+    print("嘿嘿")
+}
+if ($sssk){
+    print(123)
+}
+
+$hls=SUB(4,3)
+
+print($hls)
+print(SUB(4,3))
+print(SUB(4,3),uu,su)
+print(1)
+
+if (SUB(2,1)){
+    print("演示结束")
+}
+
+print(print(1,2),3,4)
+
+print("测试")
+print(Time())
+print(SUB($t1,Time()))

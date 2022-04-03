@@ -53,21 +53,30 @@ func So_DLL_vm(file string)(map[string]plugin.Symbol){
     }
     return So_func_map
 }
+
+func Parameter_processing(a string)(map[int]string){
+    map_snum:=0
+    returns :=make(map[int]string)
+    tokenser:=token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(a)))
+    for i:=0;i<=len(tokenser)-1;i++{
+        if tokenser[i][1]==","{
+            map_snum++
+        }else{
+            returns[map_snum]+=tokenser[i][1]
+        }
+    }
+    for i:=0;i<=len(returns)-1;i++{
+        returns[i]=Var_so_all(returns[i])
+    }
+    return returns
+}
+
 func print_vm(parameter Builds_Parameter)(string){
     a:=parameter.a
-    opcode:=parameter.opcode
-    lens:=parameter.lens
-    if string(a[0])==string("$"){
-        fmt.Println(Vars[types.Var_so(a)])
-    }else if string(a[0])==string("\""){
-        fmt.Println(types.Strings_so(a))
-    }else if types.IsNum(a){
-        fmt.Println(a)
-    }else{
-        fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:","print(",a,") \n 错误原因：其中括号内容存在异常，请检查\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
-        os.Exit(0)
-    }
-    return a
+    ms:=Parameter_processing(a)
+    rs:=ms[0]
+    fmt.Println(rs)
+    return rs
 }
 func add_vm(parameter Builds_Parameter)(string){
     a:=parameter.a
@@ -93,7 +102,7 @@ func vars_vm_array(parameter Builds_Parameter)(string){
     ft:=parameter.ft
     
     if opcode[types.Ints(c)][0]=="0"{
-        Vars[a]=opcode[types.Ints(c)][1]
+        Vars[a]=Var_so_all(opcode[types.Ints(c)][1])
     }else if opcode[types.Ints(c)][0]=="302"{
         Vars[a]=Vars[opcode[types.Ints(c)][2]]
     }else if opcode[types.Ints(c)][0]=="300"{
@@ -101,7 +110,7 @@ func vars_vm_array(parameter Builds_Parameter)(string){
     }else if opcode[types.Ints(c)][0]=="304" || opcode[types.Ints(c)][0]=="301"{
         for i:=lens;i<=len(opcode)-1;i++{
             if opcode[i][0]==types.Strings(0){
-                Vars[a]=opcode[i][1]
+                Vars[a]=Var_so_all(opcode[i][1])
                 break
             }else if opcode[i][0]==types.Strings(302){
                 Vars[a]=Vars[opcode[i][2]]
@@ -149,11 +158,15 @@ func vars_vm_array(parameter Builds_Parameter)(string){
 }
 
 func code_null(parameter Builds_Parameter)(string){
-
     return "NULL"
 }
 
 func Var_so_all(var_name string)(string){
+    if var_name=="TRUE"{
+        return "1"
+    }else if var_name=="FALSE"{
+        return "0"
+    }
     if string(var_name[0])=="$"{
         return Vars[types.Var_so(var_name)]
     }else if types.IsNum(var_name){
@@ -167,12 +180,12 @@ func Var_so_all(var_name string)(string){
             b      : bd.Codes[0][3],
             c      : bd.Codes[0][4],
             opcode : bd.Codes,
-            lens   : 99999,
+            lens   : 0,
             fs     : bd.Funcs,
             ft     : bd.Funcs_list,
         }
-        
-        return vm_s[types.Ints(bd.Codes[0][0])](Buildse)
+        res := vm_s[types.Ints(bd.Codes[0][0])](Buildse)
+        return res
     }
 }
 
@@ -185,13 +198,19 @@ func if_vm(parameter Builds_Parameter)(string){
     ft:=parameter.ft
     lone:=token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_var(a)))
     addorabb:=lone[2][1]
+    if addorabb==""{
+        if Var_so_all(a)=="1"{
+            vm_funcs_l(fs[c],fs,ft,"(NULL TO IF)")
+            return "TRUE"
+        }
+    }
     A:=lone[0][1]
     B:=lone[3][1]
     lock :=0
     for i:=lens;i<=len(opcode)-1;i++{
         if opcode[i][0]=="25"&&lock==0{
             if ifs(A,B,addorabb){
-                vm_funcs_l(fs[c],fs,ft,"(NULL TO FOR)")
+                vm_funcs_l(fs[c],fs,ft,"(NULL TO IF)")
                 break
             }
             lock=1
@@ -200,12 +219,18 @@ func if_vm(parameter Builds_Parameter)(string){
             addorabb=lone[2][1]
             A=lone[0][1]
             B=lone[3][1]
+            if addorabb==""{
+                if Var_so_all(opcode[i][2])=="1"{
+                    vm_funcs_l(fs[opcode[i][4]],fs,ft,"(NULL TO IF)")
+                    return "TRUE"
+                }
+            }
             if ifs(A,B,addorabb){
-                vm_funcs_l(fs[opcode[i][4]],fs,ft,"(NULL TO FOR)")
+                vm_funcs_l(fs[opcode[i][4]],fs,ft,"(NULL TO IF)")
                 break
             }
         }else if opcode[i][0]=="26"{
-            vm_funcs_l(fs[opcode[i][4]],fs,ft,"(NULL TO FOR)")
+            vm_funcs_l(fs[opcode[i][4]],fs,ft,"(NULL TO IF)")
             break
         }else{
             break
@@ -266,14 +291,15 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
         returns = vm_funcs(fs[function_name],fs,ft,function_name)
         Vars = Var_tmps
     }else if  _, oks := So_func_map[function_name]; oks {
-        So_func_map[function_name].(func(string) string)(a)
         Vars = Var_tmps
+        returns=So_func_map[function_name].(func(string) string)(a)
     }else{
         fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:",function_name+"(",a,") \n 错误原因：函数"+function_name+"不存在\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
         os.Exit(0)
     }
     return returns
 }
+
 func vars_fors_vars(varse string,vs int){
     Vars[varse]=types.Strings(vs)
 }

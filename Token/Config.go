@@ -31,6 +31,7 @@ func token_map()(map[string]int){     //token对应的token序号
     maps["$"] = 300;
     maps["array"] = 400;
     maps["ADD"] = 401;
+    maps[","] = 600;
     return maps;
 }
 func token_text_map()(map[string]string){    //token对应的token值
@@ -64,5 +65,6 @@ func token_text_map()(map[string]string){    //token对应的token值
     maps["$"] = "V_VAR";
     maps["array"] = "ARRAY";
     maps["ADD"] = "ADD";
+    maps[","] = "FG";
     return maps;
 }
