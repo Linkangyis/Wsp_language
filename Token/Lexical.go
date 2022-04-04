@@ -35,6 +35,7 @@ func Wsp_Lexical(file string)(map[int][4]string){
                                                     /*读取文件 并放在data变量  ---start*/
     data, _ := ioutil.ReadFile(file)
     code :=string(data)+"\n"+"\n"
+    code=Code_Notes(code)
                                                     /*读取文件 并放在data变量   --- end*/
                                                     /*设置全局循环数值         ---start*/
     num := 0;           //该opcode指令集位置
