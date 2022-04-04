@@ -1,5 +1,5 @@
 # Wsp_language
-【简介】基于golang开发的解释型语言 使用wsp虚拟机，效率极高，当前版本 BETA 3<br>
+【简介】基于golang开发的解释型语言 使用wsp虚拟机，效率极高，当前版本 BETA 4<br>
 【优点】高效率 低内存 高性能 百次循环4~5ms<br>
 【支持系统】目前只支持Linux Uinx<br>
 【使用方法】<br>
