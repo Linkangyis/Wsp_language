@@ -3,7 +3,6 @@ package token
 import(
   "../Types"
   "../Maps"
-  "fmt"
 )
 
 func Text_ADD_strings(a int ,b int,token map[int][4]string)(string){         //在token中通过指定范围，把指定数据集中，并输出字符串 无视空行 
@@ -41,8 +40,7 @@ func Tokens_KUO_X(i int,tokens map[int][4]string)(map[int][4]string){    //获�
             for {
                 tokenfs := tokens[KUO_As]
                 token_idss :=types.Ints(tokenfs[0])
-                if tokens[KUO_As-1][1]=="\\" && types.Ints(tokens[KUO_As][0])==101{
-                    tokens=maps.DEL_Map(KUO_As-1,tokens)
+                if types.Ints(tokens[KUO_As-1][0])==81 && types.Ints(tokens[KUO_As][0])==101{
                     KUO_As++
                     continue
                 }
@@ -64,10 +62,9 @@ func Tokens_KUO_X(i int,tokens map[int][4]string)(map[int][4]string){    //获�
         tokenf := tokens[z]
         token_ids :=types.Ints(tokenf[0])
         z++
-        if tokens[z-1][1]==string("\\"){
-            tokens=maps.DEL_Map(z-1,tokens)
+        if tokens[z-1][0]==string("81") && token_ids!=101{
+            z++
             continue 
-            fmt.Println(1)
         }
         if token_ids == 102 {
             if KUO_Asu==0 {
@@ -105,8 +102,7 @@ func Tokens_KUO_Z(i int,tokens map[int][4]string)(map[int][4]string){    //获�
             for {
                 tokenfs := tokens[KUO_As]
                 token_idss :=types.Ints(tokenfs[0])
-                if tokens[KUO_As-1][1]=="\\" && types.Ints(tokens[KUO_As][0])==121{
-                    tokens=maps.DEL_Map(KUO_As-1,tokens)
+                if tokens[KUO_As-1][0]=="81" && types.Ints(tokens[KUO_As][0])==121{
                     KUO_As++
                     continue
                 }
@@ -128,8 +124,8 @@ func Tokens_KUO_Z(i int,tokens map[int][4]string)(map[int][4]string){    //获�
         tokenf := tokens[z]
         token_ids :=types.Ints(tokenf[0])
         z++
-        if tokens[z-1][1]==string("\\"){
-            tokens=maps.DEL_Map(z-1,tokens)
+        if tokens[z-1][0]==string("81")&& token_ids!=121{
+            z++
             continue 
         }
         if token_ids == 122 {
@@ -168,8 +164,7 @@ func Tokens_KUO_D(i int,tokens map[int][4]string)(map[int][4]string){    //获�
             for {
                 tokenfs := tokens[KUO_As]
                 token_idss :=types.Ints(tokenfs[0])
-                if tokens[KUO_As-1][1]=="\\" && types.Ints(tokens[KUO_As][0])==111{
-                    tokens=maps.DEL_Map(KUO_As-1,tokens)
+                if tokens[KUO_As-1][0]=="81" && types.Ints(tokens[KUO_As][0])==111{
                     KUO_As++
                     continue
                 }
@@ -191,8 +186,8 @@ func Tokens_KUO_D(i int,tokens map[int][4]string)(map[int][4]string){    //获�
         tokenf := tokens[z]
         token_ids :=types.Ints(tokenf[0])
         z++
-        if tokens[z-1][1]==string("\\"){
-            tokens=maps.DEL_Map(z-1,tokens)
+        if tokens[z-1][0]==string("81")&& token_ids!=111{
+            z++
             continue 
         }
         if token_ids == 112 {
@@ -243,6 +238,7 @@ func Wsp_Grammar(tokens map[int][4]string)(map[int][4]string){
             }
             tokens=Tokens_KUO_D(i,tokens)
             i=i+2
+            
         }else if token_id==11{         //for循环
             tokens=Tokens_KUO_X(i,tokens)
             tokens=Tokens_KUO_D(i,tokens)
@@ -254,6 +250,10 @@ func Wsp_Grammar(tokens map[int][4]string)(map[int][4]string){
             tokens=Tokens_KUO_X(i,tokens)
         }else if token_id==401{
             tokens=Tokens_KUO_X(i,tokens)
+        }else if token_id==402{
+            tokens=Tokens_KUO_X(i,tokens)
+        }else{
+            continue
         }
     }
     return tokens

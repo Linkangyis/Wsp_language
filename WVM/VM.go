@@ -57,7 +57,7 @@ func So_DLL_vm(file string)(map[string]plugin.Symbol){
 func Parameter_processing(a string)(map[int]string){
     map_snum:=0
     returns :=make(map[int]string)
-    tokenser:=token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(a)))
+    tokenser:=token.Wsp_Grammar(token.Wsp_Semantic(token.Wsp_Lexical_func(a)))
     for i:=0;i<=len(tokenser)-1;i++{
         if tokenser[i][1]==","{
             map_snum++
@@ -158,7 +158,7 @@ func vars_vm_array(parameter Builds_Parameter)(string){
 }
 
 func code_null(parameter Builds_Parameter)(string){
-    return "NULL"
+    return "NULLS"
 }
 
 func Var_so_all(var_name string)(string){
@@ -278,10 +278,9 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
     function_name:=opcode[lens][1]
     vars_chuan := strings.Split(a, ",")
     Var_tmps:=maps.MAP_COPY_vars(Vars)
-    for key,_ := range Vars {
-        Vars[key]=""
-        delete(Vars,key)
-    }
+    Vars = make(map[string]string)
+    Vars = make(map[string]string)
+    Vars["Funs"] = "Y"
     returns := ""
     vars_ding := strings.Split(ft[function_name],"," )
     if _, ok := fs[function_name]; ok {
@@ -378,6 +377,23 @@ func for_vm(parameter Builds_Parameter)(string){
     }
     return "TRUE"
 }
+
+func vars_csc(parameter Builds_Parameter)(string){
+    a:=parameter.a
+    return Parameter_processing(a)[0]
+}
+var ALLS_OPCODE=make(map[int][6]string)
+func Ec_Op()(map[int][6]string){
+    return ALLS_OPCODE
+}
+var ALLS_FS=make(map[string]map[int][6]string)
+func Ec_Fs()(map[string]map[int][6]string){
+    return ALLS_FS
+}
+var ALLS_FT=make(map[string]string)
+func Ec_Ft()(map[string]string){
+    return ALLS_FT
+}
 func Wsp_VM(Buildse build.Builds_Struct){
     vm_s[12]=print_vm
     vm_s[301] = vars_vm_array
@@ -392,10 +408,13 @@ func Wsp_VM(Buildse build.Builds_Struct){
     vm_s[25] = if_vm
     vm_s[26] = code_null
     vm_s[28] = code_null
+    vm_s[402] = vars_csc
     
     
     Builds:=Buildse.Codes
-    
+    ALLS_OPCODE = Buildse.Codes
+    ALLS_FS = Buildse.Funcs
+    ALLS_FT = Buildse.Funcs_list
     for i:=0;i<=len(Builds)-1;i++{
         if v, ok := code_ok[i]; ok {
             code_ok[i] = v
@@ -429,11 +448,10 @@ func vm_funcs(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[st
     vm_s[27] = code_null
     vm_s[11] = for_vm
     vm_s[26] = code_null
+    vm_s[402] = vars_csc
     
     code_ok_f:=maps.MAP_COPY_codeok(code_ok)
-    for i:=0;i<=len(code_ok)-1;i++{
-        delete(code_ok,i)
-    }
+    code_ok = make(map[int]string)
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
         if Builds[i][0]==types.Strings(27){
@@ -455,7 +473,6 @@ func vm_funcs(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[st
             code_ok[i] = vm_s[types.Ints(Builds[i][0])](Buildse)
         }
     }
-    
     code_ok = code_ok_f
     return returns
 }
@@ -473,11 +490,10 @@ func vm_funcs_l(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[
     vm_s[200] = funcs_vm_run
     vm_s[27] = code_null
     vm_s[11] = for_vm
+    vm_s[402] = vars_csc
     
     code_ok_f:=maps.MAP_COPY_codeok(code_ok)
-    for i:=0;i<=len(code_ok)-1;i++{
-        delete(code_ok,i)
-    }
+    code_ok = make(map[int]string)
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
         if v, ok := code_ok[i]; ok {
@@ -491,6 +507,45 @@ func vm_funcs_l(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[
                 lens   : i,
                 fs     : fs,
                 ft     : ft,
+            }
+            code_ok[i] = vm_s[types.Ints(Builds[i][0])](Buildse)
+        }
+    }
+    
+    code_ok = code_ok_f
+    return returns
+}
+
+func Vm_Code_Run(Builds map[int][6]string)(string){
+    vm_s[12]=print_vm
+    vm_s[301] = vars_vm_array
+    vm_s[0] = code_null
+    vm_s[300] = code_null
+    vm_s[401] = add_vm
+    vm_s[304] = vars_vm_array
+    vm_s[302] = code_null
+    vm_s[10] = code_null
+    vm_s[200] = funcs_vm_run
+    vm_s[27] = code_null
+    vm_s[11] = for_vm
+    vm_s[402] = vars_csc
+    
+    code_ok_f:=maps.MAP_COPY_codeok(code_ok)
+
+    code_ok = make(map[int]string)
+    returns := ""
+    for i:=0;i<=len(Builds)-1;i++{
+        if v, ok := code_ok[i]; ok {
+            code_ok[i] = v
+        }else{
+            Buildse:=Builds_Parameter{
+                a      : Builds[i][2],
+                b      : Builds[i][3],
+                c      : Builds[i][4],
+                opcode : Builds,
+                lens   : i,
+                fs     : ALLS_FS,
+                ft     : ALLS_FT,
             }
             code_ok[i] = vm_s[types.Ints(Builds[i][0])](Buildse)
         }

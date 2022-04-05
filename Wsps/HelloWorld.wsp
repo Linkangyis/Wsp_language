@@ -1,0 +1,26 @@
+
+function A(){
+    print("测试服务A")
+    print(Time())
+    
+    $a = var("测试服务A")
+    Web_Print($a)
+    
+    for ($i=0;$i<=100;1;$i++){
+        Web_Print($i)
+    }
+    
+    Web_Print("测试服务A结束")
+}
+function B(){
+    print("测试服务B")
+    print(Time())
+    $a = var("测试服务B")
+    Web_Print($a)
+}
+New_Web("A","A")
+New_Web("B","B")
+New_Web("B/C","C")
+print("WEB服务器启动！")
+print("Log：")
+Web_Start("9968")

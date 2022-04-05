@@ -6,6 +6,17 @@ import(
   "io/ioutil"
 )
 
+func token_str_ifs(str string)(string){      //输出函数替换切片  可以自行定义 T_KH只是演示  代表空行
+    var maps = map[string]string{}
+    maps["\n"] = "";
+    //maps["\\"] = "";
+    
+    if v, ok := maps[str]; ok {      //判断是否有对应值
+        return v
+    }else{
+        return str
+    }
+}
 func token_str_if(str string)(string){      //输出函数替换切片  可以自行定义 T_KH只是演示  代表空行
     var maps = map[string]string{}
     maps["\n"] = "";
@@ -34,7 +45,7 @@ func token(str string,line int)([4]string){//判断token主题内容是否为字
 func Wsp_Lexical(file string)(map[int][4]string){
                                                     /*读取文件 并放在data变量  ---start*/
     data, _ := ioutil.ReadFile(file)
-    code :=string(data)+"\n"+"\n"
+    code :=string(data)+"\n"+"\n\n\n"
     code=Code_Notes(code)
                                                     /*读取文件 并放在data变量   --- end*/
                                                     /*设置全局循环数值         ---start*/
@@ -83,6 +94,20 @@ func Wsp_Lexical(file string)(map[int][4]string){
                                                     /*token分析结束              ---end*/
 }
 
+func token_funcs(str string,line int)([4]string){//判断token主题内容是否为字符串，如为字符串则返回T_TEXT token 否则匹配config.go设置的token进行判断
+    var tokens = map[string]int{}
+    tokens = token_map()
+    
+    var tokens_name = map[string]string{}
+    tokens_name = token_text_map()
+    
+    if v, ok := tokens[str]; ok {         //判断是否存在于config.go中
+        return [4]string{strconv.Itoa(v),token_str_ifs(str),tokens_name[str],strconv.Itoa(line)}    //存在  获取类型
+    }else{
+        return [4]string{strconv.Itoa(0),str,"T_TEXT",strconv.Itoa(line)}    //不存在 类型直接定义为sting
+    }
+}
+
 func Wsp_Lexical_func(code string)(map[int][4]string){
                                                     /*读取文件 并放在data变量  ---start*/
     code =string(code)+"\n"+"\n"
@@ -99,13 +124,13 @@ func Wsp_Lexical_func(code string)(map[int][4]string){
     code_len := len(code_wsp)-1             //统计数组总量并减一
     
     for i:=0;i<=code_len;i++{               //开启循环
-        tk := token(string(code_wsp[i][len(code_wsp[i])-1]),line);   //获取opcode主题最后一个字符串的token类型  只作为缓存作用
+        tk := token_funcs(string(code_wsp[i][len(code_wsp[i])-1]),line);   //获取opcode主题最后一个字符串的token类型  只作为缓存作用
         if tk[0] == strconv.Itoa(0){     //判断类型
             if i!=len(code_wsp)-1 {      //判断是否不为最后一个字符
                 tmp := code_wsp[i+1]     //把字符串数组中的下一个数组保存至tmp变量
                 code_wsp[i+1]=code_wsp[i]+code_wsp[i+1]    //将两个变量拼接
                 num_TEXTS++    //需要删除的字符串数组数量加一
-                if token(string(code_wsp[i+1][len(code_wsp[i+1])-1]),line)[0] != strconv.Itoa(0){    //判断下一个字符是否不为字符串类型
+                if token_funcs(string(code_wsp[i+1][len(code_wsp[i+1])-1]),line)[0] != strconv.Itoa(0){    //判断下一个字符是否不为字符串类型
                     code_wsp[i+1] = tmp
                     for z:=i-num_TEXTS+1;z<=i-1;z++{
                         code_wsp[z]=""          //根据num_TEXTS破坏字符串
@@ -118,11 +143,11 @@ func Wsp_Lexical_func(code string)(map[int][4]string){
             code_wsp[i]=string(code_wsp[i][len(code_wsp[i])-1])   //清空上次opcode留存的字符串，只保留本次opcode关键字
         }
         if lock_TEXT==1 {     //判断文本锁状态
-            return_map[num]=token(code_wsp[i],line)       //写入opcode
+            return_map[num]=token_funcs(code_wsp[i],line)       //写入opcode
             num++                                         //opcode位置加一
             lock_TEXT = 0                                 //关闭文本锁
-        }else if token(string(code_wsp[i][len(code_wsp[i])-1]),line)[0] != strconv.Itoa(0){    //否则判断最后一个字符的类型是否不为字符串
-            return_map[num]=token(code_wsp[i],line)       //写入opcode
+        }else if token_funcs(string(code_wsp[i][len(code_wsp[i])-1]),line)[0] != strconv.Itoa(0){    //否则判断最后一个字符的类型是否不为字符串
+            return_map[num]=token_funcs(code_wsp[i],line)       //写入opcode
             num++                                         //opcode位置加一
         }
         if code_wsp[i]=="\n"{                             //统计行数
@@ -133,8 +158,6 @@ func Wsp_Lexical_func(code string)(map[int][4]string){
                                                     /*token分析结束              ---end*/
 }
 
-
-
 func token_var(str string,line int)([4]string){//判断token主题内容是否为字符串，如为字符串则返回T_TEXT token 否则匹配config.go设置的token进行判断
     var tokens = map[string]int{}
     tokens["="] = 7
@@ -144,7 +167,7 @@ func token_var(str string,line int)([4]string){//判断token主题内容是否�
     tokens_name = token_text_map()
     
     if v, ok := tokens[str]; ok {         //判断是否存在于config.go中
-        return [4]string{strconv.Itoa(v),token_str_if(str),tokens_name[str],strconv.Itoa(line)}    //存在  获取类型
+        return [4]string{strconv.Itoa(v),token_str_ifs(str),tokens_name[str],strconv.Itoa(line)}    //存在  获取类型
     }else{
         return [4]string{strconv.Itoa(0),str,"T_TEXT",strconv.Itoa(line)}    //不存在 类型直接定义为sting
     }

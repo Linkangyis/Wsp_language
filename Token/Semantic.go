@@ -18,25 +18,25 @@ func Wsp_Semantic(Gra_Comp map[int][4]string)(map[int][4]string){
     KUO_Z:=0
     KUO_D:=0
     for i:=0;i<=len(Gra_Comp)-1;i++{
-        if Gra_Comp[i][0]==types.Strings(101){
+        if Gra_Comp[i][0]==types.Strings(101) && Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_X++
         }
-        if Gra_Comp[i][0]==types.Strings(121){
+        if Gra_Comp[i][0]==types.Strings(121) && Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_Z++
         }
-        if Gra_Comp[i][0]==types.Strings(111){
+        if Gra_Comp[i][0]==types.Strings(111) && Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_D++
         }
     }
     
     for i:=0;i<=len(Gra_Comp)-1;i++{
-        if Gra_Comp[i][0]==types.Strings(102){
+        if Gra_Comp[i][0]==types.Strings(102)&& Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_X--
         }
-        if Gra_Comp[i][0]==types.Strings(122){
+        if Gra_Comp[i][0]==types.Strings(122)&& Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_Z--
         }
-        if Gra_Comp[i][0]==types.Strings(112){
+        if Gra_Comp[i][0]==types.Strings(112)&& Gra_Comp[i-1][0]!=types.Strings(81){
             KUO_D--
         }
     }
