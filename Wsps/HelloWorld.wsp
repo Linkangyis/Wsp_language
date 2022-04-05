@@ -1,4 +1,3 @@
-
 function A(){
     print("测试服务A")
     print(Time())
@@ -13,14 +12,27 @@ function A(){
     Web_Print("测试服务A结束")
 }
 function B(){
+    Web_Header_Set("Content-Type","text/html; charset=utf-8")
     print("测试服务B")
     print(Time())
-    $a = var("测试服务B")
+    $a = var("<h5>测试服务B</h5><br><h5>测试服务B</h5>")
     Web_Print($a)
 }
-New_Web("A","A")
-New_Web("B","B")
-New_Web("B/C","C")
-print("WEB服务器启动！")
-print("Log：")
-Web_Start("9968")
+function TS2(){   //线程A函数
+    New_WebFiles("Public","./")
+    New_Web("A","A")
+    New_Web("","A")
+    New_Web("B","B")
+    New_Web("B/C","C")
+    print("服务A已开启")
+    Web_Start("9968")
+}
+function TS3(){   //线程B函数
+    print("服务B已开启")
+    New_WebFiles("Publics","../")
+    Web_Start("9958")
+}
+Multithreading("TS2") //启动线程A
+Multithreading("TS3") //启动线程B
+//线程A和线程B内存为共享
+Input("")  //线程锁，防止程序运行结束自动关闭

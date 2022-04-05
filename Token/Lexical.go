@@ -42,11 +42,21 @@ func token(str string,line int)([4]string){//判断token主题内容是否为字
     }
 }
 
+var Files string
+
+func Wsp_File_P()(string){
+    return Files
+}
 func Wsp_Lexical(file string)(map[int][4]string){
                                                     /*读取文件 并放在data变量  ---start*/
     data, _ := ioutil.ReadFile(file)
     code :=string(data)+"\n"+"\n\n\n"
+    lenf:=strings.Count(code,"function")
+    for i:=0;i<=lenf-1;i++{
+        code+="\n"
+    }
     code=Code_Notes(code)
+    Files = file
                                                     /*读取文件 并放在data变量   --- end*/
                                                     /*设置全局循环数值         ---start*/
     num := 0;           //该opcode指令集位置

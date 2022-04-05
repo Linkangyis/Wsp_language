@@ -41,7 +41,9 @@ func DLS_So_Start(){
         }
     }
 }
-
+func Wsp_File_E()(string){
+    return token.Wsp_File_P();
+}
 func So_DLL_vm(file string)(map[string]plugin.Symbol){
     p, _ := plugin.Open(file)
     add, _ := p.Lookup("H_Info")
