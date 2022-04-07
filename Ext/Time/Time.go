@@ -3,11 +3,14 @@ package main
 import(
     "time"
     "strconv"
+    "../../Types"
+    "../../WVM"
 )
 
 func H_Info()(map[int]string){
     info := make(map[int]string)
     info[0] = "Time"
+    info[1] = "Sleep"
     return info
 }
 
@@ -19,6 +22,10 @@ func Time(a string)(string){
     return strconv.FormatInt(time.Now().UnixNano(),10)
 }
 
-
+func Sleep(a string)(string){
+    str_arr:=vm.Parameter_processing(a)
+    time.Sleep(time.Duration(types.Ints(str_arr[0]))*time.Second)
+    return "1"
+}
 
 //go build -buildmode=plugin -o time.so Time.go

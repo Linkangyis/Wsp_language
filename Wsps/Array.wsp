@@ -1,0 +1,20 @@
+$a[1]="5"
+$a[2]="4"
+$a[3]="3"
+$a[4]="2"
+$a[5]="1"
+
+for ($i=1;$i<=5;1;$i++){
+    print($a[$i])
+}
+
+$two[1]=1
+$two[2]=3
+$two[3]=2
+$one[1][2]=189
+$one[189]=78 //等同于$one[$one[$two[1]][$two[$two[2]]]]=78
+print($one[$one[$two[1]][$two[$two[2]]]])
+
+$a = Time()
+print(SUB(Time(),Time()),SUB(Time(),Time()))
+print()

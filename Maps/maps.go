@@ -35,7 +35,7 @@ func MAP_COPY_codeok(token map[int]string)(map[int]string){         //copy一个
 func ADD_Map(a int ,token map[int][4]string)(map[int][4]string){    //在map指定位置ADD一个T_TEXT元素
     token_tmp:=MAP_COPY(token)
     tmps:=token[a]
-    token[a] = [4]string{types.Strings(0),"","T_TEXT",tmps[3]};
+    token[a] = [4]string{types.Strings(0),"\"\"","T_TEXT",tmps[3]};
     a++
     for i:=a;i<=len(token_tmp)-1;i++{
         t_a:=token_tmp[i-1]
