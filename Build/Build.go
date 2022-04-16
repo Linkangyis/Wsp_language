@@ -4,13 +4,16 @@ import(
   "../Types"
   "../Echo"
   "../Token"
-  //"fmt"
+  "strings"
 )
 type Builds_Struct struct {
     Codes  map[int][6]string
     Xovar  map[string]string     
     Funcs  map[string]map[int][6]string
     Funcs_list  map[string]string 
+}
+func testxs(a string)(string){
+    return strings.Replace(a, "\r", "", -1)
 }
 var Xovars_lens int =0
 var funxs =make(map[string]map[int][6]string)
@@ -87,8 +90,9 @@ func Wsp_Build(Sem_Comp map[int][4]string)(Builds_Struct){
             Build[Code_Build_NUM]=[6]string{Sem_Comp[i][0],Sem_Comp[i][1],Sem_Comp[i+2][1],"","",Sem_Comp[i][3]}
             Code_Build_NUM++
         }else if Sem_Comp[i][0]==types.Strings(0) && Sem_Comp[i-1][0]==types.Strings(7){
-            Build[Code_Build_NUM]=[6]string{Sem_Comp[i][0],Sem_Comp[i][1],Sem_Comp[i][1],Sem_Comp[i][1],Sem_Comp[i][1],Sem_Comp[i][3]}
+            Build[Code_Build_NUM]=[6]string{Sem_Comp[i][0],testxs(Sem_Comp[i][1]),testxs(Sem_Comp[i][1]),testxs(Sem_Comp[i][1]),testxs(Sem_Comp[i][1]),Sem_Comp[i][3]}
             Code_Build_NUM++
+            
         }else if Sem_Comp[i][0]==types.Strings(401){
             Build[Code_Build_NUM]=[6]string{Sem_Comp[i][0],Sem_Comp[i][1],Sem_Comp[i+2][1],"","",Sem_Comp[i][3]}
             Code_Build_NUM++

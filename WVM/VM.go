@@ -17,6 +17,7 @@ type vm_func func (parameter Builds_Parameter)(string)
 var vm_s =make(map[int]vm_func)
 var code_ok = make(map[int]string)
 var So_func_map=make(map[string]plugin.Symbol)
+var wsp_func_del []string
 
 type Builds_Parameter struct {
     a  string
@@ -28,6 +29,12 @@ type Builds_Parameter struct {
     ft map[string]string
 }
 var debugs int
+func CodesOk(s map[int]string){
+    code_ok=s
+}
+func CodesOkre()(map[int]string){
+    return code_ok
+}
 func DLS_So_Start(){
     debugs = 0
     data, _ := ioutil.ReadFile(os.Getenv("WSPPATH")+"/wsp.ini")
@@ -38,6 +45,8 @@ func DLS_So_Start(){
             So_DLL_vm(iniss[1])
         }else if iniss[0]=="wsp_debug" && iniss[1]=="1"{
             debugs = 1
+        }else if iniss[0]=="wsp_func_del"{
+            wsp_func_del = strings.Split(iniss[1], ",")
         }
     }
 }
@@ -313,6 +322,15 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
     ft:=Ec_Ft()
     
     function_name:=opcode[lens][1]
+    
+    for i:=0;i<=len(wsp_func_del)-1;i++{
+        if wsp_func_del[i]==function_name{
+            fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:",function_name+"(",a,") \n 错误原因：函数"+function_name+"被禁用\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
+            os.Exit(0)
+        }
+    }
+    
+    
     vars_chuan := Parameter_processing(a)
     vars_ding := strings.Split(ft[function_name],"," )
     Var_tmps:=maps.MAP_COPY_vars(Vars)
@@ -467,6 +485,7 @@ func Wsp_VM(Buildse build.Builds_Struct){
             code_ok[i] = vm_s[types.Ints(Builds[i][0])](Buildse)
         }
     }
+    
     if debugs==1{
         echo.Arr_Echo_Opcode_View(Builds,Vars,"(NULL)")
     }

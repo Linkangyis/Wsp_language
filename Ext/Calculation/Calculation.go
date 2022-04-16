@@ -10,6 +10,7 @@ func H_Info()(map[int]string){
     info[0] = "MUL"
     info[1] = "SUB"
     info[2] = "DIV"
+    info[3] = "Stick"
     return info
 }
 
@@ -40,5 +41,13 @@ func DIV(a string)(string){
     return types.Strings(add_num)
 }
 
+func Stick(a string)(string){
+    str_arr:=vm.Parameter_processing(a)
+    rstext:=""
+    for i:=0;i<=len(str_arr)-1;i++{
+        rstext+=str_arr[i]
+    }
+    return rstext
+}
 
 //go build -buildmode=plugin -o calculation.so Calculation.go

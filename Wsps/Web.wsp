@@ -1,3 +1,5 @@
+$a = var("114514")
+$a = 10086
 function A(){
     print("测试服务A")
     print(Time())
@@ -18,14 +20,21 @@ function B(){
     $a = var("<h5>测试服务B</h5><br><h5>测试服务B</h5>")
     Web_Print($a)
 }
-
+function C(){
+    Web_Header_Set("Content-Type","text/html; charset=utf-8")
+    print("测试服务C")
+    print(Time())
+    $a = var("<h1>测试服务C</h5><br><h5>测试服务C</h1>")
+    Web_Print($a)
+}
 function TS2(){   //线程A函数
-    Sleep(2)
     New_WebFiles("Public","./")
-    New_Web("A","A")
+    New_Web("AS","A")
+    //New_Web("ASS","A")
     New_Web("","A")
     New_Web("B","B")
     New_Web("B/C","C")
+    New_WebFiles("P","../Ext")
     print("服务A已开启")
     Web_Start("9968")
 }
@@ -36,17 +45,16 @@ function TS3(){   //线程B函数
     print("服务B已开启")
     Web_Start("9958")
 }
-
-Multithreading("TS4") //启动线程C
-
-function TS4(){   //线程C函数
-    New_WebFiles("P","../Ext")
-    print("服务C已开启")
-    Web_Start("9978")
+function ss($a){
+    Multithreading($a)
 }
+function rr(){
+    ss("TS2") //启动线程A
+    ss("TS3") //启动线程B
+}
+
 //谨慎使用多线程，以免线程堵塞
-Multithreading("TS2") //启动线程A
-Multithreading("TS3") //启动线程B
+rr()
 
 //线程A和线程B内存为共享
 Input("") //线程锁，防止程序运行结束自动关闭
