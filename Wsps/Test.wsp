@@ -33,6 +33,8 @@ print($C[A][1][2])
 
 function aaa ($a,$b,$c){
     $num = ADD($a,$b,$c)
+    $num = ADD($a,$b,$c)
+    print($num)
     print($num)
     $num = ADD(18000,$num)
     print("nmsl")

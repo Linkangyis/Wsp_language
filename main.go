@@ -29,6 +29,9 @@ func main(){
         file = str+"/"+os.Args[1]
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
+    }else if os.Args[1] == "version"{
+        fmt.Println("测试版 Beta 1.3\nVersion: BETA 1.3")
+        os.Exit(0)
     }else{
         fmt.Println("文件或路径不存在")
         fmt.Println(str+"/"+os.Args[1])

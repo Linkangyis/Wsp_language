@@ -10,6 +10,9 @@ import(
 func Wsp_Semantic(Gra_Comp map[int][4]string)(map[int][4]string){
     for i:=0;i<=len(Gra_Comp)-1;i++{
         if Gra_Comp[i][0]==types.Strings(6){
+            if Gra_Comp[i-2][0]!=types.Strings(300){
+                Gra_Comp[i-1]=[4]string{Gra_Comp[i-1][0],Gra_Comp[i-1][1]+" ",Gra_Comp[i-1][2],Gra_Comp[i-1][3]};
+            }
             Gra_Comp = maps.DEL_Map(i,Gra_Comp)
             i--
         }

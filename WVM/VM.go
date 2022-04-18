@@ -200,6 +200,7 @@ func code_null(parameter Builds_Parameter)(string){
 }
 
 func Var_so_all(var_name string)(string){
+    var_name = types.Trims(var_name)
     if var_name=="TRUE"{
         return "1"
     }else if var_name=="FALSE"{
@@ -216,7 +217,7 @@ func Var_so_all(var_name string)(string){
     }else if types.IsNum(var_name){
         return var_name
     }else if string(var_name[0])=="\""{
-        return types.Strings_so(var_name)
+        return types.Strings_so(types.Trims(var_name))
     }else{
         
         bd:=build.Wsp_Build(token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(var_name))))
@@ -321,7 +322,7 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
     fs:=parameter.fs
     ft:=Ec_Ft()
     
-    function_name:=opcode[lens][1]
+    function_name:=strings.Trim(opcode[lens][1]," ")
     
     for i:=0;i<=len(wsp_func_del)-1;i++{
         if wsp_func_del[i]==function_name{

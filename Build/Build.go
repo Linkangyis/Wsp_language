@@ -33,8 +33,8 @@ func Wsp_Build(Sem_Comp map[int][4]string)(Builds_Struct){
             Xovars_lens++
             Build[Code_Build_NUM]=[6]string{Sem_Comp[i][0],Sem_Comp[i+1][1],Sem_Comp[i+3][1],"","0x"+echo.Zero_int(6-len(types.Strings(Xovars_lens)))+types.Strings(Xovars_lens),Sem_Comp[i][3]}
             Xovars["0x"+echo.Zero_int(6-len(types.Strings(Xovars_lens)))+types.Strings(Xovars_lens)]=Sem_Comp[i+6][1]
-            funxs[Sem_Comp[i+1][1]]=Wsp_Build(token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(Sem_Comp[i+6][1])))).Codes
-            flist[Sem_Comp[i+1][1]]=Sem_Comp[i+3][1]
+            funxs[strings.Trim(Sem_Comp[i+1][1]," ")]=Wsp_Build(token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(Sem_Comp[i+6][1])))).Codes
+            flist[strings.Trim(Sem_Comp[i+1][1]," ")]=Sem_Comp[i+3][1]
             Code_Build_NUM++
             
             //i=i+3

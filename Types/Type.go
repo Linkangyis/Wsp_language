@@ -37,6 +37,9 @@ func IsNum(s string) bool {
     _, err := strconv.ParseFloat(s, 64)
     return err == nil
 }
+func Trims(a string)string{
+    return strings.Trim(a," ")
+}
 
 type Builds_Parameter struct {
     a  string

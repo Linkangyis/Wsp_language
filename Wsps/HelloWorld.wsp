@@ -1,9 +1,5 @@
-Multithreading("aa")
-for ($i=0;$i<=30;1;$i++){
-    print("吃啥")
-}
-function aa(){
-    for ($i=0;$i<=30;1;$i++){
-        print("人")
-    }
-}
+print( "Hello      World" )
+$a [ 1 ][ 1 ] = 1  //[]与[]之间不允许有空格
+$a = Time( "" ) 
+print($a)
+Eval("print(Time("     "))") //注意 多层嵌套不支持奇怪语法
