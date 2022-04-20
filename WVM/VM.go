@@ -35,7 +35,8 @@ func CodesOk(s map[int]string){
 func CodesOkre()(map[int]string){
     return code_ok
 }
-func DLS_So_Start(){
+func DLS_So_Start()(map[string]string){
+    re := make(map[string]string)
     debugs = 0
     data, _ := ioutil.ReadFile(os.Getenv("WSPPATH")+"/wsp.ini")
     inis:=strings.Split(string(data),"\n" )
@@ -47,8 +48,11 @@ func DLS_So_Start(){
             debugs = 1
         }else if iniss[0]=="wsp_func_del"{
             wsp_func_del = strings.Split(iniss[1], ",")
+        }else if iniss[0] != ""{
+            re[iniss[0]]=iniss[1]
         }
     }
+    return re
 }
 func Wsp_File_E()(string){
     return token.Wsp_File_P();
@@ -450,6 +454,7 @@ var ALLS_FT=make(map[string]string)
 func Ec_Ft()(map[string]string){
     return ALLS_FT
 }
+
 func Wsp_VM(Buildse build.Builds_Struct){
     vm_s[12]=print_vm
     vm_s[301] = vars_vm_array

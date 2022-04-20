@@ -1,5 +1,1 @@
-print( "Hello      World" )
-$a [ 1 ][ 1 ] = 1  //[]与[]之间不允许有空格
-$a = Time( "" ) 
-print($a)
-Eval("print(Time("     "))") //注意 多层嵌套不支持奇怪语法
+print("Hello World")
