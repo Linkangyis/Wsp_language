@@ -31,7 +31,22 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: BETA 1.4\nOpcache V1.0")
+        fmt.Println("Version: BETA 1.4\nOpcache: V1.0\nWsp_To_Go: BETA 1.0")
+        os.Exit(0)
+    }else if os.Args[1] == "WTG"{
+        if ok,_ := PathExists(str+"/"+os.Args[2]); ok {
+            file = str+"/"+os.Args[2]
+        }else if ok,_ := PathExists(os.Args[2]); ok {
+            file = os.Args[2]
+        }else{
+            fmt.Println("文件或路径不存在")
+            os.Exit(0)
+        }
+        Lex:=token.Wsp_Lexical(file)
+        Sem:=token.Wsp_Semantic(Lex)
+        Gra:=token.Wsp_Grammar(Sem)
+        Buildse:=build.Wsp_Build(Gra)
+        ioutil.WriteFile(file+"_c.go",[]byte(build.GO_BUILD(Buildse)), 0666)
         os.Exit(0)
     }else{
         fmt.Println("文件或路径不存在")
