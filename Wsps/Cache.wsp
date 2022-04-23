@@ -1,1 +1,3 @@
 print("未劫持")
+    vm.DLS_So_Start()
+    vm.So_func_map["Test"].(func(string) string)("1")

@@ -38,6 +38,20 @@ func var_so(a string)string{
     }
     return a
 }
+func var_soa(a string)string{
+    if string(a[0])=="$"{
+        return string("Vars[\""+a[1:]+"\"].(string)")
+    }else if string(a[0])=="\""{
+        return a
+    }else{
+        Lex:=token.Wsp_Lexical_func(a)
+        Sem:=token.Wsp_Semantic(Lex)
+        Gra:=token.Wsp_Grammar(Sem)
+        Buildse:=Wsp_Build(Gra)
+        return strings.Replace(Wsp_GTo_Go(Buildse.Codes,ALLS_ABD.Funcs), "\n", "", -1)
+    }
+    return a
+}
 func var_sos(a string)string{
     if string(a[0])=="$"{
         return string(a[1:])
@@ -60,9 +74,42 @@ func Wsp_GTo_Go(opcode map[int][6]string,Funsx map[string]map[int][6]string)(str
             Body+="\""+opcode[i][2]+"\""
             Body+="\n"
         }else if opcode[i][0]=="200"{
-            str := var_so(opcode[i][2])
-            Body+=opcode[i][1]+"("+str+")"
-            Body+="\n"
+            if _,ok:=Funsx[opcode[i][1]];ok{
+                str := var_soa(opcode[i][2])
+                Body+=opcode[i][1]+"("+str+")"
+                Body+="\n"
+            }else{
+                import_ADD("os")
+                import_ADD("plugin")
+                import_ADD("io/ioutil")
+                import_ADD("strings")
+                str := var_soa(opcode[i][2])
+                    Body+="DLS_So_Start()\n"
+                    Body+="So_func_map[\""+opcode[i][1]+"\"].(func(string) string)("+str+")\n"
+                        Body_func+=`
+                        var So_func_map=make(map[string]plugin.Symbol)
+                        func DLS_So_Start(){
+                            data, _ := ioutil.ReadFile(os.Getenv("WSPPATH")+"/wsp.ini")
+                            inis:=strings.Split(string(data),"\n" )
+                            for i:=0;i<=len(inis)-1;i++{
+                                iniss:=strings.Split(inis[i],"=" )
+                                if iniss[0]=="extension"{
+                                    So_DLL_vm(iniss[1])
+                                }
+                            }
+                        }
+                        func So_DLL_vm(file string)(map[string]plugin.Symbol){
+                            p, _ := plugin.Open(file)
+                            add, _ := p.Lookup("H_Info")
+                            funcmaps:=add.(func() map[int]string)()
+                            
+                            for i:=0;i<=len(funcmaps)-1;i++{
+                                add, _ = p.Lookup(funcmaps[i])
+                                So_func_map[funcmaps[i]]=add
+                            }
+                            return So_func_map
+                        }`
+            }
         }else if opcode[i][0]=="11"{
             a := opcode[i][2]
             lone := make(map[int]map[int][4]string)

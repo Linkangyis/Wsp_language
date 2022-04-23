@@ -6,4 +6,5 @@ function aaa($a){
     }
 }
 $a = 1
-aaa()
+aaa()//测试注释
+Tests($a)

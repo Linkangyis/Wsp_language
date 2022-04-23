@@ -35,6 +35,9 @@ func CodesOk(s map[int]string){
 func CodesOkre()(map[int]string){
     return code_ok
 }
+func E_So_func_map()(map[string]plugin.Symbol){
+    return So_func_map;
+}
 func DLS_So_Start()(map[string]string){
     re := make(map[string]string)
     debugs = 0
