@@ -41,7 +41,7 @@ function aaa ($a,$b,$c){
     return $num
 }
 $i=789789789
-for ($i=0;$i<=1500;1;$i++){
+for ($i=0;$i<=15;1;$i++){
     print($i)
 }
 aaa(1,2,3)

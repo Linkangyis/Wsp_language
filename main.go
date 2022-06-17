@@ -2,6 +2,7 @@ package main
 
 import(
   "./WVM"
+  "./WVM/Array"
   "./Token"
   "./Build"
   "os"
@@ -71,4 +72,5 @@ func main(){
         }
         vm.Wsp_VM(Buildse)
     }
+    array.Del_Dir("./Var_Temps")
 }

@@ -45,16 +45,15 @@ function TS3(){   //线程B函数
     print("服务B已开启")
     Web_Start("9958")
 }
-function ss($a){
+function res($a){
     Multithreading($a)
 }
 function rr(){
-    ss("TS2") //启动线程A
-    ss("TS3") //启动线程B
+    res("TS2") //启动线程A
+    res("TS3") //启动线程B
 }
 
 //谨慎使用多线程，以免线程堵塞
 rr()
-
 //线程A和线程B内存为共享
 Input("") //线程锁，防止程序运行结束自动关闭

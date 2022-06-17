@@ -6,13 +6,14 @@ import(
   "../Echo"
   "../Types"
   "../Maps"
+  "./Array"
   "io/ioutil"
   "plugin"
   "fmt"
   "strings"
   "os"
 )
-var Vars = make(map[string]string)
+//var Vars = make(map[string]string)
 type vm_func func (parameter Builds_Parameter)(string)
 var vm_s =make(map[int]vm_func)
 var code_ok = make(map[int]string)
@@ -104,7 +105,7 @@ func add_vm(parameter Builds_Parameter)(string){
     add_num:=0
     for i:=0;i<=len(str_arr)-1;i++{
         if string(str_arr[i][0]) == string("$"){
-            add_num+=types.Ints(Vars[strings.Replace(str_arr[i],"$","",-1)])
+            add_num+=types.Ints(array.Read_Array(strings.Replace(str_arr[i],"$","",-1)))
         }else{
             add_num+=types.Ints(str_arr[i])
         }
@@ -145,27 +146,31 @@ func vars_vm_array(parameter Builds_Parameter)(string){
         a=opcode[lens][1]+arrays(parameter.b)
     }
     if opcode[types.Ints(c)][0]=="0"{
-        Vars[a]=Var_so_all(opcode[types.Ints(c)][1])
+        array.Add_Array(a,Var_so_all(opcode[types.Ints(c)][1]))
     }else if opcode[types.Ints(c)][0]=="302"{
         as:=opcode[types.Ints(c)][1]+arrays(opcode[types.Ints(c)][3])
-        Vars[a]=Vars[as]
+        array.Copy_Array(as,a)
+        //Vars[a]=Vars[as]
     }else if opcode[types.Ints(c)][0]=="300"{
-        Vars[a]=Vars[opcode[types.Ints(c)][1]]
+        array.Add_Array(a,array.Read_Array(opcode[types.Ints(c)][1]))
+        //Vars[a]=Vars[opcode[types.Ints(c)][1]]
     }else if opcode[types.Ints(c)][0]=="304" || opcode[types.Ints(c)][0]=="301"{
         for i:=lens;i<=len(opcode)-1;i++{
             if opcode[i][0]==types.Strings(0){
-                Vars[a]=Var_so_all(opcode[i][1])
+                array.Add_Array(a,Var_so_all(opcode[i][1]))
                 break
             }else if opcode[i][0]==types.Strings(302){
                 as:=opcode[i][1]+arrays(opcode[i][3])
-                Vars[a]=Vars[as]
+                //Vars[a]=Vars[as]
+                array.Copy_Array(as,a)
                 break
             }else if opcode[i][0]==types.Strings(300){
-                Vars[a]=Vars[opcode[i][2]]
+                array.Add_Array(a,array.Read_Array(opcode[i][2]))
+                //Vars[a]=Vars[opcode[i][2]]
                 break
             }else if opcode[i][0]!=types.Strings(304) && opcode[i][0]!=types.Strings(301){
                 if v, ok := code_ok[i]; ok {
-                    Vars[a]=v
+                    array.Add_Array(a,v)
                 }else{
                     Buildse:=Builds_Parameter{
                         a      : opcode[i][2],
@@ -176,15 +181,15 @@ func vars_vm_array(parameter Builds_Parameter)(string){
                         fs     : fs,
                         ft     : ft,
                      }
-                    Vars[a]=vm_s[types.Ints(opcode[i][0])](Buildse)
-                    code_ok[i] = Vars[a]
+                    array.Add_Array(a,vm_s[types.Ints(opcode[i][0])](Buildse))
+                    code_ok[i] = array.Read_Array(a)
                 }
                 break
             }
         }
     }else{
         if v, ok := code_ok[types.Ints(c)]; ok {
-            Vars[a]=v
+            array.Add_Array(a,v)
         }else{
             Buildse:=Builds_Parameter{
                 a      : opcode[types.Ints(c)][2],
@@ -195,8 +200,8 @@ func vars_vm_array(parameter Builds_Parameter)(string){
                 fs     : fs,
                 ft     : ft,
             }
-            Vars[a]=vm_s[types.Ints(opcode[types.Ints(c)][0])](Buildse)
-            code_ok[types.Ints(c)] = Vars[a]
+            array.Add_Array(a,vm_s[types.Ints(opcode[types.Ints(c)][0])](Buildse))
+            code_ok[types.Ints(c)] = array.Read_Array(a)
         }
     }
     return "True"
@@ -216,10 +221,17 @@ func Var_so_all(var_name string)(string){
     if string(var_name[0])=="$"{
         bsd:=build.Wsp_Build(token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_func(var_name))))
         if bsd.Codes[0][0]=="300"{
-            return Vars[types.Var_so(var_name)]
+            return array.Read_Array(types.Var_so(var_name))
         }else{
             as:=bsd.Codes[0][1]+arrays(bsd.Codes[0][3])
-            return Vars[as]
+            tres := array.Get_All_Array(array.So_Array_Stick(as))
+            var returns string
+            if tres ==""{
+                returns = array.Read_Array(as)
+            }else{
+                returns = "array("+array.Get_All_Array(array.So_Array_Stick(as))+")"
+            }
+            return returns
         }
     }else if types.IsNum(var_name){
         return var_name
@@ -338,22 +350,19 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
         }
     }
     
-    
-    vars_chuan := Parameter_processing(a)
-    vars_ding := strings.Split(ft[function_name],"," )
-    Var_tmps:=maps.MAP_COPY_vars(Vars)
-    Vars = make(map[string]string)
-    Vars = make(map[string]string)
-    Vars["Funs"] = "Y"
+    temps:=array.Read_Paths()
+    array.Set_Paths(temps+function_name+"/")
     returns := ""
     if _, ok := fs[function_name]; ok {
+        vars_chuan := Parameter_processing(a)
+        vars_ding := strings.Split(ft[function_name],"," )
         for i:=0;i<=len(vars_chuan)-1;i++{
-            Vars[types.Var_so(vars_ding[i])]=vars_chuan[i]
+            array.Add_Array(types.Var_so(vars_ding[i]),vars_chuan[i])
         }
         returns = vm_funcs(fs[function_name],fs,ft,function_name)
-        Vars = Var_tmps
+        array.Set_Paths(temps)
     }else if  _, oks := So_func_map[function_name]; oks {
-        Vars = Var_tmps
+        array.Set_Paths(temps)
         returns=So_func_map[function_name].(func(string) string)(a)
     }else{
         fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:",function_name+"(",a,") \n 错误原因：函数"+function_name+"不存在\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
@@ -363,7 +372,7 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
 }
 
 func vars_fors_vars(varse string,vs int){
-    Vars[varse]=types.Strings(vs)
+    array.Add_Array(varse,types.Strings(vs))
 }
 func for_vm(parameter Builds_Parameter)(string){
     a:=parameter.a
@@ -383,8 +392,8 @@ func for_vm(parameter Builds_Parameter)(string){
     bls:=lone[3][1][1]
     lock := 0
     tmeps :=""
-    if _, ok := Vars[bls]; ok {
-        tmeps=Vars[bls]
+    if array.Read_Array(bls)!="NULL"{
+        tmeps=array.Read_Array(bls)
     }else{
         lock=1
     }
@@ -434,9 +443,9 @@ func for_vm(parameter Builds_Parameter)(string){
         }
     }
     if lock == 0{
-        Vars[bls] = tmeps
+        array.Add_Array(bls,tmeps)
     }else{
-        delete(Vars,bls)
+        array.Del_Array(bls)
     }
     return "TRUE"
 }
@@ -496,6 +505,7 @@ func Wsp_VM(Buildse build.Builds_Struct){
     }
     
     if debugs==1{
+        Vars := make(map[string]string)
         echo.Arr_Echo_Opcode_View(Builds,Vars,"(NULL)")
     }
 }
@@ -519,7 +529,7 @@ func vm_funcs(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[st
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
         if Builds[i][0]==types.Strings(27){
-            returns = Vars[Builds[i+1][1]]
+            returns = array.Read_Array(Builds[i+1][1])
             break
         }
         if v, ok := code_ok[i]; ok {

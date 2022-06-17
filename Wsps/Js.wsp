@@ -1,5 +1,1 @@
-function as(){
-    $a = Input("请输入运算式:");
-    print(Stick("运算结果:",Crun($a)))
-}
-as()
+Input(Input())

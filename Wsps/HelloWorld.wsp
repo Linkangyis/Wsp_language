@@ -1,10 +1,8 @@
-function aaa($a){
-    for ($z=0;$z<=100;1;$z++){
-        for ($i=0;$i<=100;1;$i++){
-            
-        }
-    }
-}
+print("hello world")
 $a = 1
-aaa()//测试注释
-Tests($a)
+$a[1][0][1]=1
+print($a[1][0][1])
+function a(){
+    print(1)
+}
+a()
