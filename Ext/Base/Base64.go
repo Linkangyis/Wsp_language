@@ -1,7 +1,7 @@
 package main
 
 import(
-    "../../WVM"
+    "Wsp/WVM"
     "encoding/base64"
 )
 
@@ -13,13 +13,13 @@ func H_Info()(map[int]string){
 }
 
 func Base64_Encode(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     data := str_arr[0]
     uEnc := base64.URLEncoding.EncodeToString([]byte(data))
     return string(uEnc)
 }
 func Base64_Decode(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     data := str_arr[0]
     sDec, err := base64.StdEncoding.DecodeString(data)
     if err != nil {

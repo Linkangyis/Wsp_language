@@ -1,7 +1,7 @@
 package main
 
 import(
-    "../../WVM"
+    "Wsp/WVM"
     "fmt"
 )
 
@@ -12,7 +12,7 @@ func H_Info()(map[int]string){
 }
 
 func Input(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     var text string
 	fmt.Printf(str_arr[0])
 	fmt.Scanln(&text)

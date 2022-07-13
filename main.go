@@ -1,10 +1,10 @@
 package main
 
 import(
-  "./WVM"
-  "./WVM/Array"
-  "./Token"
-  "./Build"
+  "Wsp/WVM"
+  "Wsp/WVM/Array"
+  "Wsp/Token"
+  "Wsp/Build"
   "os"
   "fmt"
   "io/ioutil"
@@ -32,7 +32,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: BETA 1.4\nOpcache: V1.0\nWsp_To_Go: BETA 1.0")
+        fmt.Println("Version: V2.0\nOpcache: V1.0\nWsp_To_Go: BETA 1.1.1")
         os.Exit(0)
     }else if os.Args[1] == "WTG"{
         if ok,_ := PathExists(str+"/"+os.Args[2]); ok {
@@ -49,6 +49,20 @@ func main(){
         Buildse:=build.Wsp_Build(Gra)
         ioutil.WriteFile(file+"_c.go",[]byte(build.GO_BUILD(Buildse)), 0666)
         os.Exit(0)
+    }else if os.Args[1] == "help"{
+        if len(os.Args)==2{
+            fmt.Println("Wsp 是用来运行Wsp语言代码的解释器\n")
+            fmt.Println("使用方法：\n\n        wsp <路径>\n")
+            fmt.Println("扩展方法：\n\n        wsp WTG <路径>           WTG是将Wsp编译为Golang代码的一种测试方法，极其不稳定，对于大多数功能无法实现，可以使用基本功能\n")
+            fmt.Println("有关该主题的更多信息，请使用“go help OR wsp help ini”。\n")
+            os.Exit(0)
+        }else if os.Args[2] == "ini"{
+            fmt.Println("wsp_func_del   用来禁用函数，用“,”隔开")
+            fmt.Println("wsp_debug      用来显示OPCODE数据 默认0关闭 1为开启")
+            fmt.Println("wsp_cache      用来开启OPCODE缓存 默认1开启 0关闭")
+            fmt.Println("wsp_cache_file 用来设置OPCODE缓存存储路径")
+            fmt.Println("extension      用来载入SO动态库扩展，需使用绝对路径")
+        }
     }else{
         fmt.Println("文件或路径不存在")
         fmt.Println(str+"/"+os.Args[1])

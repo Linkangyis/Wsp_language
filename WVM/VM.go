@@ -1,12 +1,12 @@
 package vm
 
 import(
-  "../Token"
-  "../Build"
-  "../Echo"
-  "../Types"
-  "../Maps"
-  "./Array"
+  "Wsp/Token"
+  "Wsp/Build"
+  "Wsp/Echo"
+  "Wsp/Types"
+  "Wsp/Maps"
+  "Wsp/WVM/Array"
   "io/ioutil"
   "plugin"
   "fmt"
@@ -73,7 +73,7 @@ func So_DLL_vm(file string)(map[string]plugin.Symbol){
     return So_func_map
 }
 
-func Parameter_processing(a string)(map[int]string){
+func Parameter_processing(a string)(map[int]string,map[int]string){
     map_snum:=0
     returns :=make(map[int]string)
     tokenser:=token.Wsp_Grammar(token.Wsp_Semantic(token.Wsp_Lexical_func(a)))
@@ -88,12 +88,12 @@ func Parameter_processing(a string)(map[int]string){
     for i:=0;i<=len(returns)-1;i++{
         returnss[i]=Var_so_all(returns[i])
     }
-    return returnss
+    return returnss,returns
 }
 
 func print_vm(parameter Builds_Parameter)(string){
     a:=parameter.a
-    ms:=Parameter_processing(a)
+    ms,_:=Parameter_processing(a)
     rs:=ms[0]
     fmt.Println(rs)
     return rs
@@ -229,7 +229,8 @@ func Var_so_all(var_name string)(string){
             if tres ==""{
                 returns = array.Read_Array(as)
             }else{
-                returns = "array("+array.Get_All_Array(array.So_Array_Stick(as))+")"
+                returns = array.Read_Array(as)
+                //returns = "array("+array.Get_All_Array(array.So_Array_Stick(as))+")"
             }
             return returns
         }
@@ -263,7 +264,7 @@ func if_vm(parameter Builds_Parameter)(string){
     fs:=parameter.fs
     ft:=parameter.ft
     lone:=token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_var(a)))
-    addorabb:=lone[2][1]
+    addorabb:=lone[1][1]
     if addorabb==""{
         if Var_so_all(a)=="1"{
             vm_funcs_l(fs[c],fs,ft,"(NULL TO IF)")
@@ -282,7 +283,7 @@ func if_vm(parameter Builds_Parameter)(string){
             lock=1
         }else if opcode[i][0]=="28"{
             lone=token.Wsp_Semantic(token.Wsp_Grammar(token.Wsp_Lexical_var(opcode[i][2])))
-            addorabb=lone[2][1]
+            addorabb=lone[1][1]
             A=lone[0][1]
             B=lone[3][1]
             if addorabb==""{
@@ -345,29 +346,38 @@ func funcs_vm_run(parameter Builds_Parameter)(string){
     
     for i:=0;i<=len(wsp_func_del)-1;i++{
         if wsp_func_del[i]==function_name{
+            array.Del_Dir("./Var_Temps")
             fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:",function_name+"(",a,") \n 错误原因：函数"+function_name+"被禁用\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
             os.Exit(0)
         }
     }
     
     temps:=array.Read_Paths()
-    array.Set_Paths(temps+function_name+"/")
+    
     returns := ""
     if _, ok := fs[function_name]; ok {
-        vars_chuan := Parameter_processing(a)
+        array.Set_Res(0)
+        vars_chuan,_ := Parameter_processing(a)
+        array.Set_Paths(temps+function_name+"/")
         vars_ding := strings.Split(ft[function_name],"," )
         for i:=0;i<=len(vars_chuan)-1;i++{
             array.Add_Array(types.Var_so(vars_ding[i]),vars_chuan[i])
         }
+        array.Set_Paths(temps+function_name+"/")
         returns = vm_funcs(fs[function_name],fs,ft,function_name)
+        array.Del_Dirs(array.Read_Paths())
+        array.Set_Ress(array.Read_Paths())
         array.Set_Paths(temps)
     }else if  _, oks := So_func_map[function_name]; oks {
         array.Set_Paths(temps)
         returns=So_func_map[function_name].(func(string) string)(a)
     }else{
+        array.Del_Dir("./Var_Temps")
         fmt.Println("\n",echo.Arr_Echo_Opcode_View_r(50),"\n 运行错误!! \n 错误行数:",opcode[lens][5],"\n 错误内容:",function_name+"(",a,") \n 错误原因：函数"+function_name+"不存在\n",echo.Arr_Echo_Opcode_View_r(50),"\n")
         os.Exit(0)
     }
+    
+    array.Set_Res(1)
     return returns
 }
 
@@ -452,7 +462,8 @@ func for_vm(parameter Builds_Parameter)(string){
 
 func vars_csc(parameter Builds_Parameter)(string){
     a:=parameter.a
-    return Parameter_processing(a)[0]
+    as,_:=Parameter_processing(a)
+    return as[0]
 }
 var ALLS_OPCODE=make(map[int][6]string)
 func Ec_Op()(map[int][6]string){
@@ -488,6 +499,7 @@ func Wsp_VM(Buildse build.Builds_Struct){
     ALLS_FS = Buildse.Funcs
     ALLS_FT = Buildse.Funcs_list
     for i:=0;i<=len(Builds)-1;i++{
+        array.Del_Dirl()
         if v, ok := code_ok[i]; ok {
             code_ok[i] = v
         }else{
@@ -505,8 +517,7 @@ func Wsp_VM(Buildse build.Builds_Struct){
     }
     
     if debugs==1{
-        Vars := make(map[string]string)
-        echo.Arr_Echo_Opcode_View(Builds,Vars,"(NULL)")
+        echo.Arr_Echo_Opcode_View(Builds,array.Get_All_Array(array.Read_Paths()),"(NULL)")
     }
 }
 func vm_funcs(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[string]string,funcname string)(string){
@@ -528,6 +539,7 @@ func vm_funcs(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[st
     code_ok = make(map[int]string)
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
+        array.Del_Dirl()
         if Builds[i][0]==types.Strings(27){
             returns = array.Read_Array(Builds[i+1][1])
             break
@@ -570,6 +582,7 @@ func vm_funcs_l(Builds map[int][6]string,fs map[string]map[int][6]string,ft map[
     code_ok = make(map[int]string)
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
+        array.Del_Dirl()
         if v, ok := code_ok[i]; ok {
             code_ok[i] = v
         }else{
@@ -609,6 +622,7 @@ func Vm_Code_Run(Builds map[int][6]string)(string){
     code_ok = make(map[int]string)
     returns := ""
     for i:=0;i<=len(Builds)-1;i++{
+        array.Del_Dirl()
         if v, ok := code_ok[i]; ok {
             code_ok[i] = v
         }else{

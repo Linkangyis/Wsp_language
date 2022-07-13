@@ -1,7 +1,7 @@
 package main
 
 import(
-    "../../WVM"
+    "Wsp/WVM"
     "net/http"
     "fmt"
     "path/filepath"
@@ -22,12 +22,12 @@ var Tmps_w http.ResponseWriter
 var Tmps_r *http.Request
 
 func Web_Print(a string)(string){
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     fmt.Fprintf(Tmps_w, var_arr[0])
     return ""
 }
 func Web_Header_Set(a string)(string){
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     Tmps_w.Header().Set(var_arr[0], var_arr[1])
     return ""
 }
@@ -40,14 +40,14 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
 
 func New_WebFiles(a string)(string){
     dir, _ := filepath.Split(vm.Wsp_File_E())
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     http.Handle("/"+var_arr[0]+"/",http.StripPrefix("/"+var_arr[0], http.FileServer(http.Dir(dir+var_arr[1]))))
     return ""
 }
  
 func New_Web(a string)(string){
     
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     file := var_arr[0]
     web_list[file]=var_arr[1]
     http.HandleFunc("/"+file, sayhelloName)
@@ -55,14 +55,14 @@ func New_Web(a string)(string){
 }
 
 func Web_Start(a string)(string){
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     port := var_arr[0]
     http.ListenAndServe(":"+port, nil)
     return "1"
 }
 func Web_Start_Ssl(a string)(string){
     dir, _ := filepath.Split(vm.Wsp_File_E())
-    var_arr:=vm.Parameter_processing(a)
+    var_arr,_:=vm.Parameter_processing(a)
     port := var_arr[0]
     certpem :=var_arr[1]
     keypem :=var_arr[2]

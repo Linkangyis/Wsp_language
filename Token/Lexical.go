@@ -171,6 +171,9 @@ func Wsp_Lexical_func(code string)(map[int][4]string){
 func token_var(str string,line int)([4]string){//判断token主题内容是否为字符串，如为字符串则返回T_TEXT token 否则匹配config.go设置的token进行判断
     var tokens = map[string]int{}
     tokens["="] = 7
+    tokens["!"] = 7
+    tokens["<"] = 7
+    tokens[">"] = 7
     tokens["\n"] = 7
     
     var tokens_name = map[string]string{}

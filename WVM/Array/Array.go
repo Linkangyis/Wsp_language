@@ -1,6 +1,7 @@
 package array
 
 import(
+  "Wsp/Types"
   "os"
   "io/ioutil"
   "io"
@@ -9,6 +10,25 @@ import(
   "fmt"
 )
 var paths string = "./Var_Temps/"
+var Pointer =make(map[string]string)
+var Pointere =make(map[string]string)
+var PointerLen int
+var retuenlon int=0
+var retuenpath string
+var tmpcs string
+var delmap = make(map[int]string)
+
+func Del_Dirs(path string){
+    delmap[len(delmap)]=path
+}
+func Del_Dirl(){
+    tmpcs=""
+    for i:=0;i<=len(delmap)-1;i++{
+        Del_Dir(delmap[i])
+        delete(delmap,i)
+    }
+    
+}
 func Set_Paths(path string){
     paths = path
 }
@@ -30,6 +50,28 @@ func Copy_Array(start string,stop string){
             Copy_File(start,stop)
         }
     }
+}
+func Copy_ArrayVm(start string,stop string){
+    start = So_Array_Stick_c(start)
+    stop = So_Array_Stick(stop)
+    if Exists(start){
+        if IsDir(start){
+            Del_File(stop)
+            Del_Dir(stop)
+            Copy_Dir(start,stop)
+        }
+        if IsFile(start){
+            Del_File(stop)
+            Del_Dir(stop)
+            Copy_File(start,stop)
+        }
+    }
+}
+func Set_Res(a int){
+    retuenlon=a
+}
+func Set_Ress(a string){
+    retuenpath=a
 }
 func Copy_File(src, dst string) error {
     var err error
@@ -129,12 +171,26 @@ func IsFile(path string) bool{
     return !IsDir(path)  
 }
 func Read_Array(file string)string{
-    file = So_Array_Stick(file)
-    if !Exists(file){
+    Head_VarName:=So_Array_Io(file)[0]
+    for i:=1;i<=len(So_Array_Io(file))-1;i++{
+        tmpcs+=So_Array_Io(file)[i]
+    }
+    if file==""{
         return "NULL"
     }
+    filetemp:=So_Array_Stick_b(file)
+    filetemplen:=So_Array_Stick_b_len(file)
+    file = So_Array_Stick(file)
     if IsDir(file){
         //return "array("+Get_All_Array(file)+")"
+        return Var_Pointer(Head_VarName)
+    }
+    if !Exists(file){
+        if Exists(filetemp){
+            if IsFile(filetemp){
+                return string(Read_File(filetemp)[filetemplen])
+            }
+        }
         return "NULL"
     }
     if IsFile(file){
@@ -165,7 +221,7 @@ func New_File(file string){
    }
 }
 
-func New_File_Var(file string,text string){
+func New_File_Var(file string,text string)string{
     filename := file
     f, _ := os.Create(filename)
     defer f.Close()
@@ -175,6 +231,7 @@ func New_File_Var(file string,text string){
         os.RemoveAll(file)
         New_File_Var(file,text)
     }
+    return ""
 }
 
 func Read_File(filepath string) string {
@@ -219,12 +276,63 @@ func So_Array_Stick(Arrs string)string{
     file = file+Maps[len(Maps)-1]
     return file
 }
-func Add_Array(Arrs string,Var string){
+func So_Array_Stick_b(Arrs string)string{
     Maps:=So_Array_Io(Arrs)
     file := paths
     for i:=0;i<=len(Maps)-2;i++{
         file+=Maps[i]+"/"
     }
+    file = file[0:len(file)-1]
+    return file
+}
+func So_Array_Stick_c(Arrs string)string{
+    Maps:=So_Array_Io(Arrs)
+    file:=""
+    if retuenlon==0{
+        file = "./Var_Temps/"
+    }else{
+        file = retuenpath
+    }
+    for i:=0;i<=len(Maps)-1;i++{
+        file+=Maps[i]+"/"
+    }
+    if tmpcs!=""{
+        file+=tmpcs+"/"
+        tmpcs=""
+    }
+    file = file[0:len(file)-1]
+    return file
+}
+func So_Array_Stick_b_len(Arrs string)int{
+    Maps:=So_Array_Io(Arrs)
+    if len(Arrs)==1{
+        return 0
+    }
+    reslen := types.Ints(Maps[len(Maps)-1][1:len(Maps[len(Maps)-1])-1])
+    return reslen
+}
+func Var_Pointer(VarName string)string{
+    if _,ok:=Pointer[VarName];!ok{
+        Pointer[VarName]="0x"+types.Strings(PointerLen)
+        Pointere["0x"+types.Strings(PointerLen)]=VarName
+        PointerLen++
+    }
+    return Pointer[VarName]
+}
+func Add_Array(Arrs string,Var string)string{
+    if len(Var)>2{
+        if Var[0:2]=="0x"{
+            Copy_ArrayVm(Pointere[Var],Arrs)
+            return ""
+        }
+    }
+    Maps:=So_Array_Io(Arrs)
+    file := paths
+    Var_Pointer(Maps[0])
+    for i:=0;i<=len(Maps)-2;i++{
+        file+=Maps[i]+"/"
+    }
     New_File(file)
     New_File_Var(file+Maps[len(Maps)-1],Var)
+    return ""
 }

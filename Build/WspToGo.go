@@ -3,8 +3,8 @@ package build
 import(
     "fmt"
     "strings"
-    "../Token"
-    "../Types"
+    "Wsp/Token"
+    "Wsp/Types"
 )
 var imports = make(map[int]string)
 var num int = 0

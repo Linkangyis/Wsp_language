@@ -1,8 +1,8 @@
 package main
 
 import(
-    "../../Types"
-    "../../WVM"
+    "Wsp/Types"
+    "Wsp/WVM"
 )
 
 func H_Info()(map[int]string){
@@ -15,7 +15,7 @@ func H_Info()(map[int]string){
 }
 
 func MUL(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     add_num:=types.Ints(str_arr[0])
     for i:=1;i<=len(str_arr)-1;i++{
             add_num=types.Ints(str_arr[i])*add_num
@@ -24,7 +24,7 @@ func MUL(a string)(string){
 }
 
 func SUB(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     add_num:=types.Ints(str_arr[0])
     for i:=1;i<=len(str_arr)-1;i++{
         add_num=add_num-types.Ints(str_arr[i])
@@ -33,7 +33,7 @@ func SUB(a string)(string){
 }
 
 func DIV(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     add_num:=types.Ints(str_arr[0])
     for i:=1;i<=len(str_arr)-1;i++{
         add_num=add_num/types.Ints(str_arr[i])
@@ -42,7 +42,7 @@ func DIV(a string)(string){
 }
 
 func Stick(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     rstext:=""
     for i:=0;i<=len(str_arr)-1;i++{
         rstext+=str_arr[i]

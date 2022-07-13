@@ -1,9 +1,9 @@
 package token
 
 import(
-  "../Echo"
-  "../Types"
-  "../Maps"
+  "Wsp/Echo"
+  "Wsp/Types"
+  "Wsp/Maps"
   "fmt"
   "os"
 )

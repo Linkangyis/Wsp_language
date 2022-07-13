@@ -1,5 +1,11 @@
 $a = var("114514")
 $a = 10086
+function Exit(){
+    $a = Input("输入Exit关闭服务:")
+    if ($a!="Exit"){
+        Exit()
+    }
+}
 function A(){
     print("测试服务A")
     print(Time())
@@ -28,32 +34,40 @@ function C(){
     Web_Print($a)
 }
 function TS2(){   //线程A函数
+    print("服务A已开启")
+    Web_Start("9968")
+}
+function Run(){
     New_WebFiles("Public","./")
     New_Web("AS","A")
-    //New_Web("ASS","A")
     New_Web("","A")
     New_Web("B","B")
     New_Web("B/C","C")
     New_WebFiles("P","../Ext")
-    print("服务A已开启")
-    Web_Start("9968")
-}
-
-function TS3(){   //线程B函数
     New_WebFiles("Publics","../")
     New_Web("B/Cs","B")
+}
+function TS3(){   //线程B函数
     print("服务B已开启")
     Web_Start("9958")
+}
+function TS4(){   //线程B函数
+    print("服务C已开启")
+    Web_Start("9948")
 }
 function res($a){
     Multithreading($a)
 }
-function rr(){
+function Starts(){
     res("TS2") //启动线程A
+    Sleep(1)
     res("TS3") //启动线程B
-}
+    res("TS4") //启动线程B
+} 
 
-//谨慎使用多线程，以免线程堵塞
-rr()
-//线程A和线程B内存为共享
-Input("") //线程锁，防止程序运行结束自动关闭
+        //谨慎使用多线程，以免线程堵塞
+        //线程A和线程B内存为共享
+
+Run()
+Starts()
+Exit()

@@ -2,7 +2,7 @@ package main
 
 import (
     "strconv"
-    "../../WVM"
+    "Wsp/WVM"
 )
 
 type StackNode struct {
@@ -55,7 +55,7 @@ func H_Info()(map[int]string){
 }
 
 func Crun(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     add_num:=str_arr[0]
     s2 := strconv.FormatFloat(Count(add_num),'f',-1,64)//float64
     return s2

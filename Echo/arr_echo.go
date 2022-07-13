@@ -3,7 +3,7 @@ package echo
 import(
   "fmt"
   "strings"
-  "../Types"
+  "Wsp/Types"
   "unicode/utf8"
 )
 func Arr_Echo(Gra_Comp map[int][4]string){
@@ -19,12 +19,10 @@ func Arr_Echo_Build(Gra_Comp map[int][5]string){
     }
 }
 
-func Arr_Echo_Opcode_View(Gra_Comp map[int][6]string,VARS map[string]string,funcname string){
+func Arr_Echo_Opcode_View(Gra_Comp map[int][6]string,VARS string,funcname string){
     fmt.Println("\n"+Arr_Echo_Opcode_View_r(125))
     fmt.Printf("变量列表:  ")
-    for key,value := range VARS {
-        fmt.Printf(key+"="+value+"  ")
-    }
+    fmt.Printf(VARS)
     fmt.Printf("\n函数名称:  "+funcname)
     fmt.Println("\n"+Arr_Echo_Opcode_View_r(125))
     fmt.Println("ID"+Arr_Echo_Opcode_View_k(17)+"TOKEN"+Arr_Echo_Opcode_View_k(15)+"参数标识"+Arr_Echo_Opcode_View_k(12)+"形参A"+Arr_Echo_Opcode_View_k(15)+"形参B"+Arr_Echo_Opcode_View_k(15)+"形参C/指向跳转/内存地址")

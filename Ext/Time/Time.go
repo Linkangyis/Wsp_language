@@ -3,8 +3,8 @@ package main
 import(
     "time"
     "strconv"
-    "../../Types"
-    "../../WVM"
+    "Wsp/Types"
+    "Wsp/WVM"
 )
 
 func H_Info()(map[int]string){
@@ -23,7 +23,7 @@ func Time(a string)(string){
 }
 
 func Sleep(a string)(string){
-    str_arr:=vm.Parameter_processing(a)
+    str_arr,_:=vm.Parameter_processing(a)
     time.Sleep(time.Duration(types.Ints(str_arr[0]))*time.Second)
     return "1"
 }

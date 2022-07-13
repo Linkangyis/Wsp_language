@@ -2,10 +2,15 @@ print(Time())
 $t1 = Time()
 $a = 1
 $c = 100
+print(1)
 $b = $a = $c
+print(1)
 $c=1
+print(1)
 $rr=ADD($a,$b,$c)
+print(1)
 $c = 11
+print(1)
 
 $num = ADD($a,$b,$c)$b = $a = print(123456)
 print("测试")

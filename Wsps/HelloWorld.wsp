@@ -1,8 +1,6 @@
-print("hello world")
-$a = 1
-$a[1][0][1]=1
-print($a[1][0][1])
-function a(){
-    print(1)
+$a[1][1]=1
+function aaa($as){
+    return $as
 }
-a()
+$abc = aaa($a)
+print($abc[1][1])

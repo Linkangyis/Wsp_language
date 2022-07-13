@@ -1,9 +1,9 @@
 package build
 
 import(
-  "../Types"
-  "../Echo"
-  "../Token"
+  "Wsp/Types"
+  "Wsp/Echo"
+  "Wsp/Token"
   "strings"
 )
 type Builds_Struct struct {

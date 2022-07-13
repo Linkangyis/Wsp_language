@@ -1,8 +1,8 @@
 package token
 
 import(
-  "../Types"
-  "../Maps"
+  "Wsp/Types"
+  "Wsp/Maps"
 )
 
 func Text_ADD_strings(a int ,b int,token map[int][4]string)(string){         //在token中通过指定范围，把指定数据集中，并输出字符串 无视空行 

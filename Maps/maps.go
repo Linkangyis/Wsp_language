@@ -1,7 +1,7 @@
 package maps
 
 import(
-  "../Types"
+  "Wsp/Types"
 )
 
 func DEL_Map(a int ,token map[int][4]string)(map[int][4]string){  //删除map中的一个指定元素
