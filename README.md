@@ -30,7 +30,7 @@ wsp ./xxxx.wsp
 ## 语法
 自定义函数
 ```php
-function(参数){
+function 变量名(参数){
     //代码块
 }
 ```
