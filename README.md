@@ -29,24 +29,24 @@ wsp ./xxxx.wsp
 
 ## 语法
 自定义函数
-```bash
+```php
 function(参数){
     //代码块
 }
 ```
 自定义变量
-```bash
+```php
 $xx=xx;
 ```
 循环
-```bash
+```php
 for(条件){
     //代码块
 }
 ```
 
 判断
-```bash
+```php
 if(条件){
     //代码块
 }else if(条件){
@@ -56,7 +56,31 @@ if(条件){
 }
 ```
 
+## 扩展开发
+```golang
+package main
 
+import(
+    "Wsp/WVM"  //引入核心虚拟机
+    "fmt"
+)
+
+func H_Info()(map[int]string){ //定义函数列表
+    info := make(map[int]string)
+    info[0] = "Input"
+    return info
+}
+
+func Input(a string)(string){  //定义扩展函数
+    str_arr,_:=vm.Parameter_processing(a)
+    var text string
+	fmt.Printf(str_arr[0])
+	fmt.Scanln(&text)
+    return text
+}
+//扩展编译指令
+//go build -buildmode=plugin -o scanlns.so Scanlns.go
+```
 ## License
 
-[MIT](https://github.com/Ice-Hazymoon/MikuTools/blob/master/LICENSE)
+[MIT](https://github.com/Linkangyis/Wsp_language/blob/LICENSE)
