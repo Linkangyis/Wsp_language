@@ -3,17 +3,8 @@
 <h1 align="center">WSP</h1>
 <p align="center">一门解释型语言</p>
 <p align="center">
-    <a href="https://github.com/Ice-Hazymoon/MikuTools/blob/master/LICENSE">
+    <a href="https://github.com/Linkangyis/Wsp_language/blob/LICENSE">
         <img src="https://img.shields.io/github/license/Ice-Hazymoon/MikuTools.svg" alt="MIT License" />
-    </a>
-    <a href="https://vuejs.org/">
-        <img src="https://img.shields.io/badge/nuxt.js-v5.x-green.svg" alt="for Nuxt.js 5">
-    </a>
-    <a href="http://imiku.me/">
-        <img src="https://badgen.net/badge/author/Ice-Hazymoon/f2a" alt="Author">
-    </a>
-    <a href="https://miku.tools/">
-        <img src="https://img.shields.io/badge/%F0%9F%9A%80-open--in--browser-e10079.svg" alt="Live Demo">
     </a>
 </p>
 
@@ -35,6 +26,36 @@ ln -s WSP所在目录/wsp /usr/bin
 ```bash
 wsp ./xxxx.wsp
 ```
+
+## 语法
+自定义函数
+```bash
+function(参数){
+    //代码块
+}
+```
+自定义变量
+```bash
+$xx=xx;
+```
+循环
+```bash
+for(条件){
+    //代码块
+}
+```
+
+判断
+```bash
+if(条件){
+    //代码块
+}else if(条件){
+    //代码块
+}else{
+    //代码块
+}
+```
+
 
 ## License
 
