@@ -61,7 +61,6 @@ if(条件){
 package main
 
 import(
-    "Wsp/WVM"  //引入核心虚拟机
     "fmt"
 )
 
@@ -71,8 +70,8 @@ func H_Info()(map[int]string){ //定义函数列表
     return info
 }
 
-func Input(a string)(string){  //定义扩展函数
-    str_arr,_:=vm.Parameter_processing(a)
+func Input(a map[int]string)(string){  //定义扩展函数
+    str_arr:=a
     var text string
 	fmt.Printf(str_arr[0])
 	fmt.Scanln(&text)
