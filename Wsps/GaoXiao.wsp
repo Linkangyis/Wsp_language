@@ -1,4 +1,0 @@
-$a[0][1] = var("Hello World")
-for($i=0;$i<=10;1;$i++){
-    print($a[0][1][$i])
-}

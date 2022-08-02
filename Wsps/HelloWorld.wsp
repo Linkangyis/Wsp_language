@@ -1,6 +1,0 @@
-$a[1][1]=1
-function aaa($as){
-    return $as
-}
-$abc = aaa($a)
-print($abc[1][1])
