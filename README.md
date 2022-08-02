@@ -41,14 +41,13 @@ $xx=xx;
 循环
 ```php
 xx;xx;xx形式
-for(条件(;;;三元)){
-while形式
+for(条件){
     //代码块
 }
 ```
 ```php
-for(条件){
 while形式
+for(条件){
     //代码块
 }
 ```
