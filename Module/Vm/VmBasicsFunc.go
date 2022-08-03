@@ -159,6 +159,7 @@ func FuncVm(From TransmitValue)string{
         if List[i].Type==1{
             Init = Read_Array(Init+List[i].Text)
         }else{
+            SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text)
             SetFunc(Init)
             Init = VmFuncUser[Init](Var)
@@ -210,12 +211,13 @@ func VarSo(From TransmitValue)string{
         }
     }
     Init:=Read_Array(Op.Text)
+    Tmps:=FuncName
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
             Init = Read_Array(Init+List[i].Text)
         }else{
+            SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text)
-            Tmps:=FuncName
             SetFunc(Init)
             defer SetFunc(Tmps)
             Init = VmFuncUser[Init](Var)

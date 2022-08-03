@@ -92,6 +92,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run)string{
                 Govm=0   //关闭多线程
             }
         }
+        Govm=0
         /*输出return内容*/
         if ResLock==1{
             OverAllFuncRes.Res = ResValue

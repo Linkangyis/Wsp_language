@@ -9,7 +9,7 @@ import(
 
 func VarAnalysis(Code string)map[int]string{
     Var:=make(map[int]string)
-    Tmpcode:=VarCompile(Code+" ").Body[0]
+    Tmpcode:=VarCompile(Code).Body[0]
     for i:=0;i<=len(Tmpcode)-1;i++{
         Var[len(Var)]=CodeBlockRunSingle(Tmpcode[i])
     }
@@ -38,6 +38,18 @@ func VarSoAll(Code string)string{
     Tmpcode:=VarCompile(Code).Body[0]
     Var:=CodeBlockRunSingle(Tmpcode[0])
     return Var
+}
+
+func VarNx(Value string)string{
+    if Value!=""{
+        Vt:=VarAnalysis(Value)
+        Value = ""
+        for z:=0;z<=len(Vt)-1;z++{
+            Value+=Vt[z]+","
+        }
+        Value=Value[0:len(Value)-1]
+    }
+    return Value
 }
 
 func RunCode(Code string){

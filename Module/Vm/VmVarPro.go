@@ -11,7 +11,9 @@ import(
 )
 var AllOverPaths string = "./.Var_Temps/"
 var paths string = "./.Var_Temps/Main/"
+var TmpPaths string = "./.Var_Temps/Main/"
 var FuncName string = "Main"
+var TmpFuncName  = "Main"
 
 var Pointer =make(map[string]string)
 var Pointere =make(map[string]string)
@@ -79,13 +81,14 @@ func Copy_File(src, dst string) error {
     var srcfd *os.File
     var dstfd *os.File
     var srcinfo os.FileInfo
- 
     if srcfd, err = os.Open(src); err != nil {
+        srcfd.Close()
         return err
     }
     defer srcfd.Close()
  
     if dstfd, err = os.Create(dst); err != nil {
+        dstfd.Close()
         return err
     }
     defer dstfd.Close()
@@ -323,6 +326,8 @@ func AddArray(Arrs string,Var string)string{
 }
 
 func SetFunc(cdFile string){
+    TmpPaths = paths
+    TmpFuncName = FuncName
     paths = AllOverPaths+cdFile+"/"
     FuncName= cdFile
 }

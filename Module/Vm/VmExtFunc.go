@@ -28,6 +28,8 @@ func InitFuncUserExtL(file string){
         if _,ok:=DelFunc[Name];!ok{
             AddFunc, _ = Tmp.Lookup(Name)
             VmFuncUser[Name]=func(Value map[int]string)string{
+                paths=TmpPaths
+                FuncName=TmpFuncName
                 return AddFunc.(func(map[int]string) string)(Value)
             }
         }
