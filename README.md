@@ -73,7 +73,20 @@ if(条件){
     //代码块
 }
 ```
-
+## Switch语句
+```php
+$a = "3";
+switch($a){
+    case 1:
+        print(1);
+    case 2:
+        print(2);
+    case 3:
+        print(3);
+    default:
+        print(4);
+}
+```
 ## 扩展开发
 ```golang
 package main
