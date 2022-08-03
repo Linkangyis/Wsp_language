@@ -73,7 +73,7 @@ if(条件){
     //代码块
 }
 ```
-## Switch语句
+Switch语句
 ```php
 $a = "3";
 switch($a){
