@@ -43,7 +43,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: V3.0\nOpcache: V1.0")
+        fmt.Println("Version: Beta3.1.0\nOpcache: V1.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -89,6 +89,7 @@ func main(){
         vm.Wsp_Vm(Buildse)
     }
     if ini.DebugsIf(){
+        fmt.Println("\nOpcode:")
         for i:=0;i<=len(Opcode.Body)-1;i++{
             fmt.Println(i,Opcode.Body[i])
         }

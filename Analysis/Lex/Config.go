@@ -12,6 +12,9 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["print"]=7
     Maps["wgo"]=8
     Maps["add"]=9
+    Maps["switch"]=12
+    Maps["case"]=13
+    Maps["default"]=14
     Maps["$"]=50
     Maps["("]=71
     Maps[")"]=72
@@ -33,6 +36,7 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["<"]=97
     Maps[">"]=98
     Maps["!"]=99
+    Maps[":"]=100
     if _,ok:=Maps[Text];ok{
         return Maps[Text]
     }
@@ -51,6 +55,9 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["break"]="BREAK"
     Maps["continue"]="CONTINUE"
     Maps["add"]="ADD"
+    Maps["switch"]="SWITCH"
+    Maps["case"]="SWITCH_CASE"
+    Maps["default"]="SWITCH_DEFAULT"
     Maps["$"]="VAR"
     Maps["("]="S_BRACKETS_A"
     Maps[")"]="S_BRACKETS_B"
@@ -72,6 +79,7 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["<"]="GT"
     Maps[">"]="LT"
     Maps["!"]="NT"
+    Maps[":"]="START"
     if _,ok:=Maps[Text];ok{
         return Maps[Text]
     }

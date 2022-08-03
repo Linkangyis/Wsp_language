@@ -27,6 +27,10 @@ var DelFunc = make(map[string]int)
 
 var OverLine int
 
+var FuncList compile.Func_Struct
+
+type OpStruct map[int]map[int]compile.Body_Struct_Run
+
 type TransmitValue struct{
     Value string
     Opcode map[int]compile.Body_Struct_Run

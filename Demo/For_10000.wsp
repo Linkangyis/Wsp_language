@@ -13,7 +13,7 @@ for ($t=0;$t<=10;$t=add($t,1)){
 
 $i=0;
 for{
-print($i)
+    print($i)
     $i=add($i,1);
     if ($i==19){
         break;
@@ -37,3 +37,13 @@ if ($a==$b){
     print(112)
 }
 
+$i=51;
+for($i<=50){
+    $i=add($i,1);
+    print("不会执行");
+}
+for{
+    $i=add($i,3);
+    print("会执行");
+}($i<=50)
+print($i);

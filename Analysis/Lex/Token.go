@@ -21,8 +21,8 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
     var SBrLock int = 0
     var MBrLock int = 0
     var XBrLock int = 0
-    for i:=0;i<=len(Code)-1;i++{
-        Cpoint:=string(Code[i])
+    for i,Cpoints:=range Code{
+        Cpoint := string(Cpoints)
         String_region+=Cpoint
         if Cpoint=="\n"{
             Lines++
@@ -105,7 +105,7 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
             }
             String_region=""
         }else if SBrLock==0&&XBrLock==0&&MBrLock==0&&ALLLock==0{
-            if string(Code[i+1])=="(" || string(Code[i+1])==" " || string(Code[i+1])=="[" || string(Code[i+1])=="{"||string(Code[i+1])=="+" || string(Code[i+1])=="-" || string(Code[i+1])=="*" || string(Code[i+1])=="/" || string(Code[i+1])=="%" || string(Code[i+1])=="\n" || string(Code[i+1])=="=" || string(Code[i+1])=="," || string(Code[i+1])==";" || string(Code[i+1])=="<" || string(Code[i+1])==">" || string(Code[i+1])=="!" {
+            if string(Code[i+1])=="(" || string(Code[i+1])==" " || string(Code[i+1])=="[" || string(Code[i+1])=="{"||string(Code[i+1])=="+" || string(Code[i+1])=="-" || string(Code[i+1])=="*" || string(Code[i+1])=="/" || string(Code[i+1])=="%" || string(Code[i+1])=="\n" || string(Code[i+1])=="=" || string(Code[i+1])=="," || string(Code[i+1])==";" || string(Code[i+1])=="<" || string(Code[i+1])==">" || string(Code[i+1])=="!" || string(Code[i+1])==":"  {
                 Res[len(Res)]=Lex_Struct{0,String_region,"String",Line_Echo()}
                 String_region=""
             }

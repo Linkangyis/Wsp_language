@@ -223,3 +223,59 @@ func VarSo(From TransmitValue)string{
     }
     return Init
 }
+
+func VmSwitch(From TransmitValue)string{
+    LockBreakList=""
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    Condition:=VarSoAll(Op.Name)
+    Id:=Op.Text
+    Opcode := FuncList.FuncList[Id]
+    CodeRunsOpcode := make(OpStruct)
+    tmpName := ""
+    var Else OpStruct
+    ResCodeOp := make(map[string]OpStruct)
+    Type := 0
+    for i:=0;i<=len(Opcode)-1;i++{
+        if Opcode[i][0].Type==214 || Opcode[i][0].Type==215{
+            if Opcode[i][0].Type==214{
+                Type=1
+            }else{
+                Type=2
+            }
+            if tmpName!=""{
+                ResCodeOp[tmpName]=CodeRunsOpcode
+            }
+            tmpName =CodeBlockRunSingle(Opcode[i][1])
+            CodeRunsOpcode = make(OpStruct)
+            continue
+        }
+        CodeRunsOpcode[len(CodeRunsOpcode)]= Opcode[i]
+    }
+    if Type==1{
+        ResCodeOp[tmpName]=CodeRunsOpcode
+    }else{
+        Else=CodeRunsOpcode
+    }
+    if _,ok:=ResCodeOp[Condition];ok{
+        Code:=ResCodeOp[Condition]
+        for i:=0;i<=len(Code)-1;i++{
+            CodeBlockRun(Code[i])
+            if LockBreakList=="<BREAK>"{
+                LockBreakList=""
+                break;
+            }
+        }
+    }else{
+        Code:=Else
+        for i:=0;i<=len(Code)-1;i++{
+            CodeBlockRun(Code[i])
+            if LockBreakList=="<BREAK>"{
+                LockBreakList=""
+                break;
+            }
+        }
+    }
+    return ""
+    
+}

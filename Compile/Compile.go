@@ -49,7 +49,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         tmp++
                     }
                     i+=tmp-1
-                }else{
+                }else if TCode[i].Abrk[0].Type!=2{
                     Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                         Type : 302,
                         Abrk : TCode[i].Abrk,
@@ -169,6 +169,46 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Name : "CONTINUE",
                     Text : "",
                     Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+            case 100:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 212,
+                    Abrk : TCode[i].Abrk,
+                    Name : "START",
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 12:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 213,
+                    Abrk : TCode[i].Abrk,
+                    Name : TCode[i].Sbrk[0],
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 13:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 214,
+                    Abrk : TCode[i].Abrk,
+                    Name : "SWITCH_CASE",
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "",
+                    Line : TCode[i].Line,
+                }
+            case 14:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 215,
+                    Abrk : TCode[i].Abrk,
+                    Name : "SWITCH_DEFAULT",
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "",
                     Line : TCode[i].Line,
                 }
         }

@@ -11,6 +11,7 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
         DelFunc[Temps[i]]=1
     }
     RootFuncInit()
+    FuncList = OpcodeStruct.Func
     UserFuncInit(OpcodeStruct.Func)
     InitFuncUserExt()
     Opcode := OpcodeStruct.Body
