@@ -87,6 +87,10 @@ switch($a){
         print(4);
 }
 ```
+wgo协程
+```php
+wgo func();//参数不准为变量，只能为实参如 1,2 2,3不允许传递 $a,$b形式，如有需要，可以搭配Eval
+```
 ## 扩展开发
 ```golang
 package main
