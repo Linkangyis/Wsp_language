@@ -43,7 +43,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: Beta3.1.1\nOpcache: V1.0")
+        fmt.Println("Version: Beta3.1.2\nOpcache: V1.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
