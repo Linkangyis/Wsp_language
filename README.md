@@ -96,24 +96,31 @@ wgo func();//参数有特殊处理，与非协程有很大变化，在运行前�
 package main
 
 import(
-    "fmt"
+  "fmt"
 )
-
-func H_Info()(map[int]string){ //定义函数列表
-    info := make(map[int]string)
-    info[0] = "Input"
+func Func_Info()(map[int]string){  //系统核心
+    info := make(map[int]string)  //函数列表
+    info[0] = "Testb"
+    info[1] = "Tests"
+    return info
+}
+func Package_Info()(string){  //系统核心
+    info := "Test"   //包名设置
     return info
 }
 
-func Input(a map[int]string)(string){  //定义扩展函数
-    str_arr:=a
-    var text string
-	fmt.Printf(str_arr[0])
-	fmt.Scanln(&text)
-    return text
+
+func Testb(Value map[int]string)(string){    //Testb扩展函数 wsp调用 Test.Testb()
+    fmt.Println("b")
+    return "TRUE"
+}
+
+func Tests(Value map[int]string)(string){    //Testb扩展函数 wsp调用 Test.Tests()
+    fmt.Println("s")
+    return "TRUE"
 }
 //扩展编译指令
-//go build -buildmode=plugin -o scanlns.so Scanlns.go
+//go build -buildmode=plugin -o test.so Test.go
 ```
 ## License
 
