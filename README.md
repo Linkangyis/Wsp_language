@@ -115,7 +115,7 @@ func Testb(Value map[int]string)(string){    //Testb扩展函数 wsp调用 Test.
     return "TRUE"
 }
 
-func Tests(Value map[int]string)(string){    //Testb扩展函数 wsp调用 Test.Tests()
+func Tests(Value map[int]string)(string){    //Tests扩展函数 wsp调用 Test.Tests()
     fmt.Println("s")
     return "TRUE"
 }
