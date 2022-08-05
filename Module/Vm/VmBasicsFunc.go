@@ -22,6 +22,21 @@ func Add(From TransmitValue)string{
     return TypeStrings(Res)
 }
 
+func VarSetNum(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    Nums:=make(map[string]int)
+    Nums["ABB_VAR"]=0
+    Nums["ADD_VAR"]=1
+    Type := Nums[Op.Name]
+    Ynum:=Read_Array(Op.Text)
+    if Type==0{
+        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)-1))
+    }else{
+        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)+1))
+    }
+    return Ynum
+}
 /* FOR VM*/
 func ForVm(From TransmitValue)string{
     LockBreakList=""

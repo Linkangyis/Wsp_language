@@ -27,6 +27,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
     Len_Line := 0
     Res[Len_Line]=make(map[int]Body_Struct_Run)
     for i:=0;i<=len(TCode)-1;i++{
+        //fmt.Println(TCode[i].Text,TCode[i].Type,i)
         switch TCode[i].Type{
             case 50:
                 if TCode[i+1].Type==95{
@@ -48,8 +49,9 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         }
                         tmp++
                     }
+                    //fmt.Println(i)
                     i+=tmp-1
-                }else if TCode[i].Abrk[0].Type!=2{
+                }else if TCode[i].Abrk[0].Type!=2 && (TCode[i+1].Type!=90 && TCode[i+2].Type!=90) && (TCode[i+1].Type!=91 && TCode[i+2].Type!=91){
                     Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                         Type : 302,
                         Abrk : TCode[i].Abrk,
@@ -58,7 +60,26 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         Movs : "<NIL>",
                         Line : TCode[i].Line,
                     }
+                }else if TCode[i+1].Type==90 && TCode[i+2].Type==90{
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 303,
+                        Abrk : TCode[i].Abrk,
+                        Name : "ADD_VAR",
+                        Text : TCode[i].Text,
+                        Movs : "<NIL>",
+                        Line : TCode[i].Line,
+                    }
+                }else if TCode[i+1].Type==91 && TCode[i+2].Type==91{
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 303,
+                        Abrk : TCode[i].Abrk,
+                        Name : "ABB_VAR",
+                        Text : TCode[i].Text,
+                        Movs : "<NIL>",
+                        Line : TCode[i].Line,
+                    }
                 }
+                
             case 7:
                 Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                     Type : 200,

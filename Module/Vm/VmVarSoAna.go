@@ -61,13 +61,26 @@ func ForSo(Code string)[]string{
 }
 
 func IfvmSo(Code string)bool{
-    IfLIst:=strings.Split(Code, "||")
+    IfLIst:=StickIfCodea(Code)
     for i:=0;i<=len(IfLIst)-1;i++{
-        IflistCd:=strings.Split(Code, "&&")
+        IflistCd:=StickIfCodeb(IfLIst[i])
+        if string(IfLIst[i][0])=="("{
+            Codes:=IfLIst[i][1:len(IfLIst[i])-1]
+            if IfvmSo(Codes){
+                return true
+            }
+        }
         Temp:=0
         for z:=0;z<=len(IflistCd)-1;z++{
-            if !IfOneVm(IflistCd[i]){
-                Temp=1
+            if string(IflistCd[z][0])=="("{
+                Codes:=IflistCd[z][1:len(IflistCd[z])-1]
+                if !IfvmSo(Codes){
+                    Temp=1
+                }
+            }else{
+                if !IfOneVm(IflistCd[z]){
+                    Temp=1
+                }
             }
         }
         if Temp==0{
@@ -76,7 +89,72 @@ func IfvmSo(Code string)bool{
     }
     return false
 }
-
+func StickIfCodea(Code string)map[int]string{
+    Code += "||"
+    strlock := 0
+    Res := make(map[int]string)
+    lens := 0
+    str := ""
+    for i:=0;i<=len(Code)-1;i++{
+        Text1 := string(Code[i])
+        Text2:=""
+        if i<len(Code)-1{
+            Text2 = string(Code[i+1])
+        }
+        if strlock==0 && Text1==" "{
+            continue
+        }
+        if Text1 == "("{
+            strlock++
+            //continue
+        }else if Text1 == ")"{
+            strlock--
+            //continue
+        }
+        if Text1=="|" && Text2=="|" && strlock==0{
+            Res[lens]=str
+            str=""
+            lens++
+            i++
+            continue
+        }
+        str += Text1
+    }
+    return Res
+}
+func StickIfCodeb(Code string)map[int]string{
+    Code += "&&"
+    strlock := 0
+    Res := make(map[int]string)
+    lens := 0
+    str := ""
+    for i:=0;i<=len(Code)-1;i++{
+        Text1 := string(Code[i])
+        Text2:=""
+        if i<len(Code)-1{
+            Text2 = string(Code[i+1])
+        }
+        if strlock==0 && Text1==" "{
+            continue
+        }
+        if Text1 == "("{
+            strlock++
+            //continue
+        }else if Text1 == ")"{
+            strlock--
+            //continue
+        }
+        if Text1=="&" && Text2=="&" && strlock==0{
+            Res[lens]=str
+            str=""
+            lens++
+            i++
+            continue
+        }
+        str += Text1
+    }
+    return Res
+}
 func IfOneVm(Code string)bool{
     Tmp:=Varlex(Code)
     Str := []string{}
