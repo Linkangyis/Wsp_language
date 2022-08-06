@@ -214,3 +214,44 @@ func IfOneVm(Code string)bool{
     }
     return false
 }
+
+func RuncCrunTmps(CodeRuns string)string{
+    TmpResMap:=make(map[int]string)
+    IdLen:=0
+    locks:=0
+    for i:=0;i<=len(CodeRuns)-1;i++{
+        Text := string(CodeRuns[i])
+        if Text=="("{
+            locks++
+        }else if Text==")"{
+            locks--
+        }
+        if Text==" "{
+            continue
+        }
+        if (Text=="+" || Text=="-"|| Text=="*"|| Text=="/"|| Text=="%" )&&locks==0{
+            IdLen++
+            TmpResMap[IdLen]+=Text
+            IdLen++
+            continue
+        } 
+        TmpResMap[IdLen]+=Text
+    }
+    TmpsListMap:=make(map[int]CrunTmpStruct)
+    for i:=0;i<=len(TmpResMap)-1;i++{
+        Text:=TmpResMap[i]
+        if Text=="+" || Text=="-"|| Text=="*"|| Text=="/"|| Text=="%" {
+            TmpsListMap[len(TmpsListMap)]=CrunTmpStruct{0,Text}
+        }else if string(Text[0])=="("{
+            TmpsListMap[len(TmpsListMap)]=CrunTmpStruct{0,VarSoAll(Text[1:len(Text)-1])}
+        }else{
+            TmpsListMap[len(TmpsListMap)]=CrunTmpStruct{0,VarSoAll(Text)}
+        }
+    }
+    Str:=""
+    //fmt.Println(TmpsListMap)
+    for i:=0;i<=len(TmpsListMap)-1;i++{
+        Str+=TmpsListMap[i].Text
+    }
+    return Str
+}

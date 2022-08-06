@@ -47,3 +47,8 @@ type VarSoBrkStruct struct{
     Type int
     Text string
 }
+
+type CrunTmpStruct struct{
+    Type int
+    Text string
+}

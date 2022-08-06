@@ -1,7 +1,7 @@
 package lex
 
 type Lex_Struct struct{
-    Type int
+    Type int 
     Text string
     Name string
     Line int

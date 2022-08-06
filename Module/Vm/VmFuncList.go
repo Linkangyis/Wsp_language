@@ -12,6 +12,7 @@ func RootFuncInit(){
     VmFuncRoot[301]=VarVm
     VmFuncRoot[302]=VarSo
     VmFuncRoot[303]=VarSetNum
+    VmFuncRoot[304]=CrunVm
     VmFuncRoot[209]=Add
     VmFuncRoot[202]=IfVm
     VmFuncRoot[213]=VmSwitch

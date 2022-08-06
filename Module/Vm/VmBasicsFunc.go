@@ -2,6 +2,7 @@ package vm
 
 import(
   "fmt"
+  "Wsp/Module/Formula"
 )
 
 /* PRINT VM*/
@@ -48,6 +49,7 @@ func ForVm(From TransmitValue)string{
     if len(Varlist)>1{
         RunCode(Varlist[0])
         for{
+            RunCode(Varlist[2])
             if !IfvmSo(Varlist[1]){
                 break
             }
@@ -56,7 +58,6 @@ func ForVm(From TransmitValue)string{
             if Res=="<BREAK>"{
                 break;
             }
-            RunCode(Varlist[2])
             if Res=="<CONTINUE>"{
                 LockBreakList=""
                 continue
@@ -133,6 +134,22 @@ func StrVm(From TransmitValue)string{
     }
     return Res
 }
+
+func EvalVm(From TransmitValue)string{
+    return VarSoAll(From.Value)
+}
+
+func CrunVm(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    CodeRuns:=Op.Text
+    Str := RuncCrunTmps(CodeRuns)
+    postfixExp:=crun.PostfixCRun(Str)
+    value := crun.RunNums(postfixExp)
+    ResValue:=TypeStrings(int(int64(value)))
+    return ResValue
+}
+
 
 /* FUNC VM*/
 /*

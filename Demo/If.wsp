@@ -1,8 +1,6 @@
-function aaa($a){
-    print($a)
-    $a[1][2]=aaa;
-    return $a
+$b=3;
+function aaa(){
+    return 2;
 }
-$a = 179;
-$b=aaa;
-$b($a)[1][2]($a);
+$a = 100*(($b++)+1*aaa()*(1+1)-1%3*(1+1)+114514);
+print($a);

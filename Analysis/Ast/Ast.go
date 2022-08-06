@@ -5,7 +5,6 @@ import(
   "Wsp/Module/Memory"
   "strconv"
   "strings"
-  "fmt"
 )
 
 func IsNum(s string) bool {
@@ -19,7 +18,6 @@ func Wsp_Ast(Code map[int]lex.Lex_Struct)Ast_Tree{
 }
 func Stick_Brk(BodyAst_Struct BodyAst_Struct)string{
     Res:=BodyAst_Struct.Text
-    fmt.Println(BodyAst_Struct)
     for i:=0;i<=len(BodyAst_Struct.Abrk)-1;i++{
         switch BodyAst_Struct.Abrk[i].Type{
             case 0:
@@ -76,11 +74,18 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
         if lex[i].Type==78{
             continue
         }
+        StLock := 0
+        if lex[i].Type==71{
+            Name="EVAL"
+            Type=15
+            i--
+            StLock=1
+        }
         var slock_string = make(map[int]string)
         var mlock_string = make(map[int]string)
         var xlock_string = make(map[int]string)
         var alock_string = make(map[int]Brks)
-        //if lex[i].Type!=90&&lex[i].Type!=91&&lex[i].Type!=92&&lex[i].Type!=93&&lex[i].Type!=94{
+        if lex[i].Type!=95 || StLock==1{
             for {
                 switch lex[i+1].Type {
                     case 71:
@@ -118,8 +123,11 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
                     break
                 }
             }
-        //}
+        }
         Res[len(Res)]=BodyAst_Struct{Type,Name,Text,slock_string,mlock_string,xlock_string,alock_string,Line}
+        if StLock==1{
+            StLock=0
+        }
     }
     for i:=0;i<=len(Res)-1;i++{
         Tmplen:=Line_Echo()

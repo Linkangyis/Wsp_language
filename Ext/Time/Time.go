@@ -5,12 +5,18 @@ import(
     "strconv"
 )
 
-func H_Info()(map[int]string){
+func Func_Info()(map[int]string){
     info := make(map[int]string)
     info[0] = "Time"
     info[1] = "Sleep"
     return info
 }
+
+func Package_Info()(string){
+    info := "Time"
+    return info
+}
+
 
 func Ints(text string)(int){
     ints, _ := strconv.Atoi(text)

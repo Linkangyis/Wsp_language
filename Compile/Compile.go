@@ -22,6 +22,21 @@ func Wsp_Compile(Codes ast.Ast_Tree)Res_Struct{
     return Res
 }
 
+func BrStick(Code ast.BodyAst_Struct)string{
+    Res := ""
+    List := Code.Abrk
+    for i:=0;i<=len(List)-1;i++{
+        Type := List[i].Type
+        Text := List[i].Text
+        if Type == 0{
+            Res += "("+Text+")"
+        }else{
+            Res += "["+Text+"]"
+        }
+    }
+    return Res
+}
+
 func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_Run{
     Res:=make(map[int]map[int]Body_Struct_Run)
     Len_Line := 0
@@ -51,7 +66,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                     //fmt.Println(i)
                     i+=tmp-1
-                }else if TCode[i].Abrk[0].Type!=2 && (TCode[i+1].Type!=90 && TCode[i+2].Type!=90) && (TCode[i+1].Type!=91 && TCode[i+2].Type!=91){
+                }else if TCode[i].Abrk[0].Type!=2 && (TCode[i+1].Type!=90 && TCode[i+2].Type!=90) && (TCode[i+1].Type!=91 && TCode[i+2].Type!=91) && (TCode[i+1].Type!=92 && TCode[i+1].Type!=93 && TCode[i+1].Type!=94){
                     Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                         Type : 302,
                         Abrk : TCode[i].Abrk,
@@ -78,6 +93,29 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         Movs : "<NIL>",
                         Line : TCode[i].Line,
                     }
+                }else if TCode[i].Abrk[0].Type!=2{
+                    Mov := ""
+                    tmp:=0
+                    for z:=i;z<=len(TCode)-1;z++{
+                        if TCode[z].Type==80{
+                            break
+                        }
+                        Text := ""
+                        if TCode[z].Type==50{
+                            Text = "$"+TCode[z].Text
+                        }else{
+                            Text = TCode[z].Text
+                        }
+                        Mov += Text+BrStick(TCode[z])
+                        tmp++
+                    }
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 304,
+                        Name : "CRUN_VAR",
+                        Text : Mov,
+                        Line : TCode[i].Line,
+                    }
+                    i+=tmp-1
                 }
                 
             case 7:
@@ -121,7 +159,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                 Len_Line++
                 Res[Len_Line]=make(map[int]Body_Struct_Run)
             case 0:
-                if len(TCode[i].Sbrk)>0{
+                if len(TCode[i].Sbrk)>0 && TCode[i+1].Type!=90&&TCode[i+1].Type!=91&&TCode[i+1].Type!=92&&TCode[i+1].Type!=93&&TCode[i+1].Type!=94{
                     Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                         Type : 205,
                         Abrk : TCode[i].Abrk,
@@ -130,6 +168,29 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         Movs : "<NIL>",
                         Line : TCode[i].Line,
                     }
+                }else if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94 || (TCode[i+1].Type==0 && (TCode[i+2].Type==90||TCode[i+2].Type==91||TCode[i+2].Type==92||TCode[i+2].Type==93||TCode[i+2].Type==94)){
+                    Mov := ""
+                    tmp:=0
+                    for z:=i;z<=len(TCode)-1;z++{
+                        if TCode[z].Type==80{
+                            break
+                        }
+                        Text := ""
+                        if TCode[z].Type==50{
+                            Text = "$"+TCode[z].Text
+                        }else{
+                            Text = TCode[z].Text
+                        }
+                        Mov += Text+BrStick(TCode[z])
+                        tmp++
+                    }
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 304,
+                        Name : "CRUN_VAR",
+                        Text : Mov,
+                        Line : TCode[i].Line,
+                    }
+                    i+=tmp-1
                 }else if TCode[i].Text!=""{
                     _,ok:=Code.FuncAst.FuncVars[TCode[i].Text]
                     if string(TCode[i].Text[0])=="\""||ast.IsNum(TCode[i].Text)||ok{
@@ -231,6 +292,65 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Text : TCode[i].Xbrk[0],
                     Movs : "",
                     Line : TCode[i].Line,
+                }
+            case 95:
+                if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94{
+                    Mov := ""
+                    tmp:=0
+                    for z:=i;z<=len(TCode)-1;z++{
+                        if TCode[z].Type==80{
+                            break
+                        }
+                        Text := ""
+                        if TCode[z].Type==50{
+                            Text = "$"+TCode[z].Text
+                        }else{
+                            Text = TCode[z].Text
+                        }
+                        Mov += Text+BrStick(TCode[z])
+                        tmp++
+                    }
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 304,
+                        Name : "CRUN_VAR",
+                        Text : Mov[1:],
+                        Line : TCode[i].Line,
+                    }
+                    i+=tmp-1
+                }
+            case 15:
+                if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94{
+                    Mov := ""
+                    tmp:=0
+                    for z:=i;z<=len(TCode)-1;z++{
+                        if TCode[z].Type==80{
+                            break
+                        }
+                        Text := ""
+                        if TCode[z].Type==50{
+                            Text = "$"+TCode[z].Text
+                        }else{
+                            Text = TCode[z].Text
+                        }
+                        Mov += Text+BrStick(TCode[z])
+                        tmp++
+                    }
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 304,
+                        Name : "CRUN_VAR",
+                        Text : Mov[1:],
+                        Line : TCode[i].Line,
+                    }
+                    i+=tmp-1
+                }else{
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 216,
+                        Abrk : TCode[i].Abrk,
+                        Name : "EVAL",
+                        Text : TCode[i].Sbrk[0],
+                        Movs : "<NIL>",
+                        Line : TCode[i].Line,
+                    }
                 }
         }
     }

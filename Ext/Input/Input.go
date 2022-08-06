@@ -4,9 +4,14 @@ import(
     "fmt"
 )
 
-func H_Info()(map[int]string){
+func Func_Info()(map[int]string){
     info := make(map[int]string)
     info[0] = "Input"
+    return info
+}
+
+func Package_Info()(string){
+    info := "Sys"
     return info
 }
 
