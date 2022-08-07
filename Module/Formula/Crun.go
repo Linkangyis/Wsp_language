@@ -6,17 +6,6 @@ import (
     "strconv"
 )
 
-type node struct {
-    value interface{}
-    next  *node
-}
-
-// 栈的链式结构实现
-type Stack struct {
-    top    *node
-    length int
-}
-
 func NewStack() *Stack {
     return &Stack{nil, 0}
 }
@@ -113,6 +102,9 @@ func printExp(exp []string) {
 // 是否数字
 func isDigit(r rune) bool {
     if r >= '0' && r <= '9' {
+        return true
+    }
+    if string(r)=="."{
         return true
     }
     return false
@@ -239,7 +231,7 @@ func getInt(s *Stack) float64 {
     case float64: // push进去的计算结果为int
         return v.(float64)
     case string: // exp中的数据为string
-        if i, err := strconv.Atoi(v.(string)); err != nil {
+        if i, err := strconv.ParseFloat(v.(string),64); err != nil {
             panic(err)
         } else {
             return float64(i)

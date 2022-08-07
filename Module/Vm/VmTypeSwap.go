@@ -15,6 +15,9 @@ func TypeStrings(num int)(string){
     return Text
 }
 
+func TypeFloatString(num float64)string{
+    return strconv.FormatFloat(num,'f',-1,64)
+}
 func TypeStrings_so(text string)(string){
     var texts string
     str_arr := strings.Split(text, "")

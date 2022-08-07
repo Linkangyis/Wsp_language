@@ -49,11 +49,11 @@ func ForVm(From TransmitValue)string{
     if len(Varlist)>1{
         RunCode(Varlist[0])
         for{
-            RunCode(Varlist[2])
             if !IfvmSo(Varlist[1]){
                 break
             }
             VmFuncUser[Op.Text](make(map[int]string))
+            RunCode(Varlist[2])
             Res:=LockBreakList
             if Res=="<BREAK>"{
                 break;
@@ -126,6 +126,7 @@ func IfVm(From TransmitValue)string{
     return ""
     
 }
+
 /* STR VM*/
 func StrVm(From TransmitValue)string{
     Res:=From.Opcode[From.OpRunId].Text
@@ -135,10 +136,12 @@ func StrVm(From TransmitValue)string{
     return Res
 }
 
+/* 孤儿函数*/
 func EvalVm(From TransmitValue)string{
     return VarSoAll(From.Value)
 }
 
+/* 计算虚拟机*/
 func CrunVm(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
@@ -146,7 +149,7 @@ func CrunVm(From TransmitValue)string{
     Str := RuncCrunTmps(CodeRuns)
     postfixExp:=crun.PostfixCRun(Str)
     value := crun.RunNums(postfixExp)
-    ResValue:=TypeStrings(int(int64(value)))
+    ResValue:=TypeFloatString(value)
     return ResValue
 }
 
@@ -189,7 +192,11 @@ func FuncVm(From TransmitValue)string{
     defer SetFunc(Tmps)
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
-            Init = Read_Array(Init+List[i].Text)
+            if Init[0]!='$'{
+                Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
+            }else{
+                Init = Read_Array(Init+List[i].Text)
+            }
         }else{
             SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text)
@@ -246,7 +253,11 @@ func VarSo(From TransmitValue)string{
     Tmps:=FuncName
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
-            Init = Read_Array(Init+List[i].Text)
+            if Init[0]!='$'{
+                Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
+            }else{
+                Init = Read_Array(Init+List[i].Text)
+            }
         }else{
             SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text)

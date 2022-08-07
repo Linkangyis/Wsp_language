@@ -202,6 +202,7 @@ func Read_Array(file string)string{
     }else if IsFile(file){
         return Read_File(file)
     }
+    
     return "NULL"
 }
 
