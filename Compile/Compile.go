@@ -95,6 +95,9 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                 }else if TCode[i].Abrk[0].Type!=2{
                     Mov := ""
+                    if TCode[i-1].Type==90||TCode[i-1].Type==91{
+                        Mov+=TCode[i-1].Text
+                    }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
                         if TCode[z].Type==80{
@@ -170,6 +173,9 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                 }else if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94 || (TCode[i+1].Type==0 && (TCode[i+2].Type==90||TCode[i+2].Type==91||TCode[i+2].Type==92||TCode[i+2].Type==93||TCode[i+2].Type==94)){
                     Mov := ""
+                    if TCode[i-1].Type==90||TCode[i-1].Type==91{
+                        Mov+=TCode[i-1].Text
+                    }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
                         if TCode[z].Type==80{
@@ -321,6 +327,9 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
             case 15:
                 if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94{
                     Mov := ""
+                    if TCode[i-1].Type==90||TCode[i-1].Type==91{
+                        Mov+=TCode[i-1].Text
+                    }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
                         if TCode[z].Type==80{

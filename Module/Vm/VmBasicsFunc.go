@@ -145,7 +145,7 @@ func EvalVm(From TransmitValue)string{
 func CrunVm(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
-    CodeRuns:=Op.Text
+    CodeRuns:="1*"+Op.Text
     Str := RuncCrunTmps(CodeRuns)
     postfixExp:=crun.PostfixCRun(Str)
     value := crun.RunNums(postfixExp)

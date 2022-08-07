@@ -41,8 +41,36 @@ func (s *Stack) Push(value interface{}) {
     s.length++
 }
 
+
+func negative(Num []string)[]string{ //负数解析
+    Tmp:=[]string{"1","*"}
+    Tmp=append(Tmp,Num...)
+    Num=Tmp
+    ResMap := make(map[int]string)
+    lens := 0
+    for i:=2;i<=len(Num)-1;i++{
+        Nums:=Num[i]
+        if (Num[i-1]=="-") && isSign(Num[i-2]){
+            lens--
+            ResMap[lens]=Num[i-1]+Nums
+        }else if (Num[i-1]=="+") && isSign(Num[i-2]){
+            lens--
+            ResMap[lens]=Nums
+        }else{
+            ResMap[lens]=Nums
+        }
+        lens++
+    }
+    Res:=[]string{}
+    for i:=0;i<=len(ResMap)-1;i++{
+        Res=append(Res,ResMap[i])
+    }
+    return Res
+}
+
 func PostfixCRun(str string)[]string{
     exp := toExp(str)
+    exp = negative(exp)
     postfixExp := toPostfix(exp)
     return postfixExp
 }
