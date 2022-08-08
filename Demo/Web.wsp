@@ -1,0 +1,15 @@
+function test(){
+    Web.Print("123")
+}
+Web.New_Web("test",test);
+wgo Web.Start("15559");
+
+function Exit(){
+    $a = Sys.Input("输入Exit关闭:");
+    if ($a=="Exit"){
+    
+    }else{
+        Exit();
+    }
+}
+Exit();

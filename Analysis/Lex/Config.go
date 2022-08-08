@@ -15,6 +15,7 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["switch"]=12
     Maps["case"]=13
     Maps["default"]=14
+    Maps["stick"]=16
     Maps["$"]=50
     Maps["("]=71
     Maps[")"]=72
@@ -58,6 +59,7 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["switch"]="SWITCH"
     Maps["case"]="SWITCH_CASE"
     Maps["default"]="SWITCH_DEFAULT"
+    Maps["stick"]="TEXTSTICK"
     Maps["$"]="VAR"
     Maps["("]="S_BRACKETS_A"
     Maps[")"]="S_BRACKETS_B"
