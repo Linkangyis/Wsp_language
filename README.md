@@ -19,7 +19,7 @@ ln -s WSP所在目录/wsp /usr/bin
 ```
 ## 介绍
 
-基于golang开发的解释型语言 使用wsp虚拟机，效率极高，当前版本 v3.1.2-beta.5,有PHP的简单 Python的实用 Golang的效率
+基于golang开发的解释型语言 使用wsp虚拟机，效率极高，当前版本 v3.1.2-beta.6,有PHP的简单 Python的实用 Golang的效率
 
 ## 开发
 
