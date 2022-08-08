@@ -136,6 +136,17 @@ func StrVm(From TransmitValue)string{
     return Res
 }
 
+/* STICK VM*/
+func VmStick(From TransmitValue)string{
+    Value := From.Value
+    list:=VarAnalysis(Value)
+    Res := ""
+    for i:=0;i<=len(list)-1;i++{
+        Res+=list[i]
+    }
+    return Res
+}
+
 /* 孤儿函数*/
 func EvalVm(From TransmitValue)string{
     return VarSoAll(From.Value)
@@ -201,6 +212,9 @@ func FuncVm(From TransmitValue)string{
             SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text)
             SetFunc(Init)
+            if _,ok:=VmFuncUser[Init];!ok{
+                ErrorFunc(Init)
+            }
             Init = VmFuncUser[Init](Var)
         }
     }
@@ -263,6 +277,9 @@ func VarSo(From TransmitValue)string{
             Var := VarAnalysis(List[i].Text)
             SetFunc(Init)
             defer SetFunc(Tmps)
+            if _,ok:=VmFuncUser[Init];!ok{
+                ErrorFunc(Init)
+            }
             Init = VmFuncUser[Init](Var)
         }
     }

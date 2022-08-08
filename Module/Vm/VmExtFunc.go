@@ -30,8 +30,8 @@ func InitFuncUserExtL(file string){
         Name := Funcmaps[i]
         Names := PackageName+"."+Funcmaps[i]
         if _,ok:=DelFunc[Name];!ok{
-            AddFunc, _ = Tmp.Lookup(Name)
             VmFuncUser[Names]=func(Value map[int]string)string{
+                AddFunc, _ = Tmp.Lookup(Name)
                 paths=TmpPaths
                 FuncName=TmpFuncName
                 return AddFunc.(func(map[int]string) string)(Value)

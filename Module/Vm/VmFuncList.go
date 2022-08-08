@@ -16,6 +16,8 @@ func RootFuncInit(){
     VmFuncRoot[209]=Add
     VmFuncRoot[202]=IfVm
     VmFuncRoot[213]=VmSwitch
+    VmFuncRoot[216]=EvalVm
+    VmFuncRoot[217]=VmStick
     VmFuncRoot[0]=StrVm
 }
 

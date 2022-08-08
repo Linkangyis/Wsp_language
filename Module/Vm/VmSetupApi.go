@@ -15,3 +15,15 @@ func ReadVmFuncIs()string{
 func ReadFuncOver()FuncResTmp{
     return OverAllFuncRes
 }
+
+func WspCodeFile()(string){
+    return CodeFilePath
+}
+
+func WspCodeFileSet(File string){
+    CodeFilePath = File
+}
+
+func UserFuncRun(FuncName string,Value map[int]string)string{
+    return VmFuncUser[FuncName](Value)
+}

@@ -43,7 +43,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: V3.1.2-Beta.5\nOpcache: V1.0")
+        fmt.Println("Version: V3.1.2-Beta.6\nOpcache: V1.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -67,6 +67,7 @@ func main(){
     }
     
     data, _ := ioutil.ReadFile(file)
+    vm.WspCodeFileSet(file)
     files := string(data)
     Inis:=ini.ReadIni()
     cache_file:=Inis["wsp_cache_file"]
@@ -94,9 +95,9 @@ func main(){
         fmt.Println("---------------------------------------------------------")
         for i:=0;i<=len(Opcode.Body)-1;i++{
             Codes:=Opcode.Body[i]
-            fmt.Println("第",i,"段:Type    Value    Name    Text    Mov    Line")
+            fmt.Println("第",i,"段:  ID  Type    Value    Name    Text    Mov    Line")
             for z:=0;z<=len(Codes)-1;z++{
-                fmt.Println("      ",z,Codes[z])
+                fmt.Println("          ",z,Codes[z])
             }
             fmt.Println("---------------------------------------------------------")
         }

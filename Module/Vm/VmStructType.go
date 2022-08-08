@@ -29,6 +29,8 @@ var OverLine int
 
 var FuncList compile.Func_Struct
 
+var CodeFilePath string
+
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
 type TransmitValue struct{
