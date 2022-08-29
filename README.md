@@ -91,6 +91,23 @@ wgo协程
 ```php
 wgo func();//参数有特殊处理，与非协程有很大变化，在运行前就会先将变量解析为静态值
 ```
+class类
+```php
+class Test{
+    function aaa($a){
+        print($a);
+    }
+    function _init_($c){
+        print($c)
+    }
+    function bb(){
+        $this->aaa(114514);
+    }
+    $a = 110;
+}
+$a = new Test(1);
+$a->bb();
+```
 ## 扩展开发
 ```golang
 package main
