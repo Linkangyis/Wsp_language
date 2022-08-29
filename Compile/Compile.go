@@ -100,7 +100,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
-                        if TCode[z].Type==80{
+                        if TCode[z].Type==80 || TCode[z].Type==96{
                             break
                         }
                         Text := ""
@@ -178,7 +178,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
-                        if TCode[z].Type==80{
+                        if TCode[z].Type==80 || TCode[z].Type==96{
                             break
                         }
                         Text := ""
@@ -304,7 +304,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Mov := ""
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
-                        if TCode[z].Type==80{
+                        if TCode[z].Type==80 || TCode[z].Type==96{
                             break
                         }
                         Text := ""
@@ -332,7 +332,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     }
                     tmp:=0
                     for z:=i;z<=len(TCode)-1;z++{
-                        if TCode[z].Type==80{
+                        if TCode[z].Type==80 || TCode[z].Type==96{
                             break
                         }
                         Text := ""

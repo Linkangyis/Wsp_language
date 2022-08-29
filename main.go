@@ -43,7 +43,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: V3.1.2\nOpcache: V1.0")
+        fmt.Println("Version: V3.1.3\nOpcache: V1.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -76,9 +76,7 @@ func main(){
         TmpS:=op.Opcaches_Read(cache_file+"/"+op.Md5(files))
         center.S_Memory_FromMap(TmpS.FuncList)
         Opcode=TmpS.Opcode
-        if len(Compile(files).Body)==len(TmpS.Opcode.Body){
-            vm.Wsp_Vm(TmpS.Opcode)
-        }
+        vm.Wsp_Vm(TmpS.Opcode)
         
     }else{
         Buildse:=Compile(files)
