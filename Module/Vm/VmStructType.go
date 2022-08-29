@@ -9,6 +9,8 @@ var VmFuncRoot = make(map[int]func(TransmitValue)string)
 
 var VmFuncUser = make(map[string]func(map[int]string)string)
 
+var VmClassUser = make(map[string]map[string]func(map[int]string)string)
+
 var VmFuncIs string = "Main"
 
 var OverAllFuncRes FuncResTmp
@@ -30,6 +32,12 @@ var OverLine int
 var FuncList compile.Func_Struct
 
 var CodeFilePath string
+
+var ClassId int = -1
+
+var OverClassAll map[string]compile.ClassStruct
+
+var classcdlock int=0
 
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 

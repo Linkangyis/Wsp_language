@@ -27,3 +27,8 @@ func WspCodeFileSet(File string){
 func UserFuncRun(FuncName string,Value map[int]string)string{
     return VmFuncUser[FuncName](Value)
 }
+
+func ReadClassId()string{
+    ClassId++
+    return TypeStrings(ClassId)
+}

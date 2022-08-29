@@ -15,6 +15,7 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
     UserFuncInit(OpcodeStruct.Func)
     InitFuncUserExt()
     Opcode := OpcodeStruct.Body
+    OverClassAll = OpcodeStruct.Class
     CodeRun(Opcode)
     VmEnd()
 }

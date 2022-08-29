@@ -22,4 +22,10 @@ type FuncAst_Struct struct{
 type Ast_Tree struct{
     FuncAst FuncAst_Struct
     BodyAst map[int]BodyAst_Struct
+    ClassAst map[string]ClassAstStruct
 }
+type ClassAstStruct struct{
+    ClassFunc FuncAst_Struct
+    ClassBody map[int]BodyAst_Struct
+}
+var classlock int = 0

@@ -16,8 +16,22 @@ func Wsp_Compile(Codes ast.Ast_Tree)Res_Struct{
         Name:=MemoryList[i]
         Funcs[Name]=Wsp_Compile_l(Codes.FuncAst.FuncList[Name])
     }
+    Class := make(map[string]ClassStruct)
+    ClassList:=Codes.ClassAst
+    for ClassName, Value := range ClassList{
+        Func_Structs:=Value.ClassFunc
+        FuncClass:=make(map[string]map[int]map[int]Body_Struct_Run)
+        for ClassFuncName,TValue := range Func_Structs.FuncList{
+            FuncClass[ClassFuncName]=Wsp_Compile_l(TValue)
+        }
+        ClassFunc:=Func_Struct{FuncClass,Func_Structs.FuncVars}
+        ClassBody:=Wsp_Compile_l(Value.ClassBody)
+        ClassOver:=ClassStruct{ClassFunc,ClassBody}
+        Class[ClassName]=ClassOver
+    }
     
     Res.Func=Func_Struct{Funcs,Codes.FuncAst.FuncVars}
+    Res.Class=Class
     
     return Res
 }
@@ -366,6 +380,15 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Type : 217,
                     Abrk : TCode[i].Abrk,
                     Name : "STICK",
+                    Text : TCode[i].Sbrk[0],
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+            case 18:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 218,
+                    Abrk : TCode[i].Abrk,
+                    Name : TCode[i].Text,
                     Text : TCode[i].Sbrk[0],
                     Movs : "<NIL>",
                     Line : TCode[i].Line,

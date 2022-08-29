@@ -9,6 +9,7 @@ import(
   "fmt"
   "Wsp/Compile"
 )
+var FILE string = "./.Var_Temps/"
 var AllOverPaths string = "./.Var_Temps/"
 var paths string = "./.Var_Temps/Main/"
 var TmpPaths string = "./.Var_Temps/Main/"
@@ -25,6 +26,10 @@ var retuenlon int=0
 var retuenpath string
 var tmpcs string
 var delmap = make(map[int]string)
+
+func RootCd(File string){
+    AllOverPaths+=File+"/"
+}
 
 func DelDirs(path string){
     delmap[len(delmap)]=path

@@ -1,0 +1,14 @@
+class Test{
+    function aaa($a){
+        print($a);
+    }
+    function _init_($c){
+        print($c)
+    }
+    function bb(){
+        $this->aaa(114514);
+    }
+    $a = 110;
+}
+$a = new Test(1);
+$a->bb();

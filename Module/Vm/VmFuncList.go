@@ -18,6 +18,7 @@ func RootFuncInit(){
     VmFuncRoot[213]=VmSwitch
     VmFuncRoot[216]=EvalVm
     VmFuncRoot[217]=VmStick
+    VmFuncRoot[218]=VmClass
     VmFuncRoot[0]=StrVm
 }
 
@@ -52,4 +53,40 @@ func UserFuncInit(funclist compile.Func_Struct){
             }
         }
     }
+}
+
+func UserClassInit(Class compile.ClassStruct,Id string){
+    Temps:=AllOverPaths
+    AllOverPaths=FILE
+    RootCd("Class"+Id)
+    Tmps:=FuncName
+    defer SetFunc(Tmps)
+    SetFunc("")
+    CodeRun(Class.ClassBody)
+    AllOverPaths=Temps
+    
+    funclist:=Class.ClassFunc
+    ListFunc:=make(map[string]func(map[int]string)string)
+    for name, _ := range funclist.FuncVars{
+        Name:=name+Id
+        Fname:=name
+        ListFunc[Name]=func(Var map[int]string)string{
+            VarFuncIs := funclist.FuncVars[Fname]
+            for i:=0;i<=len(Var)-1;i++{
+                AddArray(VarFuncIs[i],Var[i])
+            }
+            OverAllFuncRes.Name = Name
+            /*---------------------*/
+            Tmp:=ReadVmFuncIs()
+            SetVmFuncIs(Name)
+            /*---------------------*/
+            CodeRun(funclist.FuncList[Fname])
+            /*---------------------*/
+            defer SetVmFuncIs(Tmp)
+            defer InitOverAllFuncRes()
+            /*---------------------*/
+            return OverAllFuncRes.Res
+        }
+    }
+    VmClassUser[Id]=ListFunc
 }
