@@ -129,7 +129,7 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
                             i+=3
                         }
                 }
-                if lex[i+1].Type!=71&&lex[i+1].Type!=73&&lex[i+1].Type!=75{
+                if lex[i+1].Type!=71&&lex[i+1].Type!=73&&lex[i+1].Type!=75&&lex[i+1].Type!=91{
                     break
                 }
             }
