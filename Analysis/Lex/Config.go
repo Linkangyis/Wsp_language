@@ -18,6 +18,7 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["stick"]=16
     Maps["class"]=17
     Maps["new"]=18
+    Maps["extends"]=19
     Maps["$"]=50
     Maps["("]=71
     Maps[")"]=72
@@ -64,6 +65,7 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["stick"]="TEXTSTICK"
     Maps["class"]="CLASS"
     Maps["new"]="NEWCLASS"
+    Maps["extends"]="CLASSEXTENDS"
     Maps["$"]="VAR"
     Maps["("]="S_BRACKETS_A"
     Maps[")"]="S_BRACKETS_B"

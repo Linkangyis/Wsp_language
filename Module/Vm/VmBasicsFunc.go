@@ -432,7 +432,9 @@ func VmClass(From TransmitValue)string{
         RootCd("Class"+IdRes)
         SetFunc("_init_"+IdRes)
         RunCode("$this="+IdRes+";")
-        VmClassUser[IdRes]["_init_"+IdRes](VarAnalysis(BrkList[0].Text))
+        if _,ok:=VmClassUser[IdRes]["_init_"+IdRes];ok{
+            VmClassUser[IdRes]["_init_"+IdRes](VarAnalysis(BrkList[0].Text))
+        }
         AllOverPaths=Temps
     }
     return IdRes

@@ -66,6 +66,28 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
         Name := lex[i].Name
         Type := lex[i].Type
         Line := lex[i].Line
+        if lex[i].Type==17&&lex[i+2].Type==19{
+            Type = 19
+            var EndLien int
+            var Addid int
+            for z:=i;z<=len(lex)-1;z++{
+                if lex[z].Type==75{
+                    EndLien = z
+                    break;
+                }
+                Addid++
+            }
+            var List string
+            for z:=i+3;z<=EndLien-1;z++{
+                if lex[z].Type==0{
+                    List+=lex[z].Text+","
+                }
+            }
+            lex[EndLien-1] = lex[i+1]
+            List = List[0:len(List)-1]
+            Name = List
+            i+=Addid-1
+        }
         if lex[i].Type==50||lex[i].Type==1||lex[i].Type==17||lex[i].Type==18{
             i++
         }
@@ -158,11 +180,32 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             Res[i].Xbrk[0]="True"
         }else if Res[i].Type==17{
             classlock=1
-            //center.CA_Memory_FromMap(Res[i].Text)
             classfuncMap = make(map[string]map[int]BodyAst_Struct)
             classfuncVarMap = make(map[string]map[int]string)
             
             Body := Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
+            FuncLists:=FuncAst_Struct{classfuncMap,classfuncVarMap}
+            classMap[Res[i].Text] = ClassAstStruct{FuncLists,Body}
+            classlock=0
+        }else if Res[i].Type==19{
+            classlock=1
+            classfuncMap = make(map[string]map[int]BodyAst_Struct)
+            classfuncVarMap = make(map[string]map[int]string)
+            FatherList := strings.Split(Res[i].Name,",")
+            
+            for z:=0;z<=len(FatherList)-1;z++{
+                Values:=classMap[FatherList[z]]
+                classfuncMap = ExtendMapStick(classfuncMap,Values.ClassFunc.FuncList)
+                classfuncVarMap = ExtendMapStickVar(classfuncVarMap,Values.ClassFunc.FuncVars)
+            }
+            
+            Body := make(map[int]BodyAst_Struct)
+            for z:=0;z<=len(FatherList)-1;z++{
+                Values:=classMap[FatherList[z]].ClassBody
+                Body = ExtendMapStickBody(Body,Values)
+            }
+            
+            Body = ExtendMapStickBody(Body,Wsp_Ast_One(Complex(Res[i].Xbrk[0])))
             FuncLists:=FuncAst_Struct{classfuncMap,classfuncVarMap}
             classMap[Res[i].Text] = ClassAstStruct{FuncLists,Body}
             classlock=0
@@ -182,4 +225,34 @@ func Line_Echo()int{
 }
 func Line_Set(a int){
     lex.Line_Set(a)
+}
+func ExtendMapStick(x map[string]map[int]BodyAst_Struct,y map[string]map[int]BodyAst_Struct)map[string]map[int]BodyAst_Struct{
+    n:=make(map[string]map[int]BodyAst_Struct)
+    for i,v := range x {
+        n[i]=v
+    }
+    for i,v := range y {
+        n[i]=v
+    }
+    return n
+}
+func ExtendMapStickVar(x map[string]map[int]string,y map[string]map[int]string)map[string]map[int]string{
+    n:=make(map[string]map[int]string)
+    for i,v := range x {
+        n[i]=v
+    }
+    for i,v := range y {
+        n[i]=v
+    }
+    return n
+}
+func ExtendMapStickBody(x map[int]BodyAst_Struct,y map[int]BodyAst_Struct)map[int]BodyAst_Struct{
+    n:=make(map[int]BodyAst_Struct)
+    for i:=0;i<=len(x)-1;i++{
+        n[len(n)]=x[i]
+    }
+    for i:=0;i<=len(y)-1;i++{
+        n[len(n)]=y[i]
+    }
+    return n
 }
