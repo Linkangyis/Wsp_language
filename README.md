@@ -113,6 +113,35 @@ $TestClassB->Var = "测试2";
 $TestClass->TestPrint();
 $TestClassB->TestPrint();
 ```
+Class继承
+```php
+class Test{
+    function TestPrinta(){
+        print($this->Vara);
+    }
+    $Var = 0;
+    $Vara = 0;
+}
+class TestB{
+    function TestPrintb(){
+        print($this->Var);
+    }
+    $Var = 1;
+}
+class TestC extends Test,TestB{
+    function _init_(){
+        print($this->Var)
+    }
+    function Test(){
+        print("extends");
+        print($this->Var);
+    }
+}
+$a = new TestC();
+$a->Var=10086;
+$a->TestPrinta();
+$a->Test();
+```
 ## 扩展开发
 ```golang
 package main
