@@ -9,11 +9,17 @@ class Test{
     function TestPrint(){
         $this->PrintClass($this->Var);
     }
+    function Crun($a){
+        return $this->Var*$a;
+    }
     $Var = 110;
 }
 $TestClass = new Test(001);
 $TestClassB = new Test(002);
+$TestClassC = new Test(20);
 $TestClass->Var = "测试";
 $TestClassB->Var = "测试2";
 $TestClass->TestPrint();
 $TestClassB->TestPrint();
+$Run = $TestClassC->Crun(100);
+print($Run);

@@ -230,12 +230,16 @@ func RuncCrunTmps(CodeRuns string)string{
             continue
         }
         if (Text=="+" || Text=="-"|| Text=="*"|| Text=="/"|| Text=="%" )&&locks==0{
-            IdLen++
-            TmpResMap[IdLen]+=Text
-            if string(CodeRuns[i+1])!="+" && string(CodeRuns[i+1])!="-"{
+            if Text+string(CodeRuns[i+1])=="->"{
+                
+            }else{
                 IdLen++
+                TmpResMap[IdLen]+=Text
+                if string(CodeRuns[i+1])!="+" && string(CodeRuns[i+1])!="-"{
+                    IdLen++
+                }
+                continue
             }
-            continue
         } 
         TmpResMap[IdLen]+=Text
     }

@@ -44,8 +44,10 @@ func BrStick(Code ast.BodyAst_Struct)string{
         Text := List[i].Text
         if Type == 0{
             Res += "("+Text+")"
-        }else{
+        }else if Type == 1{
             Res += "["+Text+"]"
+        }else if Type == 3{
+            Res += "->"+Text
         }
     }
     return Res

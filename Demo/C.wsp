@@ -1,0 +1,4 @@
+function as(){
+    return 1;
+}
+print(as()-20);
