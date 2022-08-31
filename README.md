@@ -94,19 +94,24 @@ wgo func();//参数有特殊处理，与非协程有很大变化，在运行前�
 class类
 ```php
 class Test{
-    function aaa($a){
+    function PrintClass($a){
         print($a);
     }
     function _init_($c){
-        print($c)
+         $this->Var=$c;
+         print($this->Var);
     }
-    function bb(){
-        $this->aaa(114514);
+    function TestPrint(){
+        $this->PrintClass($this->Var);
     }
-    $a = 110;
+    $Var = 110;
 }
-$a = new Test(1);
-$a->bb();
+$TestClass = new Test(001);
+$TestClassB = new Test(002);
+$TestClass->Var = "测试";
+$TestClassB->Var = "测试2";
+$TestClass->TestPrint();
+$TestClassB->TestPrint();
 ```
 ## 扩展开发
 ```golang
