@@ -1,15 +1,45 @@
+$Prot_List[0]=14589;
+$Prot_List[1]=15589;
+$Prot_List[2]=16589;
+$Test = new ObjWeb();
+$Test->SetPort($Prot_List);
+$Test->SetFunc("Wweb",test);
+$Test->Run();
+
+
 function test(){
     Web.Print("123")
 }
-Web.New_Web("test",test);
-wgo Web.Start("14559");
 
-function Exit(){
-    $a = Sys.Input("输入Exit关闭:");
-    if ($a=="Exit"){
-    
-    }else{
-        Exit();
+class ObjWeb{
+    $Port;
+    function SetPort($Port){
+        $this->Port=$Port;
+    }
+    function Run(){
+        for($i=0;$i<=2;$i++){
+            $this->ClassRun($this->Port[$i]);
+        }
+        $this->Exit();
+    }
+    function ClassRun($Port){
+        $this->Log(stick("[HTTP Server][Port:",$Port,"] Loader ing..."));
+        wgo Web.Start($Port);
+        Time.Sleep(1);
+        $this->Log(stick("[HTTP Server][Port:",$Port,"] Start"));
+    }
+    function Exit(){
+        $a = Sys.Input("");
+        if ($a==""){
+            
+        }else{
+            Exit();
+        }
+    }
+    function SetFunc($file,$func){
+        Web.New_Web($file,$func);
+    }
+    function Log($text){
+        print($text);
     }
 }
-Exit();

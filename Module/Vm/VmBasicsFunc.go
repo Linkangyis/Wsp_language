@@ -206,7 +206,8 @@ func FuncVm(From TransmitValue)string{
     defer SetFunc(Tmps)
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
-            if Init[0]!='$'{
+            if Init[0]!='$'&&string(Init[0:2])!="0x"{
+                //Init = Read_Array(Init+List[i].Text)
                 Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
             }else{
                 Init = Read_Array(Init+List[i].Text)
@@ -225,8 +226,9 @@ func FuncVm(From TransmitValue)string{
                 RunCode("$this="+Init+";")
                 Init = VmClassUser[Init][Name](Var)
                 AllOverPaths=Temps
-                i++
+                //i++
             }else{
+                i--
                 Id:=Init
                 Temps:=AllOverPaths
                 AllOverPaths=FILE
@@ -234,7 +236,7 @@ func FuncVm(From TransmitValue)string{
                 Tmps:=FuncName
                 defer SetFunc(Tmps)
                 SetFunc("")
-                Init = Read_Array(List[i-1].Text)
+                Init = Read_Array(List[i].Text)
                 AllOverPaths=Temps
             }
         }else{
@@ -317,7 +319,7 @@ func VarSo(From TransmitValue)string{
     Tmps:=FuncName
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
-            if Init[0]!='$'{
+            if Init[0]!='$'&&string(Init[0:2])!="0x"{
                 Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
             }else{
                 Init = Read_Array(Init+List[i].Text)
@@ -336,8 +338,9 @@ func VarSo(From TransmitValue)string{
                 RunCode("$this="+Init+";")
                 Init = VmClassUser[Init][Name](Var)
                 AllOverPaths=Temps
-                i++
+                //i++
             }else{
+                i--
                 Id:=Init
                 Temps:=AllOverPaths
                 AllOverPaths=FILE
@@ -345,7 +348,7 @@ func VarSo(From TransmitValue)string{
                 Tmps:=FuncName
                 defer SetFunc(Tmps)
                 SetFunc("")
-                Init = Read_Array(List[i-1].Text)
+                Init = Read_Array(List[i].Text)
                 AllOverPaths=Temps
             }
         }else{

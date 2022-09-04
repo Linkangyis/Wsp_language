@@ -184,12 +184,12 @@ func Read_Array(file string)string{
     tmp:=file
     Altp:=So_Array_Io(file)
     VarName:=FuncName+Altp[0]
+
     Lisr := ""
     for i:=1;i<=len(Altp)-1;i++{
         Lisr +=Altp[i]
     }
     file = So_Array_Stick(VarName)
-    
     
     if len(tmp)>2{
         if tmp[0:2]=="0x"{
@@ -316,6 +316,7 @@ func AddArray(Arrs string,Var string)string{
                 Var+="/"+Init[i]
             }
             Var = Var[1:]
+            Var_Pointer(Arrs)
             CopyVmArray(Var,So_Array_Stick(Arrs))
             return ""
         }
