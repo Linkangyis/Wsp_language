@@ -39,10 +39,3 @@ func InitFuncUserExtL(file string){
         }
     }
 }
-
-func Test(){
-    InitFuncUserExt()
-    Test:=make(map[int]string)
-    Test[0]="4"
-    VmFuncUser["Tests"](Test)
-}

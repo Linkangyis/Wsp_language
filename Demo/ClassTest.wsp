@@ -1,0 +1,8 @@
+class test{
+    $Rb;
+    function _init_($ab){
+        $this->Rb = $ab;
+    }
+}
+$ss[0]=1
+$a = new test($ss);

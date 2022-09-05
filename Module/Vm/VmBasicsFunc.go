@@ -223,7 +223,7 @@ func FuncVm(From TransmitValue)string{
                 RootCd("Class"+Init)
                 SetFunc(Name)
                 defer SetFunc(Tmps)
-                RunCode("$this="+Init+";")
+                RunCode("$this=\""+Init+"\";")
                 Init = VmClassUser[Init][Name](Var)
                 AllOverPaths=Temps
                 //i++
@@ -335,7 +335,7 @@ func VarSo(From TransmitValue)string{
                 RootCd("Class"+Init)
                 SetFunc(Name)
                 defer SetFunc(Tmps)
-                RunCode("$this="+Init+";")
+                RunCode("$this=\""+Init+"\";")
                 Init = VmClassUser[Init][Name](Var)
                 AllOverPaths=Temps
                 //i++
@@ -428,15 +428,16 @@ func VmClass(From TransmitValue)string{
     UserClassInit(OverClassAll[Name],IdRes)
     BrkList:=Op.Abrk
     if len(BrkList)>0&&(BrkList[0].Type==0){
+        Values:=VarAnalysis(BrkList[0].Text)
         Tmps:=FuncName
         defer SetFunc(Tmps)
         Temps:=AllOverPaths
         AllOverPaths=FILE
         RootCd("Class"+IdRes)
         SetFunc("_init_"+IdRes)
-        RunCode("$this="+IdRes+";")
+        RunCode("$this=\""+IdRes+"\";")
         if _,ok:=VmClassUser[IdRes]["_init_"+IdRes];ok{
-            VmClassUser[IdRes]["_init_"+IdRes](VarAnalysis(BrkList[0].Text))
+            VmClassUser[IdRes]["_init_"+IdRes](Values)
         }
         AllOverPaths=Temps
     }

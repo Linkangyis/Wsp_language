@@ -1,8 +1,7 @@
 $Prot_List[0]=14589;
 $Prot_List[1]=15589;
 $Prot_List[2]=16589;
-$Test = new ObjWeb();
-$Test->SetPort($Prot_List);
+$Test = new Web($Prot_List);
 $Test->SetFunc("Wweb",test);
 $Test->Run();
 
@@ -13,7 +12,7 @@ function test(){
 
 class ObjWeb{
     $Port;
-    function SetPort($Port){
+    function _init_($Port){
         $this->Port=$Port;
     }
     function Run(){
@@ -23,17 +22,16 @@ class ObjWeb{
         $this->Exit();
     }
     function ClassRun($Port){
-        $this->Log(stick("[HTTP Server][Port:",$Port,"] Loader ing..."));
+        $this->Log(stick("[HTTP Server][Port:",$Port,"] HTTP Loader ing..."));
         wgo Web.Start($Port);
         Time.Sleep(1);
-        $this->Log(stick("[HTTP Server][Port:",$Port,"] Start"));
+        $this->Log(stick("[HTTP Server][Port:",$Port,"] HTTP Start OK"));
     }
     function Exit(){
-        $a = Sys.Input("");
-        if ($a==""){
-            
-        }else{
-            Exit();
+        for{
+            if (Sys.Input("")==""){
+                break;
+            }
         }
     }
     function SetFunc($file,$func){
@@ -43,3 +41,4 @@ class ObjWeb{
         print($text);
     }
 }
+class Web extends ObjWeb{}

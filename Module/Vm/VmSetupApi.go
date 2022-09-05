@@ -30,5 +30,5 @@ func UserFuncRun(FuncName string,Value map[int]string)string{
 
 func ReadClassId()string{
     ClassId++
-    return TypeStrings(ClassId)
+    return "Object-ClassUid<"+TypeStrings(ClassId)+">"
 }

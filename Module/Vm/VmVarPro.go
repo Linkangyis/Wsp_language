@@ -9,10 +9,10 @@ import(
   "fmt"
   "Wsp/Compile"
 )
-var FILE string = "./.Var_Temps/"
-var AllOverPaths string = "./.Var_Temps/"
-var paths string = "./.Var_Temps/Main/"
-var TmpPaths string = "./.Var_Temps/Main/"
+var FILE string = "./.<Var_Temps>/"
+var AllOverPaths string = "./.<Var_Temps>/"
+var paths string = "./.<Var_Temps>/Main/"
+var TmpPaths string = "./.<Var_Temps>/Main/"
 var FuncName string = "Main"
 var TmpFuncName  = "Main"
 
@@ -184,7 +184,13 @@ func Read_Array(file string)string{
     tmp:=file
     Altp:=So_Array_Io(file)
     VarName:=FuncName+Altp[0]
-
+    var Locks bool = false
+    if len(Altp[0])>2{
+        if Altp[0][0:2]=="0x"{
+            VarName=Altp[0]
+            Locks = true
+        }
+    }
     Lisr := ""
     for i:=1;i<=len(Altp)-1;i++{
         Lisr +=Altp[i]
@@ -203,6 +209,9 @@ func Read_Array(file string)string{
         }
     }
     if IsDir(file){
+        if Locks{
+            return VarName+Lisr
+        }
         return Pointer[VarName]+Lisr
     }else if IsFile(file){
         return Read_File(file)
@@ -353,6 +362,6 @@ func VarNameGenerate(Code compile.Body_Struct_Run)string{
 }
 
 func VmEnd(){
-    Del_Dir("./.Var_Temps")
+    Del_Dir("./.<Var_Temps>")
 }
 

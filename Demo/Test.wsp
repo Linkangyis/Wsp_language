@@ -28,4 +28,3 @@ $y=114;
 $p[$y][aaa(123)]=7;
 print($p[114][123]);
 
-print(Test.Tests("Test Dls"));
