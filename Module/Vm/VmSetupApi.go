@@ -25,10 +25,15 @@ func WspCodeFileSet(File string){
 }
 
 func UserFuncRun(FuncName string,Value map[int]string)string{
-    return VmFuncUser[FuncName](Value)
+    return VmFuncUser[FuncName](Value,&Mains)
 }
 
 func ReadClassId()string{
     ClassId++
     return "Object-ClassUid<"+TypeStrings(ClassId)+">"
+}
+
+func ReadWgoId()string{
+    WgoId++
+    return "WgoId<"+TypeStrings(WgoId)+">"
 }

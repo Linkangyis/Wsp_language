@@ -6,6 +6,7 @@ import(
 )
 
 func Wsp_Vm(OpcodeStruct compile.Res_Struct){
+    Mains = InitVar("Main",0)
     Temps:=ini.ReadDelFunc()
     for i:=0;i<=len(Temps)-1;i++{
         DelFunc[Temps[i]]=1
@@ -16,13 +17,12 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
     InitFuncUserExt()
     Opcode := OpcodeStruct.Body
     OverClassAll = OpcodeStruct.Class
-    CodeRun(Opcode)
-    VmEnd()
+    CodeRun(Opcode,&Mains)
 }
 
-func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run)string{
+func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run,Vales*FileValue)string{
     for i:=0;i<=len(Opcode)-1;i++{
-        Value := CodeBlockRun(Opcode[i])
+        Value := CodeBlockRun(Opcode[i],Vales)
         if Value!="<FNV>"{
             return Value
         }
@@ -30,7 +30,7 @@ func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run)string{
     return "<FNV>"
 }
 
-func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run)string{
+func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValue)string{
     var ResLock int = 0
     var ResValue string
     var Govm int = 0
@@ -68,12 +68,12 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run)string{
         }
         /*FORBREAK*/
         if Type==210{
-            LockBreakList="<BREAK>"
+            Vales.LockBreakList="<BREAK>"
             return "<BREAK>"
         }
         /*FORCONTINUE*/
         if Type==211{
-            LockBreakList="<CONTINUE>"
+            Vales.LockBreakList="<CONTINUE>"
             return "<CONTINUE>"
         }
         /*运行ROOT函数*/
@@ -83,13 +83,21 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run)string{
                     Value : Value,
                     Opcode : OpcodeStructCd,
                     OpRunId : i,
+                    VarValue : Vales,
                 })
             }else{    //多线程启动状态
-                go VmFuncRoot[Type](TransmitValue{
-                    Value : Value,
-                    Opcode : OpcodeStructCd,
-                    OpRunId : i,
-                })
+                Id := ReadWgoId()
+                Tmp:=InitVar(Id,1)
+                WgoList[Id]=&Tmp
+                CopyVmArray(Mains.FILE,WgoList[Id].FILE)
+                go func(i int){
+                    VmFuncRoot[Type](TransmitValue{
+                        Value : Value,
+                        Opcode : OpcodeStructCd,
+                        OpRunId : i,
+                        VarValue : WgoList[Id],
+                    })
+                }(i)
                 Govm=0   //关闭多线程
             }
         }
@@ -104,7 +112,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run)string{
     return "<FNV>"
 }
 
-func CodeBlockRunSingle(OpcodeStructCd compile.Body_Struct_Run)string{
+func CodeBlockRunSingle(OpcodeStructCd compile.Body_Struct_Run,VarTmpP *FileValue)string{
     /*括号值涵盖*/
     Type:=OpcodeStructCd.Type
     Value := ""
@@ -120,6 +128,7 @@ func CodeBlockRunSingle(OpcodeStructCd compile.Body_Struct_Run)string{
             Value : Value,
             Opcode : OpcodeValue,
             OpRunId : 0,
+            VarValue : VarTmpP,
         })
     }
     return Res

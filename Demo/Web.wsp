@@ -1,6 +1,6 @@
-$Prot_List[0]=14589;
-$Prot_List[1]=15589;
-$Prot_List[2]=16589;
+$Prot_List[0]=19589;
+$Prot_List[1]=18589;
+$Prot_List[2]=17589;
 $Test = new Web($Prot_List);
 $Test->SetFunc("Wweb",test);
 $Test->Run();

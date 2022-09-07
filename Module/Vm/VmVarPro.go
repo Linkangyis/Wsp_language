@@ -1,20 +1,68 @@
 package vm
 
 import(
-  "os"
-  "io/ioutil"
-  "io"
-  "path"
-  "regexp"
-  "fmt"
-  "Wsp/Compile"
+    "strings"
+    "os"
+    "io/ioutil"
+    "io"
+    "path"
+    "regexp"
+    "fmt"
+    "Wsp/Compile"
 )
-var FILE string = "./.<Var_Temps>/"
-var AllOverPaths string = "./.<Var_Temps>/"
-var paths string = "./.<Var_Temps>/Main/"
-var TmpPaths string = "./.<Var_Temps>/Main/"
-var FuncName string = "Main"
-var TmpFuncName  = "Main"
+
+type FileValue struct{
+    FILE string
+    AllOverPaths string
+    paths string
+    TmpPaths string
+    FuncName string
+    TmpFuncName  string
+    LockBreakList string
+}
+
+func PathFileStick(file string,str string)string{
+    Ls:=strings.Split(file,"/")
+    var Res string
+    lock:=false
+    if file[0]=='.'{
+        lock=true
+    }
+    for i:=0;i<=len(Ls)-1;i++{
+        if Ls[i]==""{
+            Res += "/"
+        }else if Ls[i]=="ForMain"&&i==2{
+            Res += "/For"+str
+        }else{
+            Res += "/"+Ls[i]
+        }
+    }
+    if lock{
+        return Res[1:]
+    }
+    return Res+"/"
+}
+
+func InitVar(Id string,ifs int)FileValue{
+    if ifs==0{
+        return FileValue{
+            FILE : "./.<Var_Temps>/For"+Id+"/",
+            AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
+            paths  : "./.<Var_Temps>/For"+Id+"/Main/",
+            TmpPaths  : "./.<Var_Temps>/For"+Id+"/Main/",
+            FuncName  : "Main",
+            TmpFuncName  : "Main",
+        }
+    }
+    return FileValue{
+        FILE : "./.<Var_Temps>/For"+Id+"/",
+        AllOverPaths  : PathFileStick(Mains.AllOverPaths,Id),
+        paths  : PathFileStick(Mains.paths,Id),
+        TmpPaths  : PathFileStick(Mains.TmpPaths,Id),
+        FuncName  : Mains.FuncName,
+        TmpFuncName  : Mains.TmpFuncName,
+    }
+}
 
 var Pointer =make(map[string]string)
 var Pointere =make(map[string]string)
@@ -27,8 +75,8 @@ var retuenpath string
 var tmpcs string
 var delmap = make(map[int]string)
 
-func RootCd(File string){
-    AllOverPaths+=File+"/"
+func (ls *FileValue)RootCd(File string){
+    ls.AllOverPaths+=File+"/"
 }
 
 func DelDirs(path string){
@@ -42,18 +90,18 @@ func DelDirl(){
     }
     
 }
-func SetPaths(path string){
-    paths = path
+func (ls *FileValue)SetPaths(path string){
+    ls.paths = path
 }
-func ReadPaths()string{
-    return paths
+func (ls *FileValue)ReadPaths()string{
+    return ls.paths
 }
-func CopyArray(start string,stop string){
-    start = FuncName+start
-    stop = FuncName+stop
-    Var_Pointer(So_Array_Io(stop)[0])
-    start = So_Array_Stick(start)
-    stop = So_Array_Stick(stop)
+func CopyArray(start string,stop string,Vales *FileValue){
+    start = Vales.FuncName+start
+    stop = Vales.FuncName+stop
+    Var_Pointer(So_Array_Io(stop)[0],Vales)
+    start = So_Array_Stick(start,Vales)
+    stop = So_Array_Stick(stop,Vales)
     if Exists(start){
         if IsDir(start){
             Del_File(stop)
@@ -81,6 +129,8 @@ func CopyVmArray(start string,stop string){
         }
     }
 }
+
+
 func Copy_File(src, dst string) error {
     var err error
     var srcfd *os.File
@@ -133,9 +183,7 @@ func Copy_Dir(src string, dst string) error {
                 fmt.Println(err)
             }
         } else {
-            if err = Copy_File(srcfp, dstfp); err != nil {
-                fmt.Println(err)
-            }
+            Copy_File(srcfp, dstfp)
         }
     }
     return nil
@@ -165,7 +213,7 @@ func Exists(path string) bool{
             return true  
         }  
         return false  
-    }  
+    } 
     return true  
 }  
 func IsDir(path string) bool{  
@@ -180,10 +228,10 @@ func IsFile(path string) bool{
     return !IsDir(path)  
 }
 
-func Read_Array(file string)string{
+func Read_Array(file string,Vales *FileValue)string{
     tmp:=file
     Altp:=So_Array_Io(file)
-    VarName:=FuncName+Altp[0]
+    VarName:=Vales.FuncName+Altp[0]
     var Locks bool = false
     if len(Altp[0])>2{
         if Altp[0][0:2]=="0x"{
@@ -195,7 +243,9 @@ func Read_Array(file string)string{
     for i:=1;i<=len(Altp)-1;i++{
         Lisr +=Altp[i]
     }
-    file = So_Array_Stick(VarName)
+    file = So_Array_Stick(VarName,Vales)
+    file_SHANGJI:=So_Array_Stick_SHANGJI(VarName,Vales)
+    porinterTextNum:=""
     
     if len(tmp)>2{
         if tmp[0:2]=="0x"{
@@ -206,17 +256,30 @@ func Read_Array(file string)string{
                 file+="/"+Init[i]
             }
             file = file[1:]
+            
+            Inits:=So_Array_Io(tmp)
+            Inits[0]=Pointeref[Inits[0]]
+            file_SHANGJI = ""
+            for i:=0;i<=len(Inits)-2;i++{
+                file_SHANGJI+="/"+Inits[i]
+            }
+            porinterTextNum = Inits[len(Inits)-1]
+            file_SHANGJI = file_SHANGJI[1:]
         }
     }
-    if IsDir(file){
-        if Locks{
-            return VarName+Lisr
+    if Exists(file){
+        if IsDir(file){
+            if Locks{
+                return VarName+Lisr
+            }
+            return Pointer[VarName]+Lisr
+        }else if IsFile(file){
+            return Read_File(file)
         }
-        return Pointer[VarName]+Lisr
-    }else if IsFile(file){
-        return Read_File(file)
     }
-    
+    if Exists(file_SHANGJI){
+        return string(Read_File(file_SHANGJI)[TypeInts(string(porinterTextNum[1:len(porinterTextNum)-1]))])
+    }
     return "NULL"
 }
 
@@ -236,11 +299,11 @@ func Del_File(file string){
     os.Remove(file)
 }
 func New_File(file string){
-   err := os.MkdirAll(file, 0666)
-   if err != nil {
-      Read_Os_File(err)
-      New_File(file)
-   }
+    err := os.MkdirAll(file, 0666)
+    if err != nil {
+       Read_Os_File(err)
+       New_File(file)
+    }
 }
 
 func New_File_Var(file string,text string)string{
@@ -257,14 +320,14 @@ func New_File_Var(file string,text string)string{
 }
 
 func Read_File(filepath string) string {
-   fi, _ := os.Open(filepath)
-   fd, _ := ioutil.ReadAll(fi)
-   fi.Close()
-   return string(fd)
+    fi, _ := os.Open(filepath)
+    fd, _ := ioutil.ReadAll(fi)
+    fi.Close()
+    return string(fd)
 }
 
-func Del_Array(ar string){
-    ar = So_Array_Stick(ar)
+func Del_Array(ar string,Vales *FileValue){
+    ar = So_Array_Stick(ar,Vales)
     Del_File(ar)
     Del_Dir(ar)
 }
@@ -292,9 +355,10 @@ func So_Array_Io(Arrs string)(map[int]string){
     return avrs
 }
 
-func So_Array_Stick(Arrs string)string{
+func So_Array_Stick(Arrs string,Vales *FileValue)string{
+    Vales.paths = Vales.paths
     Maps:=So_Array_Io(Arrs)
-    file := paths
+    file := Vales.paths
     for i:=0;i<=len(Maps)-2;i++{
         file+=Maps[i]+"/"
     }
@@ -302,8 +366,18 @@ func So_Array_Stick(Arrs string)string{
     return file
 }
 
-func Var_Pointer(VarName string)string{
-    VarNameFile := paths+VarName
+func So_Array_Stick_SHANGJI(Arrs string,Vales *FileValue)string{
+    Maps:=So_Array_Io(Arrs)
+    file := Vales.paths
+    for i:=0;i<=len(Maps)-3;i++{
+        file+=Maps[i]+"/"
+    }
+    file = file+Maps[len(Maps)-1]
+    return file
+}
+
+func Var_Pointer(VarName string,Vales *FileValue)string{
+    VarNameFile := Vales.paths+VarName
     if _,ok:=Pointer[VarName];!ok{
         Pointerf[VarName]=VarNameFile
         Pointer[VarName]="0x"+TypeStrings(PointerLen)
@@ -314,8 +388,8 @@ func Var_Pointer(VarName string)string{
     return Pointer[VarName]
 }
 
-func AddArray(Arrs string,Var string)string{
-    Arrs = FuncName+Arrs
+func AddArray(Arrs string,Var string,Vales *FileValue)string{
+    Arrs = Vales.FuncName+Arrs
     if len(Var)>2{
         if Var[0:2]=="0x"{
             Init:=So_Array_Io(Var)
@@ -325,14 +399,14 @@ func AddArray(Arrs string,Var string)string{
                 Var+="/"+Init[i]
             }
             Var = Var[1:]
-            Var_Pointer(Arrs)
-            CopyVmArray(Var,So_Array_Stick(Arrs))
+            Var_Pointer(So_Array_Io(Arrs)[0],Vales)
+            CopyVmArray(Var,So_Array_Stick(Arrs,Vales))
             return ""
         }
     }
     Maps:=So_Array_Io(Arrs)
-    file := paths
-    Var_Pointer(Maps[0])
+    file := Vales.paths
+    Var_Pointer(Maps[0],Vales)
     for i:=0;i<=len(Maps)-2;i++{
         file+=Maps[i]+"/"
     }
@@ -341,19 +415,19 @@ func AddArray(Arrs string,Var string)string{
     return ""
 }
 
-func SetFunc(cdFile string){
-    TmpPaths = paths
-    TmpFuncName = FuncName
-    paths = AllOverPaths+cdFile+"/"
-    FuncName= cdFile
+func (St *FileValue)SetFunc(cdFile string){
+    St.TmpPaths = St.paths
+    St.TmpFuncName = St.FuncName
+    St.paths = St.AllOverPaths+cdFile+"/"
+    St.FuncName= cdFile
 }
 
-func VarNameGenerate(Code compile.Body_Struct_Run)string{
+func VarNameGenerate(Code compile.Body_Struct_Run,Vales *FileValue)string{
     List := Code.Abrk
     Res := Code.Text
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
-            Res+="["+VarSoAll(List[i].Text)+"]"
+            Res+="["+VarSoAll(List[i].Text,Vales)+"]"
         }else{
             break
         }
@@ -362,6 +436,9 @@ func VarNameGenerate(Code compile.Body_Struct_Run)string{
 }
 
 func VmEnd(){
+    Del_Dir("./.<Var_Temps>")
+}
+func VmStart(){
     Del_Dir("./.<Var_Temps>")
 }
 

@@ -7,9 +7,9 @@ import(
 
 var VmFuncRoot = make(map[int]func(TransmitValue)string)
 
-var VmFuncUser = make(map[string]func(map[int]string)string)
+var VmFuncUser = make(map[string]func(map[int]string,*FileValue)string)
 
-var VmClassUser = make(map[string]map[string]func(map[int]string)string)
+var VmClassUser = make(map[string]map[string]func(map[int]string,*FileValue)string)
 
 var VmFuncIs string = "Main"
 
@@ -23,7 +23,8 @@ var OpcodeFuncTmp = make(map[string]compile.Res_Struct)
 
 var LexOpFuncTmp = make(map[string]map[int]lex.Lex_Struct)
 
-var LockBreakList string
+var IfStickTmpA  = make(map[string]map[int]string)
+var IfStickTmpB  = make(map[string]map[int]string)
 
 var DelFunc = make(map[string]int)
 
@@ -35,9 +36,14 @@ var CodeFilePath string
 
 var ClassId int = -1
 
+var WgoId int = -1
+
+var Mains FileValue
+
+var WgoList = make(map[string]*FileValue)
+
 var OverClassAll map[string]compile.ClassStruct
 
-var classcdlock int=0
 
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
@@ -45,6 +51,7 @@ type TransmitValue struct{
     Value string
     Opcode map[int]compile.Body_Struct_Run
     OpRunId int
+    VarValue *FileValue
 }
 
 type FuncResTmp struct{

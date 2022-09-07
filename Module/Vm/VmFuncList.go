@@ -27,24 +27,24 @@ func UserFuncInit(funclist compile.Func_Struct){
     for i:=0;i<=len(TmpList)-1;i++{
         Name:=TmpList[i]
         if Name[0:2]=="0x"{
-            VmFuncUser[Name]=func(Null map[int]string)string{
-                return CodeRun(funclist.FuncList[Name])
+            VmFuncUser[Name]=func(Null map[int]string,Vales *FileValue)string{
+                return CodeRun(funclist.FuncList[Name],Vales)
             }
         }else{
-            VmFuncUser[Name]=func(Var map[int]string)string{
+            VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
                 if _,ok:=DelFunc[Name];ok{
                     Errors("函数"+Name+"被禁用")
                 }
                 VarFuncIs := funclist.FuncVars[Name]
                 for i:=0;i<=len(Var)-1;i++{
-                    AddArray(VarFuncIs[i],Var[i])
+                    AddArray(VarFuncIs[i],Var[i],Vales)
                 }
                 OverAllFuncRes.Name = Name
                 /*---------------------*/
                 Tmp:=ReadVmFuncIs()
                 SetVmFuncIs(Name)
                 /*---------------------*/
-                CodeRun(funclist.FuncList[Name])
+                CodeRun(funclist.FuncList[Name],Vales)
                 /*---------------------*/
                 defer SetVmFuncIs(Tmp)
                 defer InitOverAllFuncRes()
@@ -55,32 +55,32 @@ func UserFuncInit(funclist compile.Func_Struct){
     }
 }
 
-func UserClassInit(Class compile.ClassStruct,Id string){
-    Temps:=AllOverPaths
-    AllOverPaths=FILE
-    RootCd("Class"+Id)
-    Tmps:=FuncName
-    defer SetFunc(Tmps)
-    SetFunc("")
-    CodeRun(Class.ClassBody)
-    AllOverPaths=Temps
+func UserClassInit(Class compile.ClassStruct,Id string,Vales *FileValue){
+    Temps:=Vales.AllOverPaths
+    Vales.AllOverPaths=Vales.FILE
+    Vales.RootCd("Class"+Id)
+    Tmps:=Vales.FuncName
+    defer Vales.SetFunc(Tmps)
+    Vales.SetFunc("")
+    CodeRun(Class.ClassBody,Vales)
+    Vales.AllOverPaths=Temps
     
     funclist:=Class.ClassFunc
-    ListFunc:=make(map[string]func(map[int]string)string)
+    ListFunc:=make(map[string]func(map[int]string,*FileValue)string)
     for name, _ := range funclist.FuncVars{
         Name:=name+Id
         Fname:=name
-        ListFunc[Name]=func(Var map[int]string)string{
+        ListFunc[Name]=func(Var map[int]string,Vales *FileValue)string{
             VarFuncIs := funclist.FuncVars[Fname]
             for i:=0;i<=len(Var)-1;i++{
-                AddArray(VarFuncIs[i],Var[i])
+                AddArray(VarFuncIs[i],Var[i],Vales)
             }
             OverAllFuncRes.Name = Name
             /*---------------------*/
             Tmp:=ReadVmFuncIs()
             SetVmFuncIs(Name)
             /*---------------------*/
-            CodeRun(funclist.FuncList[Fname])
+            CodeRun(funclist.FuncList[Fname],Vales)
             /*---------------------*/
             defer SetVmFuncIs(Tmp)
             defer InitOverAllFuncRes()

@@ -32,6 +32,7 @@ func PathExists(path string) (bool, error) {
 }
 var Files_s string
 func main(){
+    vm.VmStart()
     if len(os.Args)==1{
         fmt.Println("文件或路径不存在")
         os.Exit(0)
@@ -43,7 +44,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version: V4.1.0\nOpcache: V1.1")
+        fmt.Println("Version : V4.2.0\nOpcache : V1.1")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -100,4 +101,5 @@ func main(){
             fmt.Println("---------------------------------------------------------")
         }
     }
+    vm.VmEnd()
 }

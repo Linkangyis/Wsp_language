@@ -8,14 +8,14 @@ import(
 /* PRINT VM*/
 func Print(From TransmitValue)string{
     Value := From.Value
-    fmt.Println(VarAnalysis(Value)[0])
+    fmt.Println(VarAnalysis(Value,From.VarValue)[0])
     return "<TRUE>"
 }
 
 /* ADD VM */
 func Add(From TransmitValue)string{
     Value := From.Value
-    list := VarAnalysis(Value)
+    list := VarAnalysis(Value,From.VarValue)
     Res := 0
     for i:=0;i<=len(list)-1;i++{
         Res += TypeInts(list[i])
@@ -26,84 +26,85 @@ func Add(From TransmitValue)string{
 func VarSetNum(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
+    
     Nums:=make(map[string]int)
     Nums["ABB_VAR"]=0
     Nums["ADD_VAR"]=1
     Type := Nums[Op.Name]
-    Ynum:=Read_Array(Op.Text)
+    Ynum:=Read_Array(Op.Text,From.VarValue)
     if Type==0{
-        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)-1))
+        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)-1),From.VarValue)
     }else{
-        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)+1))
+        AddArray(Op.Text,TypeStrings(TypeInts(Ynum)+1),From.VarValue)
     }
     return Ynum
 }
 /* FOR VM*/
 func ForVm(From TransmitValue)string{
-    LockBreakList=""
+    From.VarValue.LockBreakList=""
     Value := From.Value
     //IfOneVm("")
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     Varlist := ForSo(Value)
     if len(Varlist)>1{
-        RunCode(Varlist[0])
+        RunCode(Varlist[0],From.VarValue)
         for{
-            if !IfvmSo(Varlist[1]){
+            if !IfvmSo(Varlist[1],From.VarValue){
                 break
             }
-            VmFuncUser[Op.Text](make(map[int]string))
-            RunCode(Varlist[2])
-            Res:=LockBreakList
+            VmFuncUser[Op.Text](make(map[int]string),From.VarValue)
+            RunCode(Varlist[2],From.VarValue)
+            Res:=From.VarValue.LockBreakList
             if Res=="<BREAK>"{
                 break;
             }
             if Res=="<CONTINUE>"{
-                LockBreakList=""
+                From.VarValue.LockBreakList=""
                 continue
             }
         }
     }else if len(Varlist)==1 && Varlist[0]!=""{
         for{
-            if !IfvmSo(Varlist[0]){
+            if !IfvmSo(Varlist[0],From.VarValue){
                 break
             }
-            VmFuncUser[Op.Text](make(map[int]string))
-            Res:=LockBreakList
+            VmFuncUser[Op.Text](make(map[int]string),From.VarValue)
+            Res:=From.VarValue.LockBreakList
             if Res=="<BREAK>"{
                 break;
             }else if Res=="<CONTINUE>"{
-                LockBreakList=""
+                From.VarValue.LockBreakList=""
                 continue
             }
         }
     }else if Op.Abrk[0].Type==2&&len(Op.Abrk)==2{
         for{
-            VmFuncUser[Op.Text](make(map[int]string))
-            Res:=LockBreakList
+            VmFuncUser[Op.Text](make(map[int]string),From.VarValue)
+            Res:=From.VarValue.LockBreakList
             if Res=="<BREAK>"{
                 break;
             }else if Res=="<CONTINUE>"{
-                LockBreakList=""
+                From.VarValue.LockBreakList=""
                 continue
             }
-            if !IfvmSo(Op.Abrk[1].Text){
+            if !IfvmSo(Op.Abrk[1].Text,From.VarValue){
                 break
             }
         }
     }else{
         for{
-            VmFuncUser[Op.Text](make(map[int]string))
-            Res:=LockBreakList
+            VmFuncUser[Op.Text](make(map[int]string),From.VarValue)
+            Res:=From.VarValue.LockBreakList
             if Res=="<BREAK>"{
                 break;
             }else if Res=="<CONTINUE>"{
-                LockBreakList=""
+                From.VarValue.LockBreakList=""
                 continue
             }
         }
     }
-    LockBreakList=""
+    From.VarValue.LockBreakList=""
     return "<TRUE>"
 }
 
@@ -115,11 +116,11 @@ func IfVm(From TransmitValue)string{
         Ifs:=Op[i].Abrk[0].Text
         Type := Op[i].Type
         if Type==203{
-            VmFuncUser[CodeRun](make(map[int]string))
+            VmFuncUser[CodeRun](make(map[int]string),From.VarValue)
             return ""
         }
-        if IfvmSo(Ifs){
-            VmFuncUser[CodeRun](make(map[int]string))
+        if IfvmSo(Ifs,From.VarValue){
+            VmFuncUser[CodeRun](make(map[int]string),From.VarValue)
             return ""
         }
     }
@@ -139,7 +140,7 @@ func StrVm(From TransmitValue)string{
 /* STICK VM*/
 func VmStick(From TransmitValue)string{
     Value := From.Value
-    list:=VarAnalysis(Value)
+    list:=VarAnalysis(Value,From.VarValue)
     Res := ""
     for i:=0;i<=len(list)-1;i++{
         Res+=list[i]
@@ -149,7 +150,7 @@ func VmStick(From TransmitValue)string{
 
 /* 孤儿函数*/
 func EvalVm(From TransmitValue)string{
-    return VarSoAll(From.Value)
+    return VarSoAll(From.Value,From.VarValue)
 }
 
 /* 计算虚拟机*/
@@ -157,7 +158,7 @@ func CrunVm(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     CodeRuns:="1*"+Op.Text
-    Str := RuncCrunTmps(CodeRuns)
+    Str := RuncCrunTmps(CodeRuns,From.VarValue)
     postfixExp:=crun.PostfixCRun(Str)
     value := crun.RunNums(postfixExp)
     ResValue:=TypeFloatString(value)
@@ -182,12 +183,13 @@ func FuncVm(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     BrkList:=Op.Abrk
+    
     List:=make(map[int]VarSoBrkStruct)
     ListLen:=0
     tmp:=""
     for i:=0;i<=len(BrkList)-1;i++{
         if BrkList[i].Type==1{
-            tmp+="["+VarSoAll(BrkList[i].Text)+"]"
+            tmp+="["+VarSoAll(BrkList[i].Text,From.VarValue)+"]"
             if BrkList[i+1].Type!=1{
                 List[ListLen] = VarSoBrkStruct{1,tmp}
                 ListLen++
@@ -202,51 +204,51 @@ func FuncVm(From TransmitValue)string{
         }
     }
     Init:=Op.Name
-    Tmps:=FuncName
-    defer SetFunc(Tmps)
+    Tmps:=From.VarValue.FuncName
+    defer From.VarValue.SetFunc(Tmps)
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
             if Init[0]!='$'&&string(Init[0:2])!="0x"{
                 //Init = Read_Array(Init+List[i].Text)
                 Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
             }else{
-                Init = Read_Array(Init+List[i].Text)
+                Init = Read_Array(Init+List[i].Text,From.VarValue)
             }
         }else if List[i].Type==3{
             Name:=List[i].Text+Init
             i++
             if List[i].Type==0&&i<len(List){
-                SetFunc(Tmps)
-                Var := VarAnalysis(List[i].Text)
-                Temps:=AllOverPaths
-                AllOverPaths=FILE
-                RootCd("Class"+Init)
-                SetFunc(Name)
-                defer SetFunc(Tmps)
-                RunCode("$this=\""+Init+"\";")
-                Init = VmClassUser[Init][Name](Var)
-                AllOverPaths=Temps
+                From.VarValue.SetFunc(Tmps)
+                Var := VarAnalysis(List[i].Text,From.VarValue)
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Init)
+                From.VarValue.SetFunc(Name)
+                defer From.VarValue.SetFunc(Tmps)
+                RunCode("$this=\""+Init+"\";",From.VarValue)
+                Init = VmClassUser[Init][Name](Var,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
                 //i++
             }else{
                 i--
                 Id:=Init
-                Temps:=AllOverPaths
-                AllOverPaths=FILE
-                RootCd("Class"+Id)
-                Tmps:=FuncName
-                defer SetFunc(Tmps)
-                SetFunc("")
-                Init = Read_Array(List[i].Text)
-                AllOverPaths=Temps
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Id)
+                Tmps:=From.VarValue.FuncName
+                defer From.VarValue.SetFunc(Tmps)
+                From.VarValue.SetFunc("")
+                Init = Read_Array(List[i].Text,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
             }
         }else{
-            SetFunc(Tmps)
-            Var := VarAnalysis(List[i].Text)
-            SetFunc(Init)
+            From.VarValue.SetFunc(Tmps)
+            Var := VarAnalysis(List[i].Text,From.VarValue)
+            From.VarValue.SetFunc(Init)
             if _,ok:=VmFuncUser[Init];!ok{
                 ErrorFunc(Init)
             }
-            Init = VmFuncUser[Init](Var)
+            Init = VmFuncUser[Init](Var,From.VarValue)
         }
     }
     return Init
@@ -257,33 +259,34 @@ func VarVm(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode
     BrkList:=From.Opcode[Lids].Abrk
+    
     class := false
     if BrkList[0].Type==3{
         class=true
     }
-    VarName := VarNameGenerate(From.Opcode[Lids])
+    VarName := VarNameGenerate(From.Opcode[Lids],From.VarValue)
     for i:=Lids;i<=len(Op)-1;i++{
         if Op[i].Type!=301{
             var Values string
             if _,ok:=TmpCodeRun[i];ok{
                 Values = TmpCodeRun[i]
             }else{
-                Values =CodeBlockRunSingle(Op[i])
+                Values =CodeBlockRunSingle(Op[i],From.VarValue)
                 TmpCodeRun[i]=Values
             }
             if class{
-                VarCdName := Read_Array(VarName)
+                VarCdName := Read_Array(VarName,From.VarValue)
                 Id := VarCdName
-                Temps:=AllOverPaths
-                AllOverPaths=FILE
-                RootCd("Class"+Id)
-                Tmps:=FuncName
-                defer SetFunc(Tmps)
-                SetFunc("")
-                AddArray(BrkList[0].Text,Values)
-                AllOverPaths=Temps
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Id)
+                Tmps:=From.VarValue.FuncName
+                defer From.VarValue.SetFunc(Tmps)
+                From.VarValue.SetFunc("")
+                AddArray(BrkList[0].Text,Values,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
             }else{
-                AddArray(VarName,Values)
+                AddArray(VarName,Values,From.VarValue)
             }
             break
         }
@@ -296,12 +299,13 @@ func VarSo(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     BrkList:=Op.Abrk
+    
     List:=make(map[int]VarSoBrkStruct)
     ListLen:=0
     tmp:=""
     for i:=0;i<=len(BrkList)-1;i++{
         if BrkList[i].Type==1{
-            tmp+="["+VarSoAll(BrkList[i].Text)+"]"
+            tmp+="["+VarSoAll(BrkList[i].Text,From.VarValue)+"]"
             if BrkList[i+1].Type!=1{
                 List[ListLen] = VarSoBrkStruct{1,tmp}
                 ListLen++
@@ -315,61 +319,61 @@ func VarSo(From TransmitValue)string{
             ListLen++
         }
     }
-    Init:=Read_Array(Op.Text)
-    Tmps:=FuncName
+    Init:=Read_Array(Op.Text,From.VarValue)
+    Tmps:=From.VarValue.FuncName
     for i:=0;i<=len(List)-1;i++{
         if List[i].Type==1{
             if Init[0]!='$'&&string(Init[0:2])!="0x"{
                 Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
             }else{
-                Init = Read_Array(Init+List[i].Text)
+                Init = Read_Array(Init+List[i].Text,From.VarValue)
             }
         }else if List[i].Type==3{
             Name:=List[i].Text+Init
             i++
             if List[i].Type==0&&i<len(List){
-                SetFunc(Tmps)
-                Var := VarAnalysis(List[i].Text)
-                Temps:=AllOverPaths
-                AllOverPaths=FILE
-                RootCd("Class"+Init)
-                SetFunc(Name)
-                defer SetFunc(Tmps)
-                RunCode("$this=\""+Init+"\";")
-                Init = VmClassUser[Init][Name](Var)
-                AllOverPaths=Temps
+                From.VarValue.SetFunc(Tmps)
+                Var := VarAnalysis(List[i].Text,From.VarValue)
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Init)
+                From.VarValue.SetFunc(Name)
+                defer From.VarValue.SetFunc(Tmps)
+                RunCode("$this=\""+Init+"\";",From.VarValue)
+                Init = VmClassUser[Init][Name](Var,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
                 //i++
             }else{
                 i--
                 Id:=Init
-                Temps:=AllOverPaths
-                AllOverPaths=FILE
-                RootCd("Class"+Id)
-                Tmps:=FuncName
-                defer SetFunc(Tmps)
-                SetFunc("")
-                Init = Read_Array(List[i].Text)
-                AllOverPaths=Temps
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Id)
+                Tmps:=From.VarValue.FuncName
+                defer From.VarValue.SetFunc(Tmps)
+                From.VarValue.SetFunc("")
+                Init = Read_Array(List[i].Text,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
             }
         }else{
-            SetFunc(Tmps)
-            Var := VarAnalysis(List[i].Text)
-            SetFunc(Init)
-            defer SetFunc(Tmps)
+            From.VarValue. SetFunc(Tmps)
+            Var := VarAnalysis(List[i].Text,From.VarValue)
+             From.VarValue.SetFunc(Init)
+            defer  From.VarValue.SetFunc(Tmps)
             if _,ok:=VmFuncUser[Init];!ok{
                 ErrorFunc(Init)
             }
-            Init = VmFuncUser[Init](Var)
+            Init = VmFuncUser[Init](Var,From.VarValue)
         }
     }
     return Init
 }
 
 func VmSwitch(From TransmitValue)string{
-    LockBreakList=""
+    From.VarValue.LockBreakList=""
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
-    Condition:=VarSoAll(Op.Name)
+    Condition:=VarSoAll(Op.Name,From.VarValue)
     Id:=Op.Text
     Opcode := FuncList.FuncList[Id]
     CodeRunsOpcode := make(OpStruct)
@@ -387,7 +391,7 @@ func VmSwitch(From TransmitValue)string{
             if tmpName!=""{
                 ResCodeOp[tmpName]=CodeRunsOpcode
             }
-            tmpName =CodeBlockRunSingle(Opcode[i][1])
+            tmpName =CodeBlockRunSingle(Opcode[i][1],From.VarValue)
             CodeRunsOpcode = make(OpStruct)
             continue
         }
@@ -401,18 +405,18 @@ func VmSwitch(From TransmitValue)string{
     if _,ok:=ResCodeOp[Condition];ok{
         Code:=ResCodeOp[Condition]
         for i:=0;i<=len(Code)-1;i++{
-            CodeBlockRun(Code[i])
-            if LockBreakList=="<BREAK>"{
-                LockBreakList=""
+            CodeBlockRun(Code[i],From.VarValue)
+            if From.VarValue.LockBreakList=="<BREAK>"{
+                From.VarValue.LockBreakList=""
                 break;
             }
         }
     }else{
         Code:=Else
         for i:=0;i<=len(Code)-1;i++{
-            CodeBlockRun(Code[i])
-            if LockBreakList=="<BREAK>"{
-                LockBreakList=""
+            CodeBlockRun(Code[i],From.VarValue)
+            if From.VarValue.LockBreakList=="<BREAK>"{
+                From.VarValue.LockBreakList=""
                 break;
             }
         }
@@ -424,22 +428,23 @@ func VmClass(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     Name := Op.Name
+    
     IdRes:=ReadClassId()
-    UserClassInit(OverClassAll[Name],IdRes)
+    UserClassInit(OverClassAll[Name],IdRes,From.VarValue)
     BrkList:=Op.Abrk
     if len(BrkList)>0&&(BrkList[0].Type==0){
-        Values:=VarAnalysis(BrkList[0].Text)
-        Tmps:=FuncName
-        defer SetFunc(Tmps)
-        Temps:=AllOverPaths
-        AllOverPaths=FILE
-        RootCd("Class"+IdRes)
-        SetFunc("_init_"+IdRes)
-        RunCode("$this=\""+IdRes+"\";")
+        Values:=VarAnalysis(BrkList[0].Text,From.VarValue)
+        Tmps:=From.VarValue.FuncName
+        defer From.VarValue.SetFunc(Tmps)
+        Temps:=From.VarValue.AllOverPaths
+        From.VarValue.AllOverPaths=From.VarValue.FILE
+        From.VarValue.RootCd("Class"+IdRes)
+        From.VarValue.SetFunc("_init_"+IdRes)
+        RunCode("$this=\""+IdRes+"\";",From.VarValue)
         if _,ok:=VmClassUser[IdRes]["_init_"+IdRes];ok{
-            VmClassUser[IdRes]["_init_"+IdRes](Values)
+            VmClassUser[IdRes]["_init_"+IdRes](Values,From.VarValue)
         }
-        AllOverPaths=Temps
+        From.VarValue.AllOverPaths=Temps
     }
     return IdRes
 }
