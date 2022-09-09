@@ -22,6 +22,9 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
 
 func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run,Vales*FileValue)string{
     for i:=0;i<=len(Opcode)-1;i++{
+        if Vales.AllCodeStop{
+            continue;
+        }
         Value := CodeBlockRun(Opcode[i],Vales)
         if Value!="<FNV>"{
             return Value
@@ -66,6 +69,12 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
             Govm = 1
             continue
         }
+        
+        /* FOR END IF*/
+        if Vales.LockBreakList!=""{
+            break
+        }
+        
         /*FORBREAK*/
         if Type==210{
             Vales.LockBreakList="<BREAK>"
@@ -73,6 +82,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
         }
         /*FORCONTINUE*/
         if Type==211{
+            Vales.AllCodeStop = true
             Vales.LockBreakList="<CONTINUE>"
             return "<CONTINUE>"
         }

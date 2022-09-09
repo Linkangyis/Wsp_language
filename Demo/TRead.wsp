@@ -1,0 +1,11 @@
+$i=0;
+for{
+    $text = Sys.Input(stick("输入ID[",$i+1,"]:"));
+    $a[$i++]=$text;
+    if ($i==3){
+        break;
+    }
+}
+for($i=0;$i<=2;$i++){
+    print($a[$i]);
+}

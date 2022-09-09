@@ -61,7 +61,7 @@ func ForVm(From TransmitValue)string{
             }
             if Res=="<CONTINUE>"{
                 From.VarValue.LockBreakList=""
-                continue
+                From.VarValue.AllCodeStop = false
             }
         }
     }else if len(Varlist)==1 && Varlist[0]!=""{
@@ -75,7 +75,7 @@ func ForVm(From TransmitValue)string{
                 break;
             }else if Res=="<CONTINUE>"{
                 From.VarValue.LockBreakList=""
-                continue
+                From.VarValue.AllCodeStop = false
             }
         }
     }else if Op.Abrk[0].Type==2&&len(Op.Abrk)==2{
@@ -86,7 +86,7 @@ func ForVm(From TransmitValue)string{
                 break;
             }else if Res=="<CONTINUE>"{
                 From.VarValue.LockBreakList=""
-                continue
+                From.VarValue.AllCodeStop = false
             }
             if !IfvmSo(Op.Abrk[1].Text,From.VarValue){
                 break
@@ -100,7 +100,7 @@ func ForVm(From TransmitValue)string{
                 break;
             }else if Res=="<CONTINUE>"{
                 From.VarValue.LockBreakList=""
-                continue
+                From.VarValue.AllCodeStop = false
             }
         }
     }

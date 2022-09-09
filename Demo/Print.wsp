@@ -1,4 +1,4 @@
-$a = "1";
+$a = "10";
 switch($a){
     case 1:
         print(1);

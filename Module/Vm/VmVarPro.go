@@ -19,6 +19,7 @@ type FileValue struct{
     FuncName string
     TmpFuncName  string
     LockBreakList string
+    AllCodeStop bool
 }
 
 func PathFileStick(file string,str string)string{
@@ -52,6 +53,7 @@ func InitVar(Id string,ifs int)FileValue{
             TmpPaths  : "./.<Var_Temps>/For"+Id+"/Main/",
             FuncName  : "Main",
             TmpFuncName  : "Main",
+            AllCodeStop : false,
         }
     }
     return FileValue{
@@ -61,6 +63,7 @@ func InitVar(Id string,ifs int)FileValue{
         TmpPaths  : PathFileStick(Mains.TmpPaths,Id),
         FuncName  : Mains.FuncName,
         TmpFuncName  : Mains.TmpFuncName,
+        AllCodeStop : false,
     }
 }
 
@@ -78,43 +81,19 @@ var delmap = make(map[int]string)
 func (ls *FileValue)RootCd(File string){
     ls.AllOverPaths+=File+"/"
 }
-
-func DelDirs(path string){
-    delmap[len(delmap)]=path
-}
-func DelDirl(){
-    tmpcs=""
-    for i:=0;i<=len(delmap)-1;i++{
-        Del_Dir(delmap[i])
-        delete(delmap,i)
-    }
-    
-}
 func (ls *FileValue)SetPaths(path string){
     ls.paths = path
 }
 func (ls *FileValue)ReadPaths()string{
     return ls.paths
 }
-func CopyArray(start string,stop string,Vales *FileValue){
-    start = Vales.FuncName+start
-    stop = Vales.FuncName+stop
-    Var_Pointer(So_Array_Io(stop)[0],Vales)
-    start = So_Array_Stick(start,Vales)
-    stop = So_Array_Stick(stop,Vales)
-    if Exists(start){
-        if IsDir(start){
-            Del_File(stop)
-            Del_Dir(stop)
-            Copy_Dir(start,stop)
-        }
-        if IsFile(start){
-            Del_File(stop)
-            Del_Dir(stop)
-            Copy_File(start,stop)
-        }
-    }
+func (St *FileValue)SetFunc(cdFile string){
+    St.TmpPaths = St.paths
+    St.TmpFuncName = St.FuncName
+    St.paths = St.AllOverPaths+cdFile+"/"
+    St.FuncName= cdFile
 }
+
 func CopyVmArray(start string,stop string){
     if Exists(start){
         if IsDir(start){
@@ -206,8 +185,8 @@ func Get_All_Array(pathname string) string {
     }
     return res
 }
-func Exists(path string) bool{
-    _, err := os.Stat(path)    //os.Stat获取文件信息  
+func Exists(path string) bool{  //获取文件是否存在
+    _, err := os.Stat(path)
     if err != nil {  
         if os.IsExist(err){  
             return true  
@@ -216,7 +195,7 @@ func Exists(path string) bool{
     } 
     return true  
 }  
-func IsDir(path string) bool{  
+func IsDir(path string) bool{    //目录
     s, err := os.Stat(path)  
     if err != nil {  
         return false  
@@ -224,11 +203,11 @@ func IsDir(path string) bool{
     return s.IsDir()  
 }  
 
-func IsFile(path string) bool{  
+func IsFile(path string) bool{    //文件
     return !IsDir(path)  
 }
 
-func Read_Array(file string,Vales *FileValue)string{
+func Read_Array(file string,Vales *FileValue)string{   //vm读取变量
     tmp:=file
     Altp:=So_Array_Io(file)
     VarName:=Vales.FuncName+Altp[0]
@@ -283,7 +262,7 @@ func Read_Array(file string,Vales *FileValue)string{
     return "NULL"
 }
 
-func Read_Os_File(files error){
+func Read_Os_File(files error){  //错误处理
     file:=string(files.Error())
     r, _ := regexp.Compile("r(.*):")
     file = r.FindString(file)[1:]
@@ -291,14 +270,14 @@ func Read_Os_File(files error){
     Del_File(file)
     Del_Dir(file)
 }
-func Del_Dir(file string){
+func Del_Dir(file string){  //删除目录
     os.RemoveAll(file)
 }
-func Del_File(file string){
+func Del_File(file string){   //删除文件
     file=file[0:len(file)-1]
     os.Remove(file)
 }
-func New_File(file string){
+func New_File(file string){   //无视报错，新建目录
     err := os.MkdirAll(file, 0666)
     if err != nil {
        Read_Os_File(err)
@@ -306,7 +285,7 @@ func New_File(file string){
     }
 }
 
-func New_File_Var(file string,text string)string{
+func New_File_Var(file string,text string)string{    //新建变量
     filename := file
     f, _ := os.Create(filename)
     defer f.Close()
@@ -319,20 +298,20 @@ func New_File_Var(file string,text string)string{
     return ""
 }
 
-func Read_File(filepath string) string {
+func Read_File(filepath string) string {    //读取文件
     fi, _ := os.Open(filepath)
     fd, _ := ioutil.ReadAll(fi)
     fi.Close()
     return string(fd)
 }
 
-func Del_Array(ar string,Vales *FileValue){
+func Del_Array(ar string,Vales *FileValue){    //删除变量
     ar = So_Array_Stick(ar,Vales)
     Del_File(ar)
     Del_Dir(ar)
 }
 
-func So_Array_Io(Arrs string)(map[int]string){
+func So_Array_Io(Arrs string)(map[int]string){    //解析数组
     lock := 0
     start:=0
     avrs := make(map[int]string)
@@ -355,7 +334,7 @@ func So_Array_Io(Arrs string)(map[int]string){
     return avrs
 }
 
-func So_Array_Stick(Arrs string,Vales *FileValue)string{
+func So_Array_Stick(Arrs string,Vales *FileValue)string{    //数组转路径
     Vales.paths = Vales.paths
     Maps:=So_Array_Io(Arrs)
     file := Vales.paths
@@ -366,7 +345,7 @@ func So_Array_Stick(Arrs string,Vales *FileValue)string{
     return file
 }
 
-func So_Array_Stick_SHANGJI(Arrs string,Vales *FileValue)string{
+func So_Array_Stick_SHANGJI(Arrs string,Vales *FileValue)string{    //数组转路径上级
     Maps:=So_Array_Io(Arrs)
     file := Vales.paths
     for i:=0;i<=len(Maps)-3;i++{
@@ -376,7 +355,7 @@ func So_Array_Stick_SHANGJI(Arrs string,Vales *FileValue)string{
     return file
 }
 
-func Var_Pointer(VarName string,Vales *FileValue)string{
+func Var_Pointer(VarName string,Vales *FileValue)string{   //声明指针
     VarNameFile := Vales.paths+VarName
     if _,ok:=Pointer[VarName];!ok{
         Pointerf[VarName]=VarNameFile
@@ -388,7 +367,7 @@ func Var_Pointer(VarName string,Vales *FileValue)string{
     return Pointer[VarName]
 }
 
-func AddArray(Arrs string,Var string,Vales *FileValue)string{
+func AddArray(Arrs string,Var string,Vales *FileValue)string{    //添加数组
     Arrs = Vales.FuncName+Arrs
     if len(Var)>2{
         if Var[0:2]=="0x"{
@@ -415,14 +394,7 @@ func AddArray(Arrs string,Var string,Vales *FileValue)string{
     return ""
 }
 
-func (St *FileValue)SetFunc(cdFile string){
-    St.TmpPaths = St.paths
-    St.TmpFuncName = St.FuncName
-    St.paths = St.AllOverPaths+cdFile+"/"
-    St.FuncName= cdFile
-}
-
-func VarNameGenerate(Code compile.Body_Struct_Run,Vales *FileValue)string{
+func VarNameGenerate(Code compile.Body_Struct_Run,Vales *FileValue)string{   //解析数组
     List := Code.Abrk
     Res := Code.Text
     for i:=0;i<=len(List)-1;i++{

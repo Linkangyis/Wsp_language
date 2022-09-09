@@ -1,13 +1,12 @@
 $Prot_List[0]=19589;
 $Prot_List[1]=18589;
-$Prot_List[2]=17589;
+$Prot_List[2]=11589;
 $Test = new Web($Prot_List);
 $Test->SetFunc("Wweb",test);
 $Test->Run();
 
-
 function test(){
-    Web.Print("123")
+    Web.Print("123");
 }
 
 class ObjWeb{
