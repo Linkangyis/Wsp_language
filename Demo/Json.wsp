@@ -1,0 +1,8 @@
+for($i=0;$i<=10;$i++){
+    $list[$i]=$i;
+}
+$json = Seq.Json_encode($list);
+$array = Seq.Json_decode($json);
+for($i=0;$i<=len($array)-1;$i++){
+    print($array[$i]);
+}

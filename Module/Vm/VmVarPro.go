@@ -55,14 +55,24 @@ func InitVar(Id string,ifs int)FileValue{
             TmpFuncName  : "Main",
             AllCodeStop : false,
         }
+    }else if ifs==1{
+        return FileValue{
+            FILE : "./.<Var_Temps>/For"+Id+"/",
+            AllOverPaths  : PathFileStick(Mains.AllOverPaths,Id),
+            paths  : PathFileStick(Mains.paths,Id),
+            TmpPaths  : PathFileStick(Mains.TmpPaths,Id),
+            FuncName  : Mains.FuncName,
+            TmpFuncName  : Mains.TmpFuncName,
+            AllCodeStop : false,
+        }
     }
     return FileValue{
         FILE : "./.<Var_Temps>/For"+Id+"/",
-        AllOverPaths  : PathFileStick(Mains.AllOverPaths,Id),
-        paths  : PathFileStick(Mains.paths,Id),
-        TmpPaths  : PathFileStick(Mains.TmpPaths,Id),
-        FuncName  : Mains.FuncName,
-        TmpFuncName  : Mains.TmpFuncName,
+        AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
+        paths  : "./.<Var_Temps>/For"+Id+"/Main/",
+        TmpPaths  : "./.<Var_Temps>/For"+Id+"/Main/",
+        FuncName  : "Main",
+        TmpFuncName  : "Main",
         AllCodeStop : false,
     }
 }
@@ -306,7 +316,7 @@ func Read_File(filepath string) string {    //读取文件
 }
 
 func Del_Array(ar string,Vales *FileValue){    //删除变量
-    ar = So_Array_Stick(ar,Vales)
+    ar = So_Array_Stick(Vales.FuncName+ar,Vales)
     Del_File(ar)
     Del_Dir(ar)
 }
@@ -406,6 +416,21 @@ func VarNameGenerate(Code compile.Body_Struct_Run,Vales *FileValue)string{   //�
     }
     return Res
 }
+
+/*MAP TO ARRAY*/
+func CopyArrayStudio(Values map[string]interface{},Path string){
+    for index, data := range Values{
+        index = "["+index+"]"
+        switch data.(type) {
+            case map[string]interface{}:
+                CopyArrayStudio(data.(map[string]interface{}),Path+index+"/")
+            case string:
+                New_File(Path+index)
+                New_File_Var(Path+index,data.(string))
+        }
+    }
+}
+
 
 func VmEnd(){
     Del_Dir("./.<Var_Temps>")

@@ -1,6 +1,7 @@
 $Prot_List[0]=19589;
 $Prot_List[1]=18589;
 $Prot_List[2]=11589;
+$Prot_List[3]=14589;
 $Test = new Web($Prot_List);
 $Test->SetFunc("Wweb",test);
 $Test->Run();
@@ -9,18 +10,18 @@ function test(){
     Web.Print("123");
 }
 
-class ObjWeb{
+class ObjWeb{    //web类
     $Port;
     function _init_($Port){
         $this->Port=$Port;
     }
     function Run(){
-        for($i=0;$i<=2;$i++){
+        for($i=0;$i<=len($this->Port)-1;$i++){
             $this->ClassRun($this->Port[$i]);
         }
         $this->Exit();
     }
-    function ClassRun($Port){
+    function ClassRun($Port){    //运行
         $this->Log(stick("[HTTP Server][Port:",$Port,"] HTTP Loader ing..."));
         wgo Web.Start($Port);
         Time.Sleep(1);
@@ -40,4 +41,4 @@ class ObjWeb{
         print($text);
     }
 }
-class Web extends ObjWeb{}
+class Web extends ObjWeb{}  //继承类

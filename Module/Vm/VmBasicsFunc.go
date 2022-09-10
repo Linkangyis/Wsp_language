@@ -369,6 +369,7 @@ func VarSo(From TransmitValue)string{
     return Init
 }
 
+/*VM SWITCH*/
 func VmSwitch(From TransmitValue)string{
     From.VarValue.LockBreakList=""
     Lids := From.OpRunId
@@ -424,6 +425,8 @@ func VmSwitch(From TransmitValue)string{
     return ""
     
 }
+
+/*VM CLASS*/
 func VmClass(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
@@ -447,4 +450,16 @@ func VmClass(From TransmitValue)string{
         From.VarValue.AllOverPaths=Temps
     }
     return IdRes
+}
+
+/*VM LEN*/
+func VmLen(From TransmitValue)string{
+    Value := From.Value
+    Text := VarAnalysis(Value,From.VarValue)[0]
+    if len(Text)>2{
+        if Text[0:2]=="0x"{
+            return TypeStrings(len(ArrayRead(Text)))
+        }
+    }
+    return TypeStrings(len(Text))
 }

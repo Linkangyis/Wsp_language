@@ -21,5 +21,4 @@ func Input(value map[int]string)(string){
 	fmt.Scanln(&text)
     return text
 }
-
 //go build -buildmode=plugin -o input.so Input.go

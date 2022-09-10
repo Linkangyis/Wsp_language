@@ -274,3 +274,12 @@ func RuncCrunTmps(CodeRuns string,VarDump *FileValue)string{
     }
     return Str
 }
+func ArrayUseSo(n string)string{
+    if len(n)<2{
+        return n
+    }
+    if string(n[0:1])=="["{
+        return n[1:len(n)-1]
+    }
+    return n
+}

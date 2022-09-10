@@ -1,5 +1,9 @@
 package lex
 
+import(
+    "regexp"
+)
+
 type Lex_Struct struct{
     Type int 
     Text string
@@ -14,7 +18,15 @@ func Line_Echo()int{
 func Line_Set(a int){
     Lines=a
 }
+
+func CodeNotes(text string)(string){
+    match:=regexp.MustCompile(`//(.*)\n`).ReplaceAllString(text,"\n")
+    match = regexp.MustCompile(`#(.*)\n`).ReplaceAllString(match,"\n")
+    return match
+}
+
 func Wsp_Lexical(Code string)map[int]Lex_Struct{
+    Code = CodeNotes(Code)
     Res:=make(map[int]Lex_Struct)
     var String_region string
     var ALLLock int = 0

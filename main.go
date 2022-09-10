@@ -17,7 +17,7 @@ func RunCode(Code string){
     vm.Wsp_Vm(Compile(Code))
 }
 func Compile(Code string)compile.Res_Struct{
-    return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+" "))))
+    return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+"\n "))))
 }
 
 func PathExists(path string) (bool, error) {
@@ -44,7 +44,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version : V4.2.1\nOpcache : V1.1")
+        fmt.Println("Version : V4.3.0\nOpcache : V1.1")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
