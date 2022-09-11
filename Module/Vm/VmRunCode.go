@@ -99,13 +99,14 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
                 Id := ReadWgoId()
                 Tmp:=InitVar(Id,1)
                 WgoList[Id]=&Tmp
+                TmpP := WgoList[Id]
                 CopyVmArray(Mains.FILE,WgoList[Id].FILE)
                 go func(i int){
                     VmFuncRoot[Type](TransmitValue{
                         Value : Value,
                         Opcode : OpcodeStructCd,
                         OpRunId : i,
-                        VarValue : WgoList[Id],
+                        VarValue : TmpP,
                     })
                 }(i)
                 Govm=0   //关闭多线程

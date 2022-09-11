@@ -1,5 +1,9 @@
 package vm
 
+import(
+    "path/filepath"
+)
+
 func InitOverAllFuncRes(){
     OverAllFuncRes=FuncResTmp{}
 }
@@ -17,7 +21,8 @@ func ReadFuncOver()FuncResTmp{
 }
 
 func WspCodeFile()(string){
-    return CodeFilePath
+    Paths, _ := filepath.Split(CodeFilePath)
+    return Paths
 }
 
 func WspCodeFileSet(File string){

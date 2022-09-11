@@ -2,6 +2,7 @@ package vm
 
 import(
     "io/ioutil"
+    "os"
 )
 
 func ArrayRead(Value string)map[string]interface{}{
@@ -35,3 +36,15 @@ func NewArrayType(Values map[string]interface{})string{
     return ResAId
 }
 
+func FilePathRead(Path string)string{
+    file := Path
+    str, _ := os.Getwd()
+    if Exists(str+"/"+Path){
+        file = str+"/"+Path
+    }else if Exists(Path){
+        file = Path
+    }else if Exists(WspCodeFile()+Path){
+        file = WspCodeFile()+Path
+    }
+    return file
+}

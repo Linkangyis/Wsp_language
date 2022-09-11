@@ -1,7 +1,6 @@
-$tests = 2;
-$testb =2;
-($tests++);
-($tests--);
-$test = 1*(($tests++)*$testb*($tests++)*10+1)*($tests++);
-print($test);
-print($tests);
+function null($a){
+    
+}
+for($i=0;$i<=100000;$i++){
+    wgo null($i);
+}
