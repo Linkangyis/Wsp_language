@@ -40,10 +40,11 @@ var WgoId int = -1
 
 var Mains FileValue
 
+var VarRam bool = false
+
 var WgoList = make(map[string]*FileValue)
 
 var OverClassAll map[string]compile.ClassStruct
-
 
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 

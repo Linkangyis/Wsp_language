@@ -32,7 +32,6 @@ func PathExists(path string) (bool, error) {
 }
 var Files_s string
 func main(){
-    vm.VmStart()
     if len(os.Args)==1{
         fmt.Println("文件或路径不存在")
         os.Exit(0)
@@ -44,7 +43,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version : V4.3.1\nOpcache : V1.1")
+        fmt.Println("Version    V4.3.2\nOpcache    V1.1.0\nVarCache   V1.0.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -55,9 +54,10 @@ func main(){
             os.Exit(0)
         }else if os.Args[2] == "ini"{
             fmt.Println("wsp_func_del   用来禁用函数，用“,”隔开")
-            fmt.Println("wsp_debug      用来显示OPCODE数据 默认0关闭 1为开启")
-            fmt.Println("wsp_cache      用来开启OPCODE缓存 默认1开启 0关闭")
+            fmt.Println("wsp_debug      用来显示OPCODE数据 默认0关闭 1开启")
+            fmt.Println("wsp_cache      用来开启OPCODE缓存 默认0关闭 1开启")
             fmt.Println("wsp_cache_file 用来设置OPCODE缓存存储路径")
+            fmt.Println("wsp_var_ram    用来开启VarCache缓存 默认1开启 0关闭")
             fmt.Println("extension      用来载入SO动态库扩展，需使用绝对路径")
         }
     }else{
@@ -66,11 +66,14 @@ func main(){
         fmt.Println(os.Args[1])
         os.Exit(0)
     }
-    
     data, _ := ioutil.ReadFile(file)
     vm.WspCodeFileSet(file)
     files := string(data)
     Inis:=ini.ReadIni()
+    if Inis["wsp_var_ram"]=="1"{
+        vm.VarRamStart()
+    }
+    vm.VmStart()
     cache_file:=Inis["wsp_cache_file"]
     var Opcode compile.Res_Struct
     if ok,_ := PathExists(cache_file+"/"+op.Md5(files)); ok  && Inis["wsp_cache"]=="1"{

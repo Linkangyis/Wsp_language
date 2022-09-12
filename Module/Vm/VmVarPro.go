@@ -9,6 +9,7 @@ import(
     "regexp"
     "fmt"
     "Wsp/Compile"
+    "Wsp/Module/RamDisk"
 )
 
 type FileValue struct{
@@ -433,9 +434,17 @@ func CopyArrayStudio(Values map[string]interface{},Path string){
 
 
 func VmEnd(){
-    Del_Dir("./.<Var_Temps>")
+    if VarRam{
+        ramdisk.Del("./.<Var_Temps>")
+    }else{
+        Del_Dir("./.<Var_Temps>")
+    }
 }
 func VmStart(){
-    Del_Dir("./.<Var_Temps>")
+    if VarRam{
+        ramdisk.New(512,"./.<Var_Temps>")
+    }else{
+        Del_Dir("./.<Var_Temps>")
+    }
 }
 

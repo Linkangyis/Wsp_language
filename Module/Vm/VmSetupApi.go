@@ -4,6 +4,10 @@ import(
     "path/filepath"
 )
 
+func VarRamStart(){
+    VarRam = true
+}
+
 func InitOverAllFuncRes(){
     OverAllFuncRes=FuncResTmp{}
 }
