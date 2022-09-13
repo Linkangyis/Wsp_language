@@ -3,6 +3,7 @@ package vm
 import(
   "Wsp/Compile"
   "Wsp/Module/Ini"
+  "Wsp/Module/GC"
 )
 
 func Wsp_Vm(OpcodeStruct compile.Res_Struct){
@@ -22,6 +23,9 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
 
 func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run,Vales*FileValue)string{
     for i:=0;i<=len(Opcode)-1;i++{
+        if gc.Gc_Panic{
+            for{}
+        }
         if Vales.AllCodeStop{
             continue;
         }
@@ -34,16 +38,17 @@ func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run,Vales*FileValue)stri
 }
 
 func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValue)string{
-    var ResLock int = 0
     var ResValue string
-    var Govm int = 0
     TmpCodeRun = make(map[int]string)
     for i:=0;i<=len(OpcodeStructCd)-1;i++{
+        if gc.Gc_Panic{
+            for{}
+        }
         OverLine = OpcodeStructCd[i].Line
         var lock int = 0
         //Del_Dirl()
         /*func return生效*/
-        if OverAllFuncRes.IfRes==1{
+        if Vales.Func.IfRes==1{
             break
         }
         
@@ -60,35 +65,15 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
         }
         
         /*return 处理*/
-        if Type==207{
-            ResLock = 1
-            continue
-        }
-        /*多线程处理*/
-        if Type==208{
-            Govm = 1
-            continue
-        }
         
         /* FOR END IF*/
         if Vales.LockBreakList!=""{
             break
         }
         
-        /*FORBREAK*/
-        if Type==210{
-            Vales.LockBreakList="<BREAK>"
-            return "<BREAK>"
-        }
-        /*FORCONTINUE*/
-        if Type==211{
-            Vales.AllCodeStop = true
-            Vales.LockBreakList="<CONTINUE>"
-            return "<CONTINUE>"
-        }
         /*运行ROOT函数*/
         if _,ok:=VmFuncRoot[Type];ok && lock!=1{
-            if Govm==0{ //多线程关闭状态
+            if Vales.Govm{ //多线程关闭状态
                 ResValue = VmFuncRoot[Type](TransmitValue{
                     Value : Value,
                     Opcode : OpcodeStructCd,
@@ -98,25 +83,23 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
             }else{    //多线程启动状态
                 Id := ReadWgoId()
                 Tmp:=InitVar(Id,1)
-                WgoList[Id]=&Tmp
-                TmpP := WgoList[Id]
-                CopyVmArray(Mains.FILE,WgoList[Id].FILE)
+                CopyVmArray(Mains.FILE,Tmp.FILE)
                 go func(i int){
                     VmFuncRoot[Type](TransmitValue{
                         Value : Value,
                         Opcode : OpcodeStructCd,
                         OpRunId : i,
-                        VarValue : TmpP,
+                        VarValue : &Tmp,
                     })
+                    gc.GC_Queue(Tmp.FILE)
                 }(i)
-                Govm=0   //关闭多线程
+                Vales.Govm=true   //关闭多线程
             }
         }
-        Govm=0
         /*输出return内容*/
-        if ResLock==1{
-            OverAllFuncRes.Res = ResValue
-            OverAllFuncRes.IfRes = 1
+        if Vales.ResLock{
+            Vales.Func.Res = ResValue
+            Vales.Func.IfRes = 1
             return ResValue
         }
     }
@@ -125,6 +108,9 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
 
 func CodeBlockRunSingle(OpcodeStructCd compile.Body_Struct_Run,VarTmpP *FileValue)string{
     /*括号值涵盖*/
+    if gc.Gc_Panic{
+        for{}
+    }
     Type:=OpcodeStructCd.Type
     Value := ""
     if OpcodeStructCd.Abrk[0].Type==0{

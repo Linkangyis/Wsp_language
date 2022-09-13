@@ -20,6 +20,10 @@ func RootFuncInit(){
     VmFuncRoot[217]=VmStick
     VmFuncRoot[218]=VmClass
     VmFuncRoot[219]=VmLen
+    VmFuncRoot[207]=VmReturn
+    VmFuncRoot[208]=VmWgo
+    VmFuncRoot[210]=VmBreak
+    VmFuncRoot[211]=VmContinue
     VmFuncRoot[0]=StrVm
 }
 
@@ -40,7 +44,7 @@ func UserFuncInit(funclist compile.Func_Struct){
                 for i:=0;i<=len(Var)-1;i++{
                     AddArray(VarFuncIs[i],Var[i],Vales)
                 }
-                OverAllFuncRes.Name = Name
+                Vales.Func.Name = Name
                 /*---------------------*/
                 Tmp:=ReadVmFuncIs()
                 SetVmFuncIs(Name)
@@ -48,9 +52,9 @@ func UserFuncInit(funclist compile.Func_Struct){
                 CodeRun(funclist.FuncList[Name],Vales)
                 /*---------------------*/
                 defer SetVmFuncIs(Tmp)
-                defer InitOverAllFuncRes()
+                defer InitOverAllFuncRes(Vales)
                 /*---------------------*/
-                return OverAllFuncRes.Res
+                return Vales.Func.Res
             }
         }
     }
@@ -76,7 +80,7 @@ func UserClassInit(Class compile.ClassStruct,Id string,Vales *FileValue){
             for i:=0;i<=len(Var)-1;i++{
                 AddArray(VarFuncIs[i],Var[i],Vales)
             }
-            OverAllFuncRes.Name = Name
+            Vales.Func.Name = Name
             /*---------------------*/
             Tmp:=ReadVmFuncIs()
             SetVmFuncIs(Name)
@@ -84,9 +88,9 @@ func UserClassInit(Class compile.ClassStruct,Id string,Vales *FileValue){
             CodeRun(funclist.FuncList[Fname],Vales)
             /*---------------------*/
             defer SetVmFuncIs(Tmp)
-            defer InitOverAllFuncRes()
+            defer InitOverAllFuncRes(Vales)
             /*---------------------*/
-            return OverAllFuncRes.Res
+            return Vales.Func.Res
         }
     }
     VmClassUser[Id]=ListFunc

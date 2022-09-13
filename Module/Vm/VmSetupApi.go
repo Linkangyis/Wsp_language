@@ -8,8 +8,8 @@ func VarRamStart(){
     VarRam = true
 }
 
-func InitOverAllFuncRes(){
-    OverAllFuncRes=FuncResTmp{}
+func InitOverAllFuncRes(Ls *FileValue){
+    Ls.Func=&FuncResTmp{}
 }
 
 func SetVmFuncIs(Name string){
@@ -20,9 +20,6 @@ func ReadVmFuncIs()string{
     return VmFuncIs
 }
 
-func ReadFuncOver()FuncResTmp{
-    return OverAllFuncRes
-}
 
 func WspCodeFile()(string){
     Paths, _ := filepath.Split(CodeFilePath)

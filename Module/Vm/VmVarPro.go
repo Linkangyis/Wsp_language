@@ -21,6 +21,9 @@ type FileValue struct{
     TmpFuncName  string
     LockBreakList string
     AllCodeStop bool
+    ResLock bool
+    Govm bool
+    Func *FuncResTmp
 }
 
 func PathFileStick(file string,str string)string{
@@ -55,6 +58,9 @@ func InitVar(Id string,ifs int)FileValue{
             FuncName  : "Main",
             TmpFuncName  : "Main",
             AllCodeStop : false,
+            ResLock : false,
+            Govm  : true,
+            Func : &FuncResTmp{},
         }
     }else if ifs==1{
         return FileValue{
@@ -65,6 +71,9 @@ func InitVar(Id string,ifs int)FileValue{
             FuncName  : Mains.FuncName,
             TmpFuncName  : Mains.TmpFuncName,
             AllCodeStop : false,
+            ResLock : false,
+            Govm  : true,
+            Func : &FuncResTmp{},
         }
     }
     return FileValue{
@@ -75,6 +84,9 @@ func InitVar(Id string,ifs int)FileValue{
         FuncName  : "Main",
         TmpFuncName  : "Main",
         AllCodeStop : false,
+        ResLock : false,
+        Govm  : true,
+        Func : &FuncResTmp{},
     }
 }
 
@@ -442,7 +454,7 @@ func VmEnd(){
 }
 func VmStart(){
     if VarRam{
-        ramdisk.New(512,"./.<Var_Temps>")
+        ramdisk.New(1024,"./.<Var_Temps>")
     }else{
         Del_Dir("./.<Var_Temps>")
     }

@@ -1,7 +1,6 @@
 package ramdisk
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
 	"os"
@@ -23,9 +22,9 @@ func (i LinuxPlatformImplementation) create(opts Options) (*RAMDisk, error) {
 	sizeFlag := fmt.Sprintf("size=%d", opts.Size)
 	cmd := exec.Command(
 		"mount", "-v", "-t", "tmpfs", "-o", sizeFlag, "tmpfs", opts.MountPath)
-	stdout, err := cmd.Output()
+	_, err := cmd.Output()
 	if err == nil && opts.Logger != nil {
-		opts.Logger.Printf("%s\n", bytes.TrimSpace(stdout))
+		//opts.Logger.Printf("%s\n", bytes.TrimSpace(stdout))
 	}
 	return &rd, err
 }

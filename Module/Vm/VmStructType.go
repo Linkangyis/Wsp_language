@@ -13,7 +13,6 @@ var VmClassUser = make(map[string]map[string]func(map[int]string,*FileValue)stri
 
 var VmFuncIs string = "Main"
 
-var OverAllFuncRes FuncResTmp
 
 var TmpCodeRun map[int]string
 

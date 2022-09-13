@@ -9,6 +9,7 @@ import(
   "Wsp/Module/Ini"
   "Wsp/Module/Opcache"
   "Wsp/Module/Memory"
+  "Wsp/Module/GC"
   "Wsp/Compile"
   "io/ioutil"
 )
@@ -43,7 +44,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version    V4.3.2\nOpcache    V1.1.0\nVarCache   V1.0.0")
+        fmt.Println("Version    V4.3.3\nOpcache    V1.1.0\nVarCache   V1.0.0\nWspGc      V1.0.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -74,6 +75,8 @@ func main(){
         vm.VarRamStart()
     }
     vm.VmStart()
+    gc.SetGcSize(Inis["wsp_gc_size"])
+    go gc.GC_Runtime()
     cache_file:=Inis["wsp_cache_file"]
     var Opcode compile.Res_Struct
     if ok,_ := PathExists(cache_file+"/"+op.Md5(files)); ok  && Inis["wsp_cache"]=="1"{
