@@ -88,10 +88,46 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             Name = List
             i+=Addid-1
         }
-        if lex[i].Type==50||lex[i].Type==1||lex[i].Type==17||lex[i].Type==18{
+        if lex[i].Type==1{
+            if funcnewlock>0{
+                Type = 52
+            }
+            if lex[i+1].Type==0{
+                i++
+            }else{
+                Type = 51
+            }
+        }
+        if lex[i].Type==50||lex[i].Type==17||lex[i].Type==18{
             i++
         }
+        
         Text := lex[i].Text
+        
+        
+        if lex[i].Type==21{
+            Type = 21
+            var EndLien int
+            var Addid int
+            for z:=i;z<=len(lex)-1;z++{
+                if lex[z].Type==80{
+                    EndLien = z
+                    break;
+                }
+                Addid++
+            }
+            var List string
+            for z:=i;z<=EndLien-1;z++{
+                if lex[z].Type==0{
+                    List+=lex[z].Text+","
+                }
+            }
+            lex[EndLien-1] = lex[i+1]
+            List = List[0:len(List)-1]
+            Name = List
+            i+=Addid-1
+        }
+        
         if lex[i].Type==4&&lex[i+1].Type==3{
             Type=5
             Name="ELIF"
@@ -169,12 +205,19 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
     for i:=0;i<=len(Res)-1;i++{
         Tmplen:=Line_Echo()
         Line_Set(Res[i].Line)
-        if Res[i].Type==1 && classlock==0{          //花括号内容编译
+        if Res[i].Type==1 && classlock==0 && funcnewlock == 0{          //花括号内容编译 正常函数 域外
+            funcnewlock++
             funcMap[Res[i].Text]=Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
             funcVarMap[Res[i].Text]=Func_Stc(Res[i].Sbrk[0])
             center.A_Memory_FromMap(Res[i].Text)
             Res[i].Xbrk[0]="True"
-        }else if Res[i].Type==1 && classlock==1{
+            funcnewlock--
+        }else if Res[i].Type==52 && classlock==0{          //花括号内容编译 正常函数 域内
+            funcMap["9C"+Res[i].Text]=Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
+            funcVarMap["9C"+Res[i].Text]=Func_Stc(Res[i].Sbrk[0])
+            center.A_Memory_FromMap("9C"+Res[i].Text)
+            Res[i].Xbrk[0]="True"
+        }else if Res[i].Type==1 && classlock==1{          //花括号内容编译 Class函数
             classfuncMap[Res[i].Text]=Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
             classfuncVarMap[Res[i].Text]=Func_Stc(Res[i].Sbrk[0])
             Res[i].Xbrk[0]="True"
@@ -209,11 +252,22 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             FuncLists:=FuncAst_Struct{classfuncMap,classfuncVarMap}
             classMap[Res[i].Text] = ClassAstStruct{FuncLists,Body}
             classlock=0
+        }else if Res[i].Type==51{
+            for z:=0;z<=len(Res[i].Xbrk)-1;z++{
+                funcnewlock++
+                Mer:=center.New_MemoryFunc()
+                funcMap[Mer]=Wsp_Ast_One(Complex(Res[i].Xbrk[z]))
+                Res[i].Xbrk[z]=Mer
+                funcVarMap[Mer]=Func_Stc(Res[i].Sbrk[0])
+                funcnewlock--
+            }
         }else if len(Res[i].Xbrk)!=0{
             for z:=0;z<=len(Res[i].Xbrk)-1;z++{
+                funcnewlock++
                 Mer:=center.New_Memory()
                 funcMap[Mer]=Wsp_Ast_One(Complex(Res[i].Xbrk[z]))
                 Res[i].Xbrk[z]=Mer
+                funcnewlock--
             }
         }
         Line_Set(Tmplen)

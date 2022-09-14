@@ -269,6 +269,7 @@ func Read_Array(file string,Vales *FileValue)string{   //vm读取变量
             file_SHANGJI = file_SHANGJI[1:]
         }
     }
+    
     if Exists(file){
         if IsDir(file){
             if Locks{

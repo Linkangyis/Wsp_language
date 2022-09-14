@@ -29,3 +29,4 @@ type ClassAstStruct struct{
     ClassBody map[int]BodyAst_Struct
 }
 var classlock int = 0
+var funcnewlock int = 0

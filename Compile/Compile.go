@@ -432,6 +432,39 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                         Line : TCode[i].Line,
                     }
                 }
+            case 51:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 220,
+                    Abrk : TCode[i].Abrk,
+                    Name : "FUNCNEW",
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 52:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 221,
+                    Abrk : TCode[i].Abrk,
+                    Name : TCode[i].Text,
+                    Text : TCode[i].Xbrk[0],
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 21:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 222,
+                    Abrk : TCode[i].Abrk,
+                    Name : TCode[i].Text,
+                    Text : TCode[i].Name,
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
         }
     }
     Check(Res)

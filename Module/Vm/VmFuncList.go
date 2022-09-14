@@ -24,6 +24,9 @@ func RootFuncInit(){
     VmFuncRoot[208]=VmWgo
     VmFuncRoot[210]=VmBreak
     VmFuncRoot[211]=VmContinue
+    VmFuncRoot[220]=VmFuncInit
+    VmFuncRoot[221]=VmFuncInitBody
+    VmFuncRoot[222]=VmGlobal
     VmFuncRoot[0]=StrVm
 }
 
@@ -35,7 +38,7 @@ func UserFuncInit(funclist compile.Func_Struct){
             VmFuncUser[Name]=func(Null map[int]string,Vales *FileValue)string{
                 return CodeRun(funclist.FuncList[Name],Vales)
             }
-        }else{
+        }else if Name[0:2]!="0F"&&Name[0:2]!="9C"{
             VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
                 if _,ok:=DelFunc[Name];ok{
                     Errors("函数"+Name+"被禁用")
@@ -49,6 +52,8 @@ func UserFuncInit(funclist compile.Func_Struct){
                 Tmp:=ReadVmFuncIs()
                 SetVmFuncIs(Name)
                 /*---------------------*/
+                Del_Dir(Vales.paths)
+                New_File(Vales.paths)
                 CodeRun(funclist.FuncList[Name],Vales)
                 /*---------------------*/
                 defer SetVmFuncIs(Tmp)
@@ -94,4 +99,58 @@ func UserClassInit(Class compile.ClassStruct,Id string,Vales *FileValue){
         }
     }
     VmClassUser[Id]=ListFunc
+}
+
+
+func UserFuncInitManual(Name string){
+    funclist := FuncList
+    VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
+        if _,ok:=DelFunc[Name];ok{
+            Errors("函数"+Name+"被禁用")
+        }
+        VarFuncIs := funclist.FuncVars[Name]
+        for i:=0;i<=len(Var)-1;i++{
+            AddArray(VarFuncIs[i],Var[i],Vales)
+        }
+        Vales.Func.Name = Name
+        /*---------------------*/
+        Tmp:=ReadVmFuncIs()
+        SetVmFuncIs(Name)
+        /*---------------------*/
+        Del_Dir(Vales.paths)
+        New_File(Vales.paths)
+        CodeRun(funclist.FuncList[Name],Vales)
+        /*---------------------*/
+        defer SetVmFuncIs(Tmp)
+        defer InitOverAllFuncRes(Vales)
+        /*---------------------*/
+        return Vales.Func.Res
+    }
+}
+
+func UserFuncInitManual_9C(Name string){
+    funclist := FuncList
+    Names:="9C"+Name
+    VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
+        if _,ok:=DelFunc[Name];ok{
+            Errors("函数"+Name+"被禁用")
+        }
+        VarFuncIs := funclist.FuncVars[Names]
+        for i:=0;i<=len(Var)-1;i++{
+            AddArray(VarFuncIs[i],Var[i],Vales)
+        }
+        Vales.Func.Name = Name
+        /*---------------------*/
+        Tmp:=ReadVmFuncIs()
+        SetVmFuncIs(Name)
+        /*---------------------*/
+        Del_Dir(Vales.paths)
+        New_File(Vales.paths)
+        CodeRun(funclist.FuncList[Names],Vales)
+        /*---------------------*/
+        defer SetVmFuncIs(Tmp)
+        defer InitOverAllFuncRes(Vales)
+        /*---------------------*/
+        return Vales.Func.Res
+    }
 }

@@ -64,8 +64,6 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
             Value=OpcodeStructCd[i].Abrk[0].Text
         }
         
-        /*return 处理*/
-        
         /* FOR END IF*/
         if Vales.LockBreakList!=""{
             break

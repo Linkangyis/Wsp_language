@@ -16,6 +16,17 @@ func New_Memory()string{
     return "0x"+T
 }
 
+func New_MemoryFunc()string{
+    T:=Num_Hex(Memory_Id)
+    Memory_Id++
+    LenTmp:=len(T)
+    for i:=0;i<=7-LenTmp;i++{
+        T="0"+T
+    }
+    Memory_From_Map[len(Memory_From_Map)]="0F"+T
+    return "0F"+T
+}
+
 func Num_Hex(ten int) string {
     m := 0
     hex := make([]int, 0)
