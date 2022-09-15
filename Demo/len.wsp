@@ -1,13 +1,5 @@
-$a[1] = 1;
-Test();
-
-function Test(){
-    global $a;
-    print($a[1]);
+$a = 11111111111111111111;
+for($i=0;$i<=100000;$i++){
+    wgo null();
 }
-$ab[0]=1;
-$a = function(){
-    global $ab;
-    print($ab[0])
-}
-$a();
+function null(){}

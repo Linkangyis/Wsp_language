@@ -13,7 +13,7 @@ var Gc_Panic bool
 
 func SetGcSize(Size string){
     Sizes, _ := strconv.Atoi(Size[0:len(Size)-1])
-    GC_Size = Sizes*1000
+    GC_Size = Sizes*1024*1024
     Queue = NewConcurMap()
     Gc_Panic = false
 }

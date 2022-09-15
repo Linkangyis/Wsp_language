@@ -47,7 +47,7 @@ func VmGlobal(From TransmitValue)string{
     Text := Op.Text
     FatherList := strings.Split(Text,",")
     for i:=0;i<=len(FatherList)-1;i++{
-        pathMain:=From.VarValue.TmpPaths+From.VarValue.TmpFuncName+FatherList[i]
+        pathMain:=From.VarValue.FILE+"Main/Main"+FatherList[i]
         pathFunc:=From.VarValue.paths+From.VarValue.FuncName+FatherList[i]
         Var_Pointer(From.VarValue.FuncName+FatherList[i],From.VarValue)
         CopyVmArray(pathMain,pathFunc)

@@ -31,7 +31,9 @@ func WspCodeFileSet(File string){
 }
 
 func UserFuncRun(FuncName string,Value map[int]string)string{
-    return VmFuncUser[FuncName](Value,&Mains)
+    Ts:=Mains
+    Ts.SetFunc(FuncName)
+    return VmFuncUser[FuncName](Value,&Ts)
 }
 
 func ReadClassId()string{
