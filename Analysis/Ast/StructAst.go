@@ -23,6 +23,7 @@ type Ast_Tree struct{
     FuncAst FuncAst_Struct
     BodyAst map[int]BodyAst_Struct
     ClassAst map[string]ClassAstStruct
+    ClassLock map[string]bool
 }
 type ClassAstStruct struct{
     ClassFunc FuncAst_Struct
@@ -30,3 +31,4 @@ type ClassAstStruct struct{
 }
 var classlock int = 0
 var funcnewlock int = 0
+var classlocks = make(map[string]bool)

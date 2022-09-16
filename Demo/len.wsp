@@ -1,5 +1,8 @@
-$a = 11111111111111111111;
-for($i=0;$i<=100000;$i++){
-    wgo null();
+if(1==1){
+    function aaa(){
+        print(1);
+    }
 }
-function null(){}
+function bbb(){}
+bbb();
+aaa();

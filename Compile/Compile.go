@@ -32,7 +32,7 @@ func Wsp_Compile(Codes ast.Ast_Tree)Res_Struct{
     
     Res.Func=Func_Struct{Funcs,Codes.FuncAst.FuncVars}
     Res.Class=Class
-    
+    Res.ClassLock=Codes.ClassLock
     return Res
 }
 
@@ -460,6 +460,28 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Abrk : TCode[i].Abrk,
                     Name : TCode[i].Text,
                     Text : TCode[i].Name,
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 17:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 223,
+                    Abrk : make(map[int]ast.Brks),
+                    Name : "CLASSLOCK",
+                    Text : TCode[i].Text,
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
+                Len_Line++
+                Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 19:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 223,
+                    Abrk : make(map[int]ast.Brks),
+                    Name : "CLASSLOCK",
+                    Text : TCode[i].Text,
                     Movs : "<NIL>",
                     Line : TCode[i].Line,
                 }

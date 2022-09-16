@@ -14,7 +14,7 @@ func IsNum(s string) bool {
 func Wsp_Ast(Code map[int]lex.Lex_Struct)Ast_Tree{
     BodyAst:=Wsp_Ast_One(Code)
     FuncAst:=FuncAst_Struct{funcMap,funcVarMap}
-    return Ast_Tree{FuncAst,BodyAst,classMap}
+    return Ast_Tree{FuncAst,BodyAst,classMap,classlocks}
 }
 func Stick_Brk(BodyAst_Struct BodyAst_Struct)string{
     Res:=BodyAst_Struct.Text
@@ -207,12 +207,22 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
         Line_Set(Res[i].Line)
         if Res[i].Type==1 && classlock==0 && funcnewlock == 0{          //花括号内容编译 正常函数 域外
             funcnewlock++
+            _,ok1:=funcMap[Res[i].Text];
+            _,ok2:=funcMap["9C"+Res[i].Text]
+            if ok1 || ok2{
+                Error("Error: 函数 "+Res[i].Text+" 不允许重载")
+            }
             funcMap[Res[i].Text]=Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
             funcVarMap[Res[i].Text]=Func_Stc(Res[i].Sbrk[0])
             center.A_Memory_FromMap(Res[i].Text)
             Res[i].Xbrk[0]="True"
             funcnewlock--
         }else if Res[i].Type==52 && classlock==0{          //花括号内容编译 正常函数 域内
+            _,ok1:=funcMap[Res[i].Text];
+            _,ok2:=funcMap["9C"+Res[i].Text]
+            if ok1 || ok2{
+                Error("Error: 函数 "+Res[i].Text+" 不允许重载")
+            }
             funcMap["9C"+Res[i].Text]=Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
             funcVarMap["9C"+Res[i].Text]=Func_Stc(Res[i].Sbrk[0])
             center.A_Memory_FromMap("9C"+Res[i].Text)
@@ -228,6 +238,14 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             
             Body := Wsp_Ast_One(Complex(Res[i].Xbrk[0]))
             FuncLists:=FuncAst_Struct{classfuncMap,classfuncVarMap}
+            
+            if _,ok:=classMap[Res[i].Text];ok{
+                Error("Error: Class "+Res[i].Text+" 不允许重载")
+            }
+            classlocks[Res[i].Text]=false
+            if funcnewlock==0{
+                classlocks[Res[i].Text]=true
+            }
             classMap[Res[i].Text] = ClassAstStruct{FuncLists,Body}
             classlock=0
         }else if Res[i].Type==19{
@@ -250,6 +268,13 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             
             Body = ExtendMapStickBody(Body,Wsp_Ast_One(Complex(Res[i].Xbrk[0])))
             FuncLists:=FuncAst_Struct{classfuncMap,classfuncVarMap}
+            if _,ok:=classMap[Res[i].Text];ok{
+                Error("Error: Class "+Res[i].Text+" 不允许重载")
+            }
+            classlocks[Res[i].Text]=false
+            if funcnewlock==0{
+                classlocks[Res[i].Text]=true
+            }
             classMap[Res[i].Text] = ClassAstStruct{FuncLists,Body}
             classlock=0
         }else if Res[i].Type==51{

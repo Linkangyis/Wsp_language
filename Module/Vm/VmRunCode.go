@@ -7,6 +7,7 @@ import(
 )
 
 func Wsp_Vm(OpcodeStruct compile.Res_Struct){
+    ClassLock = OpcodeStruct.ClassLock
     Mains = InitVar("Main",0)
     Temps:=ini.ReadDelFunc()
     for i:=0;i<=len(Temps)-1;i++{

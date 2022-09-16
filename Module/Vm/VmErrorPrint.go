@@ -19,3 +19,8 @@ func ErrorFunc(err string){
     fmt.Println("-------------------------\n内核异常:\n-------------------------\n  函数 "+err+" 不存在","\n  在第",OverLine,"行\n-------------------------")
     os.Exit(0)
 }
+
+func ErrorClass(err string){ 
+    fmt.Println("-------------------------\n内核异常:\n-------------------------\n  Class "+err+" 不存在","\n  在第",OverLine,"行\n-------------------------")
+    os.Exit(0)
+}

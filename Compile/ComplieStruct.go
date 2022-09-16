@@ -8,6 +8,7 @@ type Res_Struct struct{
     Func Func_Struct
     Body map[int]map[int]Body_Struct_Run
     Class map[string]ClassStruct
+    ClassLock map[string]bool
 }
 type Func_Struct struct{
     FuncList map[string]map[int]map[int]Body_Struct_Run

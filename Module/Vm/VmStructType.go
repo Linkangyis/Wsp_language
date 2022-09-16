@@ -45,6 +45,8 @@ var WgoList = make(map[string]*FileValue)
 
 var OverClassAll map[string]compile.ClassStruct
 
+var ClassLock = make(map[string]bool)
+
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
 type TransmitValue struct{

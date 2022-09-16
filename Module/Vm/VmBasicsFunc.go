@@ -431,7 +431,12 @@ func VmClass(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
     Name := Op.Name
-    
+    if _,ok:=ClassLock[Name];!ok{
+        ErrorClass(Name)
+    }
+    if !ClassLock[Name]{
+        ErrorClass(Name)
+    }
     IdRes:=ReadClassId()
     UserClassInit(OverClassAll[Name],IdRes,From.VarValue)
     BrkList:=Op.Abrk

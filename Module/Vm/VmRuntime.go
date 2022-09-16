@@ -55,3 +55,11 @@ func VmGlobal(From TransmitValue)string{
     
     return ""
 }
+
+func VmClassLock(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    Text := Op.Text
+    ClassLock[Text]=true
+    return ""
+}

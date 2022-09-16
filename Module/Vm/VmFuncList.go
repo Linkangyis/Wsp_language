@@ -27,6 +27,7 @@ func RootFuncInit(){
     VmFuncRoot[220]=VmFuncInit
     VmFuncRoot[221]=VmFuncInitBody
     VmFuncRoot[222]=VmGlobal
+    VmFuncRoot[223]=VmClassLock
     VmFuncRoot[0]=StrVm
 }
 
