@@ -1,8 +1,8 @@
-if(1==1){
-    function aaa(){
-        print(1);
-    }
+$a = "Test";
+print(aaa($a));
+print("Test2");
+
+function aaa($test){
+    print($test);
+    return "Test1.5";
 }
-function bbb(){}
-bbb();
-aaa();

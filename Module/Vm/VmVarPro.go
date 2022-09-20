@@ -269,7 +269,6 @@ func Read_Array(file string,Vales *FileValue)string{   //vm读取变量
             file_SHANGJI = file_SHANGJI[1:]
         }
     }
-    
     if Exists(file){
         if IsDir(file){
             if Locks{
@@ -314,6 +313,7 @@ func New_File_Var(file string,text string)string{    //新建变量
     f, _ := os.Create(filename)
     defer f.Close()
     content := text
+    
     f.Write([]byte(content))
     if IsDir(file){
         os.RemoveAll(file)
@@ -393,6 +393,7 @@ func Var_Pointer(VarName string,Vales *FileValue)string{   //声明指针
 
 func AddArray(Arrs string,Var string,Vales *FileValue)string{    //添加数组
     Arrs = Vales.FuncName+Arrs
+    
     if len(Var)>2{
         if Var[0:2]=="0x"{
             Init:=So_Array_Io(Var)

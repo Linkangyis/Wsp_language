@@ -251,6 +251,7 @@ func FuncVm(From TransmitValue)string{
             Init = VmFuncUser[Init](Var,From.VarValue)
         }
     }
+    
     return Init
 }
 

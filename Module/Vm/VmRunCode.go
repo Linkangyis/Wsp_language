@@ -48,6 +48,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
         OverLine = OpcodeStructCd[i].Line
         var lock int = 0
         //Del_Dirl()
+        
         /*func return生效*/
         if Vales.Func.IfRes==1{
             break
@@ -99,6 +100,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
         if Vales.ResLock{
             Vales.Func.Res = ResValue
             Vales.Func.IfRes = 1
+            Vales.ResLock=false
             return ResValue
         }
     }

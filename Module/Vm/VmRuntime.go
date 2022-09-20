@@ -6,7 +6,9 @@ import(
 
 func VmReturn(From TransmitValue)string{
     From.VarValue.ResLock=true
-    return ""
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids+1]
+    return CodeBlockRunSingle(Op,From.VarValue)
 }
 
 func VmWgo(From TransmitValue)string{

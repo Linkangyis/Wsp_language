@@ -10,6 +10,7 @@ func VarRamStart(){
 
 func InitOverAllFuncRes(Ls *FileValue){
     Ls.Func=&FuncResTmp{}
+    Ls.Func.IfRes=0
 }
 
 func SetVmFuncIs(Name string){

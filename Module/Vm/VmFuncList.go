@@ -45,6 +45,7 @@ func UserFuncInit(funclist compile.Func_Struct){
                     Errors("函数"+Name+"被禁用")
                 }
                 VarFuncIs := funclist.FuncVars[Name]
+                Del_Dir(Vales.paths)
                 for i:=0;i<=len(Var)-1;i++{
                     AddArray(VarFuncIs[i],Var[i],Vales)
                 }
@@ -53,7 +54,7 @@ func UserFuncInit(funclist compile.Func_Struct){
                 Tmp:=ReadVmFuncIs()
                 SetVmFuncIs(Name)
                 /*---------------------*/
-                Del_Dir(Vales.paths)
+                //Del_Dir(Vales.paths)
                 New_File(Vales.paths)
                 CodeRun(funclist.FuncList[Name],Vales)
                 /*---------------------*/
@@ -110,6 +111,7 @@ func UserFuncInitManual(Name string){
             Errors("函数"+Name+"被禁用")
         }
         VarFuncIs := funclist.FuncVars[Name]
+        Del_Dir(Vales.paths)
         for i:=0;i<=len(Var)-1;i++{
             AddArray(VarFuncIs[i],Var[i],Vales)
         }
@@ -118,7 +120,7 @@ func UserFuncInitManual(Name string){
         Tmp:=ReadVmFuncIs()
         SetVmFuncIs(Name)
         /*---------------------*/
-        Del_Dir(Vales.paths)
+        //Del_Dir(Vales.paths)
         New_File(Vales.paths)
         CodeRun(funclist.FuncList[Name],Vales)
         /*---------------------*/
@@ -137,6 +139,7 @@ func UserFuncInitManual_9C(Name string){
             Errors("函数"+Name+"被禁用")
         }
         VarFuncIs := funclist.FuncVars[Names]
+        Del_Dir(Vales.paths)
         for i:=0;i<=len(Var)-1;i++{
             AddArray(VarFuncIs[i],Var[i],Vales)
         }
@@ -145,7 +148,7 @@ func UserFuncInitManual_9C(Name string){
         Tmp:=ReadVmFuncIs()
         SetVmFuncIs(Name)
         /*---------------------*/
-        Del_Dir(Vales.paths)
+        //Del_Dir(Vales.paths)
         New_File(Vales.paths)
         CodeRun(funclist.FuncList[Names],Vales)
         /*---------------------*/
