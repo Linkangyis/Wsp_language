@@ -1,8 +1,11 @@
-$a = "Test";
-print(aaa($a));
-print("Test2");
-
-function aaa($test){
-    print($test);
-    return "Test1.5";
+function test(){
+    class Tests{
+        function Test(){
+            print(1);
+        }
+    }
 }
+
+test();
+$a = new Tests();
+$a->Test();

@@ -1,12 +1,13 @@
 package compile
 
 import(
-  "os"
-  "fmt"
+    "os"
+    "fmt"
+    "Wsp/Module/Const"
 )
 
 func Error(err string,line int,errs string){
-    fmt.Println("语法错误:\n"+"在第",line,"行时"+err+errs)
+    fmt.Println("语法错误:\n"+"在第",line,"行时"+err+errs,"\n目录：",consts.WspConst.WspFile)
     os.Exit(0)
 }
 

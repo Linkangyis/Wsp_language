@@ -10,6 +10,7 @@ import(
   "Wsp/Module/Opcache"
   "Wsp/Module/Memory"
   "Wsp/Module/GC"
+  "Wsp/Module/Const"
   "Wsp/Compile"
   "io/ioutil"
 )
@@ -44,7 +45,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version    V4.3.7\nOpcache    V1.1.0\nVarCache   V1.0.0\nWspGc      V1.1.0")
+        fmt.Println("Version    V4.4.0\nOpcache    V1.1.0\nVarCache   V1.0.0\nWspGc      V1.1.0")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{
@@ -67,6 +68,7 @@ func main(){
         fmt.Println(os.Args[1])
         os.Exit(0)
     }
+    consts.WspConst.SetWspFile(file)
     data, _ := ioutil.ReadFile(file)
     vm.WspCodeFileSet(file)
     files := string(data)

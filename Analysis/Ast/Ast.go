@@ -89,12 +89,12 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
             i+=Addid-1
         }
         if lex[i].Type==1{
-            if funcnewlock>0{
+            if funcnewlock>0 && classlock==0{
                 Type = 52
             }
             if lex[i+1].Type==0{
                 i++
-            }else{
+            }else if classlock==0{
                 Type = 51
             }
         }
