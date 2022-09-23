@@ -9,6 +9,7 @@ var GC_Size int
 var Queue *ConcurMap
 var lock bool = true
 var Gc_Panic bool
+var Gc_End bool = false
 
 
 func SetGcSize(Size string){
@@ -46,4 +47,8 @@ func (d ConcurMap) Get() map[int]string{
 
 func GC_Queue(file string){
     Queue.Set(file)
+}
+
+func Gc_Ends(){
+    Gc_End = true
 }

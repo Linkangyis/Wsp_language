@@ -6,6 +6,7 @@ function test(){
     }
 }
 
+
 test();
 $a = new Tests();
 $a->Test();

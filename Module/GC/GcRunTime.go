@@ -25,5 +25,7 @@ func GC_Runtime(){
         panic("Wsp GC Error: 内存超出最大GC限制")
     }
     time.Sleep(2 * time.Second)
-    GC_Runtime()
+    if !Gc_End{
+        GC_Runtime()
+    }
 }
