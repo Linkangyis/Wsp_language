@@ -1,12 +1,6 @@
-function test(){
-    class Tests{
-        function Test(){
-            print(1);
-        }
+class test{
+    function _init_(){
+        print(1);
     }
 }
-
-
-test();
-$a = new Tests();
-$a->Test();
+$b=new test();

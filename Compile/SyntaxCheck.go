@@ -11,6 +11,12 @@ func Error(err string,line int,errs string){
     os.Exit(0)
 }
 
+func Errors(err string,line int){
+    fmt.Println("语法错误:\n  "+err,"\n  在第",line,"行","\n  目录：",consts.WspConst.WspFile)
+    os.Exit(0)
+}
+
+
 func Check(Opcode map[int]map[int]Body_Struct_Run){
     for i:=0;i<=len(Opcode)-1;i++{
         for z:=0;z<=len(Opcode[i])-1;z++{

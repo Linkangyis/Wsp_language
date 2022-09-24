@@ -231,6 +231,8 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                             Movs : "<NIL>",
                             Line : TCode[i].Line,
                         }
+                    }else{
+                        Errors("函数 ["+TCode[i].Text+"] 不存在",TCode[i].Line)
                     }
                 }
             case 11:

@@ -101,6 +101,11 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
         if lex[i].Type==50||lex[i].Type==17||lex[i].Type==18{
             i++
         }
+        if Type==18{
+            if lex[i].Text=="$"{
+                Error("语法错误，NEW类不允许为变量")
+            }
+        }
         
         Text := lex[i].Text
         
