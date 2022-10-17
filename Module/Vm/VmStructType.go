@@ -3,6 +3,7 @@ package vm
 import(
   "Wsp/Compile"
   "Wsp/Analysis/Lex"
+  "sync"
 )
 
 var VmFuncRoot = make(map[int]func(TransmitValue)string)
@@ -13,6 +14,7 @@ var VmClassUser = make(map[string]map[string]func(map[int]string,*FileValue)stri
 
 var VmFuncIs string = "Main"
 
+var TmpCodeRunLock sync.Mutex
 
 var TmpCodeRun map[int]string
 

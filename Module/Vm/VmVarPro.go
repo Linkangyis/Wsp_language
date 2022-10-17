@@ -23,6 +23,7 @@ type FileValue struct{
     AllCodeStop bool
     ResLock bool
     Govm bool
+    WgoIdName string
     Func *FuncResTmp
 }
 
@@ -109,6 +110,9 @@ func (ls *FileValue)SetPaths(path string){
 }
 func (ls *FileValue)ReadPaths()string{
     return ls.paths
+}
+func (ls *FileValue)SetWgoId(Name string){
+    ls.WgoIdName=Name;
 }
 func (St *FileValue)SetFunc(cdFile string){
     St.TmpPaths = St.paths

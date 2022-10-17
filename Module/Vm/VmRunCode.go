@@ -81,7 +81,12 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
                     VarValue : Vales,
                 })
             }else{    //多线程启动状态
-                Id := ReadWgoId()
+                Id := "Null"
+                if Vales.WgoIdName!=""{
+                    Id = Vales.WgoIdName
+                }else{
+                    Id = ReadWgoId()
+                }
                 Tmp:=InitVar(Id,1)
                 CopyVmArray(Mains.FILE,Tmp.FILE)
                 go func(i int){

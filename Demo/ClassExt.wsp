@@ -1,23 +1,23 @@
 class Test{
     function TestPrinta(){
-        print($this->Vara);
+        Sys.Println($this->Vara);
     }
     $Var = 0;
     $Vara = 0;
 }
 class TestB{
     function TestPrintb(){
-        print($this->Var);
+        Sys.Println($this->Var);
     }
     $Var = 1;
 }
 class TestC extends Test,TestB{
     function _init_(){
-        print($this->Var)
+        Sys.Println($this->Var)
     }
     function Test(){
-        print("extends");
-        print($this->Var);
+        Sys.Println("extends");
+        Sys.Println($this->Var);
     }
 }
 $a = new TestC();

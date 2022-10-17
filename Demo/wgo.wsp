@@ -1,0 +1,4 @@
+Sys.Print(1);
+Sys.Println(Sys.Input("")+1,20);
+Sys.Println(Sys.Stick(1,2)+1);
+wgo[20] Sys.Print(1);

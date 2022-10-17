@@ -1,6 +1,18 @@
-class test{
-    function _init_(){
-        print(1);
+$Max=Sys.Input("最大值：");
+$Min=Sys.Input("最小值：");
+$num = Sys.Rand($Min,$Max);
+for{
+    $UserInput = Sys.Input("猜数字:");
+    if($UserInput == $num){
+        print("猜对了");
+        break;
+    }else{
+        if($UserInput>$num){
+            $Max = $UserInput;
+            print(stick("新范围:",$Min,"-",$Max));
+        }else{
+            $Min = $UserInput;
+            print(stick("新范围:",$Min,"-",$Max));
+        }
     }
 }
-$b=new test();

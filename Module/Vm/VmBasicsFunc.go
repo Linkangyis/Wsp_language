@@ -270,11 +270,16 @@ func VarVm(From TransmitValue)string{
         if Op[i].Type!=301{
             var Values string
             if _,ok:=TmpCodeRun[i];ok{
+                TmpCodeRunLock.Lock()
                 Values = TmpCodeRun[i]
+                TmpCodeRunLock.Unlock()
             }else{
                 Values =CodeBlockRunSingle(Op[i],From.VarValue)
+                TmpCodeRunLock.Lock()
                 TmpCodeRun[i]=Values
+                TmpCodeRunLock.Unlock()
             }
+            
             if class{
                 VarCdName := Read_Array(VarName,From.VarValue)
                 Id := VarCdName

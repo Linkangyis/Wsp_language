@@ -247,6 +247,7 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
             case 8:
                 Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                     Type : 208,
+                    Abrk : TCode[i].Abrk,
                     Name : "WGO",
                     Text : "",
                     Movs : "<NIL>",

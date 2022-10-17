@@ -1,6 +1,7 @@
 function null($a){
     
 }
-for($i=0;$i<=100000;$i++){
+for($i=0;$i<=10000;$i++){
     wgo null($i);
 }
+print(10086);

@@ -6,8 +6,24 @@ import(
     "os"
 )
 
+
+
+func PathExists(path string)(bool){
+    _ , err :=os.Stat(path)
+    if err == nil{//文件或者目录存在
+        return true
+    }
+    if os.IsNotExist(err){
+        return false
+    }
+    return false
+}
+
 //获取目录dir下的文件大小
 func readDir(dirPath string) int {
+    if !PathExists(dirPath){
+        return 0
+    }
     var dirSize int
     flist, _ := ioutil.ReadDir(dirPath)
     for _, f := range flist {

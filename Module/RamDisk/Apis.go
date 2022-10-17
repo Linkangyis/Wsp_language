@@ -13,7 +13,7 @@ func New(Size uint64,File string){
 
     _, err := ramdisk.Create(opts)
     if err != nil {
-        os.Exit(1)
+        os.Exit(0)
     }
 }
 
@@ -22,7 +22,7 @@ func Del(File string){
     err := ramdisk.Destroy(device)
     if err != nil {
         os.RemoveAll(File)
-        os.Exit(1)
+        os.Exit(0)
     }
     os.RemoveAll(File)
 }

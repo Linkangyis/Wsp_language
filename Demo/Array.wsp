@@ -1,3 +1,21 @@
-$a[0][1]=10086;
+$a[0][1]=11454;
 $b=$a[0];
-print($a[0]);
+print($b[1]);
+
+switch($b[1]){
+    case 10086:
+        print(1);
+    case 114514:
+        print(2);
+    default:
+        switch($b[1]){
+            case 10086:
+                print(1);
+            case 114514:
+                print(2);
+            case 11454:
+                print("欸嘿");
+            default:
+                print(3);
+        }
+}

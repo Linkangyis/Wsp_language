@@ -12,7 +12,10 @@ func VmReturn(From TransmitValue)string{
 }
 
 func VmWgo(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
     From.VarValue.Govm=false
+    From.VarValue.SetWgoId(Op.Abrk[0].Text)
     return ""
 }
 
