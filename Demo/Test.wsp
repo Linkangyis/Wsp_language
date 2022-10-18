@@ -1,9 +1,9 @@
 CurEnv->31;
-$a = 1;
+$a[0] = 1;
 CurEnv->32;
-$a = 2;
+$a[1] = 2;
 CurEnv->Main;
 CurEnv->32;
-Sys.Println($a);
+Sys.Println($a[1]);
 CurEnv->31;
-Sys.Println($a);
+Sys.Println($a[0]);

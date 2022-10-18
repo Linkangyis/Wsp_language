@@ -61,6 +61,19 @@ func InitVar(Id string,ifs int)FileValue{
             Govm  : true,
             Func : &FuncResTmp{},
         }
+    }else if ifs==4{
+        return FileValue{
+            FILE : "./.<Var_Temps>/For"+Id+"/",
+            AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
+            paths  : "./.<Var_Temps>/For"+Id+"/"+Id+"-Main/",
+            TmpPaths  : "./.<Var_Temps>/For"+Id+"/"+Id+"-Main/",
+            FuncName  : Id+"-Main",
+            TmpFuncName  : Id+"-Main",
+            AllCodeStop : false,
+            ResLock : false,
+            Govm  : true,
+            Func : &FuncResTmp{},
+        }
     }
     return FileValue{
         FILE : "./.<Var_Temps>/For"+Id+"/",

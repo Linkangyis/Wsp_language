@@ -1,4 +1,16 @@
-Sys.Print(1);
-Sys.Println(Sys.Input("")+1,20);
-Sys.Println(Sys.Stick(1,2)+1);
-wgo[20] Sys.Print(1);
+CurEnv->31;
+$All = 0;
+function For(){
+    CurEnv->31;
+    for($i=0;$i<=10;$i++){
+        Sys.Println($i);
+    }
+    $All++;
+}
+wgo For();
+wgo For();
+for{
+    if($All==2){
+        break;
+    }
+}

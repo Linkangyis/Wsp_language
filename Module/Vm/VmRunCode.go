@@ -89,7 +89,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
                 }else{
                     Id = ReadWgoId()
                 }
-                Tmp:=InitVar(Id,0)
+                Tmp:=InitVar(Id,1)
                 AddEnv(Id,&Tmp)
                 CopyVmArray(Mains.FILE,Tmp.FILE)
                 go func(i int){

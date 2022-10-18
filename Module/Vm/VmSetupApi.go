@@ -56,7 +56,7 @@ func AddEnv(Id string,Value *FileValue){
 func ReadEnv(Id string)FileValue{
     EnvListLock.Lock()
     if _,ok:=EnvList[Id];!ok{
-        Tmp:=InitVar(Id,0)
+        Tmp:=InitVar(Id,4)
         EnvList[Id]=Tmp
     }
     Res := EnvList[Id]
