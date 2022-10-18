@@ -68,3 +68,12 @@ func VmClassLock(From TransmitValue)string{
     ClassLock[Text]=true
     return ""
 }
+
+func SetEnv(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    FormId := Op.Abrk[0].Text
+    Value := ReadEnv(FormId)
+    *From.VarValue = Value
+    return "True"
+}

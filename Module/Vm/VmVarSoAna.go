@@ -17,6 +17,8 @@ func VarAnalysis(Code string, VarDump *FileValue)map[int]string{
 }
 
 func VarCompile(Code string)compile.Res_Struct{
+    OpcodeFuncLock.Lock()
+    defer OpcodeFuncLock.Unlock()
     if _,ok:=OpcodeFuncTmp[Code];ok{
         return OpcodeFuncTmp[Code]
     }
@@ -26,11 +28,16 @@ func VarCompile(Code string)compile.Res_Struct{
 }
 
 func Varlex(Code string)map[int]lex.Lex_Struct{
+    LexOpFuncLock.Lock()
     if _,ok:=LexOpFuncTmp[Code];ok{
+        defer LexOpFuncLock.Unlock()
         return LexOpFuncTmp[Code]
     }
+    LexOpFuncLock.Unlock()
     Res := lex.Wsp_Lexical(Code+" ")
+    LexOpFuncLock.Lock()
     LexOpFuncTmp[Code]=Res
+    LexOpFuncLock.Unlock()
     return Res
 }
 

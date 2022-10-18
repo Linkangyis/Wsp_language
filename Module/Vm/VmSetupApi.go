@@ -46,3 +46,20 @@ func ReadWgoId()string{
     WgoId++
     return "WgoId<"+TypeStrings(WgoId)+">"
 }
+
+func AddEnv(Id string,Value *FileValue){
+    EnvListLock.Lock()
+    EnvList[Id]=*Value
+    EnvListLock.Unlock()
+}
+
+func ReadEnv(Id string)FileValue{
+    EnvListLock.Lock()
+    if _,ok:=EnvList[Id];!ok{
+        Tmp:=InitVar(Id,0)
+        EnvList[Id]=Tmp
+    }
+    Res := EnvList[Id]
+    EnvListLock.Unlock()
+    return Res
+}

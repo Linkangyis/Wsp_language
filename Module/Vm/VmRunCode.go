@@ -9,6 +9,7 @@ import(
 func Wsp_Vm(OpcodeStruct compile.Res_Struct){
     ClassLock = OpcodeStruct.ClassLock
     Mains = InitVar("Main",0)
+    AddEnv("Main",&Mains)
     Temps:=ini.ReadDelFunc()
     for i:=0;i<=len(Temps)-1;i++{
         DelFunc[Temps[i]]=1
@@ -84,10 +85,12 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run,Vales *FileValu
                 Id := "Null"
                 if Vales.WgoIdName!=""{
                     Id = Vales.WgoIdName
+                    Vales.WgoIdName = ""
                 }else{
                     Id = ReadWgoId()
                 }
-                Tmp:=InitVar(Id,1)
+                Tmp:=InitVar(Id,0)
+                AddEnv(Id,&Tmp)
                 CopyVmArray(Mains.FILE,Tmp.FILE)
                 go func(i int){
                     VmFuncRoot[Type](TransmitValue{

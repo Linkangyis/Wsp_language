@@ -24,6 +24,9 @@ var OpcodeFuncTmp = make(map[string]compile.Res_Struct)
 
 var LexOpFuncTmp = make(map[string]map[int]lex.Lex_Struct)
 
+var LexOpFuncLock sync.Mutex
+var OpcodeFuncLock sync.Mutex
+
 var IfStickTmpA  = make(map[string]map[int]string)
 var IfStickTmpB  = make(map[string]map[int]string)
 
@@ -49,6 +52,10 @@ var OverClassAll map[string]compile.ClassStruct
 
 var ClassLock = make(map[string]bool)
 
+var EnvList = make(map[string]FileValue)
+
+var EnvListLock sync.Mutex
+
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
 type TransmitValue struct{
@@ -72,4 +79,19 @@ type VarSoBrkStruct struct{
 type CrunTmpStruct struct{
     Type int
     Text string
+}
+
+type FileValue struct{
+    FILE string
+    AllOverPaths string
+    paths string
+    TmpPaths string
+    FuncName string
+    TmpFuncName  string
+    LockBreakList string
+    AllCodeStop bool
+    ResLock bool
+    Govm bool
+    WgoIdName string
+    Func *FuncResTmp
 }

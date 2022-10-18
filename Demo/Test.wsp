@@ -1,30 +1,9 @@
-function Test($ac,$b,$c){
-    $a[1]=159;
-    $Func=114514;
-    print(1);
-    return $a;
-}
-function aaa($av){
-    return $av;
-}
-$se = aaa
-$Func = $se(Test);
-print($Func)
-$acc=$Func(1,2,3)[1];
-$accs=$Func()[1];
-
-$bcs = Test(1,2,$Func)[1];
-
-$aaa[1][123123]=1599;
-$cccbbb=$aaa;
-
-for ($t=0;$t<=1;$t=add($t,1)){
-    $aaawe=Test;
-    print(11456)
-}
-$aaawe();
-
-$y=114;
-$p[$y][aaa(123)]=7;
-print($p[114][123]);
-
+CurEnv->31;
+$a = 1;
+CurEnv->32;
+$a = 2;
+CurEnv->Main;
+CurEnv->32;
+Sys.Println($a);
+CurEnv->31;
+Sys.Println($a);

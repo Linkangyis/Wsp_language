@@ -28,6 +28,7 @@ func RootFuncInit(){
     VmFuncRoot[221]=VmFuncInitBody
     VmFuncRoot[222]=VmGlobal
     VmFuncRoot[223]=VmClassLock
+    VmFuncRoot[224]=SetEnv
     VmFuncRoot[0]=StrVm
 }
 

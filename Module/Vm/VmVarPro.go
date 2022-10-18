@@ -12,21 +12,6 @@ import(
     "Wsp/Module/RamDisk"
 )
 
-type FileValue struct{
-    FILE string
-    AllOverPaths string
-    paths string
-    TmpPaths string
-    FuncName string
-    TmpFuncName  string
-    LockBreakList string
-    AllCodeStop bool
-    ResLock bool
-    Govm bool
-    WgoIdName string
-    Func *FuncResTmp
-}
-
 func PathFileStick(file string,str string)string{
     Ls:=strings.Split(file,"/")
     var Res string

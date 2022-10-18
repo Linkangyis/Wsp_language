@@ -490,6 +490,15 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                 }
                 Len_Line++
                 Res[Len_Line]=make(map[int]Body_Struct_Run)
+            case 22:
+                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                    Type : 224,
+                    Abrk : TCode[i].Abrk,
+                    Name : "ENV",
+                    Text : "",
+                    Movs : "<NIL>",
+                    Line : TCode[i].Line,
+                }
         }
     }
     Check(Res)

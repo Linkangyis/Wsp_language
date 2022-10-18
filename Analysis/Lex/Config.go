@@ -21,6 +21,7 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["extends"]=19
     Maps["len"]=20
     Maps["global"]=21
+    Maps["CurEnv"]=22
     Maps["$"]=50
     Maps["("]=71
     Maps[")"]=72
@@ -70,6 +71,7 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["extends"]="CLASSEXTENDS"
     Maps["len"]="ALLLEN"
     Maps["global"]="ALLGLOBAL"
+    Maps["CurEnv"]="SETENV"
     Maps["$"]="VAR"
     Maps["("]="S_BRACKETS_A"
     Maps[")"]="S_BRACKETS_B"
