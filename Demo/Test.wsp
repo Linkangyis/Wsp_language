@@ -1,9 +1,17 @@
-CurEnv->31;
-$a[0] = 1;
-CurEnv->32;
-$a[1] = 2;
+$a = 1;
+CurEnv->Mains;
+for($i=0;$i<=20;$i++){
+    CurEnv->31;
+    $a[0] = 1;
+    CurEnv->32;
+    $a[1] = 2;
+    CurEnv->Main;
+    CurEnv->32;
+    wgo->21 Sys.Println($a[1],"-1-");
+    CurEnv->31;
+    wgo->20 Sys.Println($a[0],"-2-");
+}
+CurEnv->Mains;
+Sys.Print($a);
 CurEnv->Main;
-CurEnv->32;
-Sys.Println($a[1]);
-CurEnv->31;
-Sys.Println($a[0]);
+Sys.Print($a);

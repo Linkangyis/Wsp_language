@@ -1,7 +1,7 @@
-function null($a){
-    
+if(1==1){
+    Sys.Println("-1");
+}else if(1==2){
+    Sys.Println(0);
+}else{
+    Sys.Println(1);
 }
-for($i=0;$i<=10000;$i++){
-    wgo null($i);
-}
-print(10086);

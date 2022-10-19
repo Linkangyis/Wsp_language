@@ -24,6 +24,8 @@ func PathFileStick(file string,str string)string{
             Res += "/"
         }else if Ls[i]=="ForMain"&&i==2{
             Res += "/For"+str
+        }else if len(Ls[i])>3&&(Ls[i][0:3]=="For"&&i==2){
+            Res += "/For"+str
         }else{
             Res += "/"+Ls[i]
         }
@@ -34,7 +36,7 @@ func PathFileStick(file string,str string)string{
     return Res+"/"
 }
 
-func InitVar(Id string,ifs int)FileValue{
+func InitVar(Id string,ifs int,Father FileValue)FileValue{
     if ifs==0{
         return FileValue{
             FILE : "./.<Var_Temps>/For"+Id+"/",
@@ -69,6 +71,19 @@ func InitVar(Id string,ifs int)FileValue{
             TmpPaths  : "./.<Var_Temps>/For"+Id+"/"+Id+"-Main/",
             FuncName  : Id+"-Main",
             TmpFuncName  : Id+"-Main",
+            AllCodeStop : false,
+            ResLock : false,
+            Govm  : true,
+            Func : &FuncResTmp{},
+        }
+    }else if ifs==5{
+        return FileValue{
+            FILE : "./.<Var_Temps>/For"+Id+"/",
+            AllOverPaths  : PathFileStick(Father.AllOverPaths,Id),
+            paths  : PathFileStick(Father.paths,Id),
+            TmpPaths  : PathFileStick(Father.TmpPaths,Id),
+            FuncName  : Father.FuncName,
+            TmpFuncName  : Father.TmpFuncName,
             AllCodeStop : false,
             ResLock : false,
             Govm  : true,
@@ -250,7 +265,6 @@ func Read_Array(file string,Vales *FileValue)string{   //vm读取变量
     file = So_Array_Stick(VarName,Vales)
     file_SHANGJI:=So_Array_Stick_SHANGJI(VarName,Vales)
     porinterTextNum:=""
-    
     if len(tmp)>2{
         if tmp[0:2]=="0x"{
             Init:=So_Array_Io(tmp)

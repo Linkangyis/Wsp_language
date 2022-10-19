@@ -27,7 +27,7 @@ func ArrayRead(Value string)map[string]interface{}{
 
 
 func NewArrayType(Values map[string]interface{})string{
-    RamS:=InitVar("RES",3)
+    RamS:=InitVar("RES",3,FileValue{})
     AddArray("__NEWRES__[__NEWRES__]","<INIT>",&RamS)
     ResAId:=Read_Array("__NEWRES__",&RamS)
     Path:=Pointeref[ResAId]+"/"

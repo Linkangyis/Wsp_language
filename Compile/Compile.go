@@ -254,13 +254,19 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                     Line : TCode[i].Line,
                 }
             case 9:
-                Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
-                    Type : 209,
-                    Abrk : TCode[i].Abrk,
-                    Name : "ADD",
-                    Text : TCode[i].Sbrk[0],
-                    Movs : "<NIL>",
-                    Line : TCode[i].Line,
+                Tmpi,IfOk,TmpRes:=CrunCompileRoot(i,TCode,Res,Len_Line);
+                if IfOk{
+                    i=Tmpi
+                    Res = TmpRes
+                }else{
+                    Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+                        Type : 209,
+                        Abrk : TCode[i].Abrk,
+                        Name : "ADD",
+                        Text : TCode[i].Sbrk[0],
+                        Movs : "<NIL>",
+                        Line : TCode[i].Line,
+                    }
                 }
             case 6:
                 Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
@@ -503,4 +509,35 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
     }
     Check(Res)
     return Res
+}
+func CrunCompileRoot(i int,TCode map[int]ast.BodyAst_Struct,Res map[int]map[int]Body_Struct_Run,Len_Line int)(int,bool,map[int]map[int]Body_Struct_Run){
+    if TCode[i+1].Type==90||TCode[i+1].Type==91||TCode[i+1].Type==92||TCode[i+1].Type==93||TCode[i+1].Type==94{
+        Mov := ""
+        if TCode[i-1].Type==90||TCode[i-1].Type==91{
+            Mov+=TCode[i-1].Text
+        }
+        tmp:=0
+        for z:=i;z<=len(TCode)-1;z++{
+            if TCode[z].Type==80 || TCode[z].Type==96{
+                break
+            }
+            Text := ""
+            if TCode[z].Type==50{
+                Text = "$"+TCode[z].Text
+            }else{
+                Text = TCode[z].Text
+            }
+            Mov += Text+BrStick(TCode[z])
+            tmp++
+        }
+        Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
+            Type : 304,
+            Name : "CRUN_VAR",
+            Text : Mov,
+            Line : TCode[i].Line,
+        }
+        i+=tmp-1
+        return i,true,Res
+    }
+    return 0,false,Res
 }

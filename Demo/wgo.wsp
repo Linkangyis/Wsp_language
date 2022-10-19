@@ -1,16 +1,24 @@
+$a = Sys.Input();
+Sys.Println(1+$a+10086);
 CurEnv->31;
 $All = 0;
-function For(){
-    CurEnv->31;
-    for($i=0;$i<=10;$i++){
-        Sys.Println($i);
-    }
-    $All++;
-}
 wgo For();
 wgo For();
 for{
-    if($All==2){
+    if($All>=2){
         break;
     }
+}
+
+//Public->Block->WriteHeap->a;
+//Public->Block->WriteHeap->a;
+//TmpWrite->a = $a;
+//Public->Block->ReadHeap->a;
+
+function For(){
+    for($i=0;$i<=10;$i++){
+        wgo Sys.Println($i);
+    }
+    CurEnv->31;
+    $All++;
 }
