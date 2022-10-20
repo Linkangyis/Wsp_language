@@ -1,6 +1,14 @@
-$a = Sys.Input();
-Sys.Println(1+$a+10086);
+function For(){
+    for($i=0;$i<=10;$i++){
+        
+    }
+    CurEnv->31;
+    $All++;
+}
+
+
 CurEnv->31;
+$TestArray[0]=10086;
 $All = 0;
 wgo For();
 wgo For();
@@ -10,15 +18,10 @@ for{
     }
 }
 
-//Public->Block->WriteHeap->a;
-//Public->Block->WriteHeap->a;
-//TmpWrite->a = $a;
-//Public->Block->ReadHeap->a;
 
-function For(){
-    for($i=0;$i<=10;$i++){
-        wgo Sys.Println($i);
-    }
-    CurEnv->31;
-    $All++;
-}
+CurEnv->Main;
+$Pinter = Raflect.OpenCont(31);
+$All = Raflect.ReadCont($Pinter,"All")+1;
+$TestArray = Raflect.ReadCont($Pinter,"TestArray");
+Sys.Println($All);
+Sys.Println($TestArray[0]);

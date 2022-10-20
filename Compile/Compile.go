@@ -216,10 +216,14 @@ func Wsp_Compile_l(TCode map[int]ast.BodyAst_Struct)map[int]map[int]Body_Struct_
                 }else if TCode[i].Text!=""{
                     _,ok:=Code.FuncAst.FuncVars[TCode[i].Text]
                     if string(TCode[i].Text[0])=="\""||ast.IsNum(TCode[i].Text)||ok{
+                        TextTemp := TCode[i].Text
+                        if(TCode[i-1].Text=="-"){
+                             TextTemp = "-"+TCode[i].Text
+                        }
                         Res[Len_Line][len(Res[Len_Line])]=Body_Struct_Run{
                             Type : 0,
                             Name : TCode[i].Name,
-                            Text : TCode[i].Text,
+                            Text : TextTemp,
                             Movs : "<NIL>",
                             Line : TCode[i].Line,
                         }
