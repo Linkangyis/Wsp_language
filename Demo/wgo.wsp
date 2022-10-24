@@ -19,7 +19,7 @@ for{
 }
 
 
-CurEnv->Main;
+CurEnv->Main; 
 $Pinter = Raflect.OpenCont(31);
 $All = Raflect.ReadCont($Pinter,"All")+1;
 $TestArray = Raflect.ReadCont($Pinter,"TestArray");

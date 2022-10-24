@@ -1,3 +1,10 @@
-$a = (1*-1-20-1)*-1;
-Sys.Println($a);
-Sys.Println(-123);
+CurEnv->Db;
+class Db_Login{
+    function Test($a){
+        Sys.Println($a);
+    }
+}
+$DB = new Db_Login();
+CurEnv->Main;
+$Pinter = Raflect.OpenCont("Db");
+Raflect.ReadCont($Pinter,"DB")->Test(1);
