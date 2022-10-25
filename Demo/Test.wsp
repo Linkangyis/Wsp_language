@@ -5,6 +5,22 @@ class Db_Login{
     }
 }
 $DB = new Db_Login();
+
+CurEnv->Redis;
+class TestRedis{
+    $Array;
+    function Write($k,$v){
+        $this->Array[$k]=$v;
+    }
+    function Read(){
+        return $this->Array;
+    }
+}
+$DB = new TestRedis();
+
 CurEnv->Main;
-$Pinter = Raflect.OpenCont("Db");
-Raflect.ReadCont($Pinter,"DB")->Test(1);
+$PointerDb = Raflect.OpenCont("Db");
+$PointerRedis = Raflect.OpenCont("Redis");
+Raflect.ReadCont($PointerDb,"DB")->Test(1);
+Raflect.ReadCont($PointerRedis,"DB")->Write("你好","再见");
+Sys.Println(Raflect.ReadCont($PointerRedis,"DB")->Read()["你好"]);

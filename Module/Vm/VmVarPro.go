@@ -448,6 +448,19 @@ func VarNameGenerate(Code compile.Body_Struct_Run,Vales *FileValue)string{   //�
     return Res
 }
 
+func VarNameGenerateClass(Code compile.Body_Struct_Run,Vales *FileValue)string{   //解析数组
+    List := Code.Abrk
+    Res := List[0].Text
+    for i:=1;i<=len(List)-1;i++{
+        if List[i].Type==1{
+            Res+="["+VarSoAll(List[i].Text,Vales)+"]"
+        }else{
+            break
+        }
+    }
+    return Res
+}
+
 /*MAP TO ARRAY*/
 func CopyArrayStudio(Values map[string]interface{},Path string){
     for index, data := range Values{

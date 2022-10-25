@@ -282,6 +282,7 @@ func VarVm(From TransmitValue)string{
             
             if class{
                 VarCdName := Read_Array(VarName,From.VarValue)
+                VarName = VarNameGenerateClass(From.Opcode[Lids],From.VarValue)
                 Id := VarCdName
                 Temps:=From.VarValue.AllOverPaths
                 From.VarValue.AllOverPaths=From.VarValue.FILE
@@ -289,7 +290,7 @@ func VarVm(From TransmitValue)string{
                 Tmps:=From.VarValue.FuncName
                 defer From.VarValue.SetFunc(Tmps)
                 From.VarValue.SetFunc("")
-                AddArray(BrkList[0].Text,Values,From.VarValue)
+                AddArray(VarName,Values,From.VarValue)
                 From.VarValue.AllOverPaths=Temps
             }else{
                 AddArray(VarName,Values,From.VarValue)
