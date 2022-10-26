@@ -9,18 +9,48 @@ $DB = new Db_Login();
 CurEnv->Redis;
 class TestRedis{
     $Array;
+    $String;
     function Write($k,$v){
         $this->Array[$k]=$v;
+    }
+    function WriteText($k){
+        $this->String = $k;
     }
     function Read(){
         return $this->Array;
     }
+    function ReadText(){
+        return $this->String;
+    }
 }
 $DB = new TestRedis();
+$DB->Write("Test","隔离");
+$DB->WriteText("Test");
 
 CurEnv->Main;
 $PointerDb = Raflect.OpenCont("Db");
 $PointerRedis = Raflect.OpenCont("Redis");
 Raflect.ReadCont($PointerDb,"DB")->Test(1);
-Raflect.ReadCont($PointerRedis,"DB")->Write("你好","再见");
-Sys.Println(Raflect.ReadCont($PointerRedis,"DB")->Read()["你好"]);
+
+Raflect.ReadCont($PointerRedis,"DB")->Write("Test","隔离2");  //此处写入结果在Main
+Sys.Println(Raflect.ReadCont($PointerRedis,"DB")->Read()["Test"]);  //此处读取对象在Redis
+//特性 如在容器内Array类型变量被使用，则所有写入都无效化,读可以正常读取容器内内容
+//原因 是引用类型 
+//剖析 操作的堆内存会在Main容器中 但是Redis容器数组最终只会读取Redis容器内堆内存
+
+
+Sys.Println(Raflect.ReadCont($PointerRedis,"DB")->ReadText());//这样会尝试在Main中读取TestRedis String成员但是读取不到，所以抛出null
+Raflect.ReadCont($PointerRedis,"DB")->WriteText("隔离");  //此处写入结果在Main
+Sys.Println(Raflect.ReadCont($PointerRedis,"DB")->ReadText());  //此处读取对象在Main
+//特性 无法通过反射读取到容器内类成员字符串变量 但是通过反射的类地址创建的类对象可以被读取
+//原因 不是引用类型 
+//剖析 虚拟机会尝试在Main容器中读取Class中的 TestRedis String 成员
+
+
+//P.S.
+//反射的作用仅仅是反射变量 不会起到跨容器 高级读/低级写 的作用
+//建议使用容器仅作为资源隔离以及模块化开发
+//上面对类进行的反射仅仅是反射类指针 而不是反射整个类
+//之所以为什么反射的类ID可以被其他堆伪正常调用 是因为堆 在WSPVM中被分为了两种 ROOT堆 和 USER堆 容器隔离的仅仅是USER堆 ROOT堆和SYSTEM栈在任何容器内均为共享态。一些函数声明以及类实例化的结果均放在 ROOT堆 所以造成了反射类ID可以正常调用的现象
+//USER堆只存储用户态 容器态 函数堆空间 所以一个类ID在不同容器下 都是隔离状态 Array是引用类型 所以可以被主容器正常进行高级读和低级读 写则会完全被屏蔽(因为写入对象是新容器的USER堆 读则是 旧容器的USER堆)
+
