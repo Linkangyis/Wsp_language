@@ -1,21 +1,2 @@
-function Sc($a){
-    for($i=0;$i<=10;$i++){
-        print($i);
-        if($i==5){
-            break;
-        }
-    }
-}
-wgo Sc(001);
-Time.Sleep(1);
-wgo Sc(002);
-Time.Sleep(1);
-wgo Sc(003);
-Time.Sleep(1);
-wgo Sc(004);
-Time.Sleep(1);
-wgo Sc(005);
-Time.Sleep(1);
-wgo Sc(006);
-Time.Sleep(1);
-Sc(100);
+$i=0;
+Sys.Println($i-1);

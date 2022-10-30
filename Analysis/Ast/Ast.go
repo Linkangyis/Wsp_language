@@ -196,6 +196,9 @@ func Wsp_Ast_One(lex map[int]lex.Lex_Struct)map[int]BodyAst_Struct{
                     if lex[i+1].Type!=91 && lex[i+2].Type!=98{
                         break
                     }
+                    if lex[i+1].Type==91 && lex[i+2].Type!=98{
+                        break
+                    }
                 }
             }
         }

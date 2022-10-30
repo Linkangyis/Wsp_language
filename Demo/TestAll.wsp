@@ -1,1 +1,16 @@
-print(add(1,1)+3);
+class TestClass{
+    $Array;
+    function _init_(){
+        $this->Array["init"]=0;
+    }
+    function Test($a){
+        $this->Array[$a]=$a;
+    }
+}
+
+CurEnv->Crun;
+    $CrunRam = new TestClass();
+CurEnv->Main;
+    $Pointer = Raflect.OpenCont("Crun");
+    Raflect.ReadCont($Pointer,"CrunRam")->Test(1);
+    Sys.Println($Pointer,Raflect.ReadCont($Pointer,"CrunRam")->Array["init"]);

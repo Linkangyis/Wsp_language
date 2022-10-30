@@ -20,11 +20,6 @@ func Errors(err string,line int){
 func Check(Opcode map[int]map[int]Body_Struct_Run){
     for i:=0;i<=len(Opcode)-1;i++{
         for z:=0;z<=len(Opcode[i])-1;z++{
-            if Opcode[i][z].Type==205&&z!=len(Opcode[i])-1{
-                if Opcode[i][z+1].Type!=212 && Opcode[i][z+1].Type!=90&&(Opcode[i][z+1].Type!=91||(Opcode[i][z+1].Type==91&&Opcode[i][z+2].Type==98))&& Opcode[i][z+1].Type!=92&& Opcode[i][z+1].Type!=93&& Opcode[i][z+1].Type!=94{
-                    Error("结尾缺少一个",Opcode[i][z].Line,";")
-                }
-            }
             if Opcode[i][z].Type==202 || Opcode[i][z].Type==203 || Opcode[i][z].Type==204{
                 if len(Opcode[i][z].Abrk)<2 && Opcode[i][z].Type!=203{
                     Error("缺少需要条件",Opcode[i][z].Line,"() or {}")
