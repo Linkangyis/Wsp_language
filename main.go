@@ -3,6 +3,7 @@ package main
 import(
   "fmt"
   "os"
+  "bufio"
   "Wsp/Analysis/Lex"
   "Wsp/Analysis/Ast"
   "Wsp/Module/Vm"
@@ -14,9 +15,23 @@ import(
   "Wsp/Compile"
   "io/ioutil"
 )
-
+const Version = "4.5.6"
 func RunCode(Code string){
-    vm.Wsp_Vm(Compile(Code))
+    Opcode:=Compile(Code)
+    if ini.DebugsIf(){
+        fmt.Println("\n---------------------------------------------------------")
+        fmt.Println("Opcode:")
+        fmt.Println("---------------------------------------------------------")
+        for i:=0;i<=len(Opcode.Body)-1;i++{
+            Codes:=Opcode.Body[i]
+            fmt.Println("第",i,"段:  ID  Type    Value    Name    Text    Mov    Line")
+            for z:=0;z<=len(Codes)-1;z++{
+                fmt.Println("          ",z,Codes[z])
+            }
+            fmt.Println("---------------------------------------------------------")
+        }
+    }
+    vm.Wsp_Vm(Opcode)
 }
 func Compile(Code string)compile.Res_Struct{
     return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+"\n "))))
@@ -35,7 +50,22 @@ func PathExists(path string) (bool, error) {
 var Files_s string
 func main(){
     if len(os.Args)==1{
-        fmt.Println("文件或路径不存在")
+        fmt.Println("Wsp Console [版本 "+Version+"]")
+        fmt.Println("版权所有 (c) 2022 WspLang.com 保留部分权利。")
+        Inis:=ini.ReadIni()
+        if Inis["wsp_var_ram"]=="1"{
+            vm.VarRamStart()
+        }
+        vm.VmStart()
+        gc.SetGcSize(Inis["wsp_gc_size"])
+        go gc.GC_Runtime()
+        for{
+            fmt.Printf(">>>")
+            reader := bufio.NewReader(os.Stdin)
+            Codebyte, _, _ := reader.ReadLine()
+            Code := string(Codebyte)
+            RunCode(Code+"\n")
+        }
         os.Exit(0)
     }
     file := ""
@@ -45,7 +75,7 @@ func main(){
     }else if ok,_ := PathExists(os.Args[1]); ok {
         file = os.Args[1]
     }else if os.Args[1] == "version"{
-        fmt.Println("Version    V4.5.4\nOpcache    V1.1.0\nVarCache   V1.0.0\nWspGc      V1.1.1")
+        fmt.Println("Version    V"+Version+"\nOpcache    V1.1.0\nVarCache   V1.0.0\nWspGc      V1.1.1")
         os.Exit(0)
     }else if os.Args[1] == "help"{
         if len(os.Args)==2{

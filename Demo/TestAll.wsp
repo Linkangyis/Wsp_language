@@ -13,4 +13,4 @@ CurEnv->Crun;
 CurEnv->Main;
     $Pointer = Raflect.OpenCont("Crun");
     Raflect.ReadCont($Pointer,"CrunRam")->Test(1);
-    Sys.Println($Pointer,Raflect.ReadCont($Pointer,"CrunRam")->Array["init"]);
+    Sys.Println(Raflect.ReadCont($Pointer,"CrunRam")->Array["init"],$Pointer);

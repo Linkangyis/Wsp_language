@@ -1,2 +1,2 @@
-$i=0;
-Sys.Println($i-1);
+function aaa(){Sys.Println(1);}
+aaa();
