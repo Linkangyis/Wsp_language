@@ -32,6 +32,7 @@ func Token_Contrast_Map_Type(Text string)int{
     Maps["\""]=77
     Maps["\n"]=78
     Maps[" "]=79
+    Maps["\t"]=79
     Maps[";"]=80
     Maps["+"]=90
     Maps["-"]=91
@@ -82,6 +83,7 @@ func Token_Contrast_Map_Name(Text string)string{
     Maps["\""]="STRING_QUOTE"
     Maps["\n"]="LINE_ADD"
     Maps[" "]="SPACE"
+    Maps["\t"]="SPACETAB"
     Maps[";"]="END"
     Maps["+"]="CRUN_ADD"
     Maps["-"]="CRUN_SUB"
@@ -103,8 +105,23 @@ func Token_Contrast_Map_Name(Text string)string{
 func Token_Replace_String(Text string)string{
     Maps:=make(map[string]string)
     Maps["\n"]=""
+    Maps["\t"]=""
     if _,ok:=Maps[Text];ok{
         return Maps[Text]
     }
     return Text
+}
+
+func LegitimateText(OneB string)bool{
+    Maps := make(map[string]bool)
+    Maps["_"] = true
+    Maps["."] = true
+    if StrAllLetter(OneB){
+        return true
+    }else if IsNum(OneB){
+        return true
+    }else if _,ok:=Maps[OneB];ok{
+        return true
+    }
+    return false
 }

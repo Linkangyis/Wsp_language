@@ -27,6 +27,7 @@ $DB = new TestRedis();
 $DB->Write("Test","隔离");
 $DB->WriteText("Test");
 
+
 CurEnv->Main;
 $PointerDb = Raflect.OpenCont("Db");
 $PointerRedis = Raflect.OpenCont("Redis");

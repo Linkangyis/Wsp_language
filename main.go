@@ -15,7 +15,7 @@ import(
   "Wsp/Compile"
   "io/ioutil"
 )
-const Version = "4.5.7"
+const Version = "4.5.8"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
@@ -34,6 +34,7 @@ func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     return vm.WspVmConsole(Opcode,FilesStruct)
 }
 func Compile(Code string)compile.Res_Struct{
+    //fmt.Println(lex.Wsp_Lexical(string(Code+"\n ")))
     return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+"\n "))))
 }
 

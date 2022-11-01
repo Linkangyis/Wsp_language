@@ -2,6 +2,7 @@ package lex
 
 import(
     "regexp"
+    "strconv"
 )
 
 type Lex_Struct struct{
@@ -25,6 +26,16 @@ func CodeNotes(text string)(string){
     return match
 }
 
+func IsNum(s string) bool {
+    _, err := strconv.ParseFloat(s, 64)
+    return err == nil
+}
+
+func StrAllLetter(str string) bool {
+    match, _ := regexp.MatchString(`^[A-Za-z]+$`, str)
+    return match
+}
+
 func Wsp_Lexical(Code string)map[int]Lex_Struct{
     Code = CodeNotes(Code)
     Res:=make(map[int]Lex_Struct)
@@ -33,13 +44,14 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
     var SBrLock int = 0
     var MBrLock int = 0
     var XBrLock int = 0
+    var Auxlock bool = true
     for i,Cpoints:=range Code{
         Cpoint := string(Cpoints)
         String_region+=Cpoint
         if Cpoint=="\n"{
             Lines++
         }
-        if Cpoint=="\""{
+        if Cpoint=="\""&&XBrLock==0&&MBrLock==0&&SBrLock==0{
             if ALLLock==0{
                 ALLLock=1
             }else{
@@ -48,7 +60,16 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
                 String_region=""
             }
         }
-        if Cpoint=="("&&XBrLock==0&&MBrLock==0&&ALLLock==0{
+        
+        if  Cpoint=="\""{
+            if Auxlock{
+                Auxlock = false
+            }else{
+                Auxlock = true
+            }
+        }
+        
+        if Cpoint=="("&&XBrLock==0&&MBrLock==0&&ALLLock==0&&Auxlock{
             if SBrLock<1{
                 Type:=Token_Contrast_Map_Type(String_region)
                 Name:=Token_Contrast_Map_Name(String_region)
@@ -57,7 +78,7 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
             }
             SBrLock++
         }
-        if Cpoint==")"&&XBrLock==0&&MBrLock==0&&ALLLock==0{
+        if Cpoint==")"&&XBrLock==0&&MBrLock==0&&ALLLock==0&&Auxlock{
             SBrLock--
             if SBrLock<1{
                 String_region=String_region[0:len(String_region)-1]
@@ -109,13 +130,15 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
         
         
         if Token_Contrast_Map_Name(String_region)!="NULL"&&SBrLock==0&&XBrLock==0&&MBrLock==0&&ALLLock==0{
-            Type:=Token_Contrast_Map_Type(String_region)
-            Name:=Token_Contrast_Map_Name(String_region)
-            String_R:=Token_Replace_String(String_region)
-            if Name!="SPACE"{
-                Res[len(Res)]=Lex_Struct{Type,String_R,Name,Line_Echo()}
+            if len(String_region)==1||!LegitimateText(string(Code[i+1])){
+                Type:=Token_Contrast_Map_Type(String_region)
+                Name:=Token_Contrast_Map_Name(String_region)
+                String_R:=Token_Replace_String(String_region)
+                if Name!="SPACE"{
+                    Res[len(Res)]=Lex_Struct{Type,String_R,Name,Line_Echo()}
+                }
+                String_region=""
             }
-            String_region=""
         }else if SBrLock==0&&XBrLock==0&&MBrLock==0&&ALLLock==0{
             if string(Code[i+1])=="(" || string(Code[i+1])==" " || string(Code[i+1])=="[" || string(Code[i+1])=="{"||string(Code[i+1])=="+" || string(Code[i+1])=="-" || string(Code[i+1])=="*" || string(Code[i+1])=="/" || string(Code[i+1])=="%" || string(Code[i+1])=="\n" || string(Code[i+1])=="=" || string(Code[i+1])=="," || string(Code[i+1])==";" || string(Code[i+1])=="<" || string(Code[i+1])==">" || string(Code[i+1])=="!" || string(Code[i+1])==":"  {
                 Res[len(Res)]=Lex_Struct{0,String_region,"String",Line_Echo()}
