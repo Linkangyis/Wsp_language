@@ -23,6 +23,28 @@ func Wsp_Vm(OpcodeStruct compile.Res_Struct){
     CodeRun(Opcode,&Mains)
 }
 
+func WspVmConsole(OpcodeStruct compile.Res_Struct,Superior FileValue)FileValue{
+    ClassLock = OpcodeStruct.ClassLock
+    if Superior==(FileValue{}){
+        Mains = InitVar("Main",0,FileValue{})
+        AddEnv("Main",&Mains)
+    }else{
+        Mains = Superior
+    }
+    Temps:=ini.ReadDelFunc()
+    for i:=0;i<=len(Temps)-1;i++{
+        DelFunc[Temps[i]]=1
+    }
+    RootFuncInit()
+    FuncList = OpcodeStruct.Func
+    UserFuncInit(OpcodeStruct.Func)
+    InitFuncUserExt()
+    Opcode := OpcodeStruct.Body
+    OverClassAll = OpcodeStruct.Class
+    CodeRun(Opcode,&Mains)
+    return Mains
+}
+
 func CodeRun(Opcode map[int]map[int]compile.Body_Struct_Run,Vales*FileValue)string{
     for i:=0;i<=len(Opcode)-1;i++{
         if gc.Gc_Panic{

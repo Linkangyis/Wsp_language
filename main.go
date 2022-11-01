@@ -15,8 +15,8 @@ import(
   "Wsp/Compile"
   "io/ioutil"
 )
-const Version = "4.5.6"
-func RunCode(Code string){
+const Version = "4.5.7"
+func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
         fmt.Println("\n---------------------------------------------------------")
@@ -31,7 +31,7 @@ func RunCode(Code string){
             fmt.Println("---------------------------------------------------------")
         }
     }
-    vm.Wsp_Vm(Opcode)
+    return vm.WspVmConsole(Opcode,FilesStruct)
 }
 func Compile(Code string)compile.Res_Struct{
     return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+"\n "))))
@@ -48,6 +48,21 @@ func PathExists(path string) (bool, error) {
     return false, err
 }
 var Files_s string
+func ConsoleCodeCheck(Code string)bool{
+    Tlex := lex.Wsp_Lexical(string(Code+"\n "))
+    JsNum := 0
+    for i:=0;i<=len(Tlex)-1;i++{
+        if Tlex[i].Type==75{
+            JsNum++
+        }else if Tlex[i].Type==76{
+            JsNum--
+        }
+    }
+    if JsNum==0{
+        return true
+    }
+    return false
+}
 func main(){
     if len(os.Args)==1{
         fmt.Println("Wsp Console [版本 "+Version+"]")
@@ -59,12 +74,24 @@ func main(){
         vm.VmStart()
         gc.SetGcSize(Inis["wsp_gc_size"])
         go gc.GC_Runtime()
+        FilesStruct := vm.FileValue{}
+        var TmpCode string
         for{
-            fmt.Printf(">>>")
+            if ConsoleCodeCheck(TmpCode){
+                fmt.Printf(">>>")
+            }else{
+                fmt.Printf("   ")
+            }
+            
             reader := bufio.NewReader(os.Stdin)
             Codebyte, _, _ := reader.ReadLine()
             Code := string(Codebyte)
-            RunCode(Code+"\n")
+            if ConsoleCodeCheck(TmpCode+Code){
+                FilesStruct = RunCode(TmpCode+Code+"\n",FilesStruct)
+                TmpCode = ""
+            }else{
+                TmpCode += Code+"\n"
+            }
         }
         os.Exit(0)
     }

@@ -39,7 +39,7 @@ func Wsp_Lexical(Code string)map[int]Lex_Struct{
         if Cpoint=="\n"{
             Lines++
         }
-        if Cpoint=="\""&&XBrLock==0&&MBrLock==0&&SBrLock==0{
+        if Cpoint=="\""{
             if ALLLock==0{
                 ALLLock=1
             }else{
