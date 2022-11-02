@@ -3,7 +3,6 @@ package main
 import(
   "fmt"
   "os"
-  "bufio"
   "Wsp/Analysis/Lex"
   "Wsp/Analysis/Ast"
   "Wsp/Module/Vm"
@@ -14,8 +13,9 @@ import(
   "Wsp/Module/Const"
   "Wsp/Compile"
   "io/ioutil"
+  "github.com/peterh/liner"
 )
-const Version = "4.5.8"
+const Version = "4.5.9"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
@@ -78,14 +78,15 @@ func main(){
         FilesStruct := vm.FileValue{}
         var TmpCode string
         for{
+            printfText := "" 
             if ConsoleCodeCheck(TmpCode){
-                fmt.Printf(">>>")
+                printfText = ">>>"
             }else{
-                fmt.Printf("   ")
+                printfText = "   "
             }
-            
-            reader := bufio.NewReader(os.Stdin)
-            Codebyte, _, _ := reader.ReadLine()
+            lineTmp := liner.NewLiner()
+            Codebyte,_:= lineTmp.Prompt(printfText);
+            lineTmp.Close()
             Code := string(Codebyte)
             if ConsoleCodeCheck(TmpCode+Code){
                 FilesStruct = RunCode(TmpCode+Code+"\n",FilesStruct)
