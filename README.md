@@ -142,6 +142,18 @@ $a->Var=10086;
 $a->TestPrinta();
 $a->Test();
 ```
+面向容器编程
+```php
+CurEnv->31;
+        $TestArray[0]=10086;
+        $All = 0;
+CurEnv->Main;
+        $Pinter = Raflect.OpenCont(31);
+        $All = Raflect.ReadCont($Pinter,"All")+1;
+        $TestArray = Raflect.ReadCont($Pinter,"TestArray");
+        Sys.Println($All);
+        Sys.Println($TestArray[0]);
+```
 ## 扩展开发
 ```golang
 package main
