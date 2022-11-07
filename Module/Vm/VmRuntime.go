@@ -72,8 +72,19 @@ func VmClassLock(From TransmitValue)string{
 func SetEnv(From TransmitValue)string{
     Lids := From.OpRunId
     Op := From.Opcode[Lids]
-    FormId := Op.Abrk[0].Text
+    FromIp := Op.Abrk[0].Text
+    Port := Op.Abrk[1].Text
+    FormId := Op.Abrk[2].Text
+    if FromIp!="this"{
+        Value := ReadEnv(FormId)
+        go SyncVar(FromIp,Port)
+        *From.VarValue = Value
+        return "True"
+    }
     Value := ReadEnv(FormId)
+    if Port!="0"{
+        go SververSocketClient(Port,Value.FILE)
+    }
     *From.VarValue = Value
     return "True"
 }

@@ -10,6 +10,7 @@ import(
     "fmt"
     "Wsp/Compile"
     "Wsp/Module/RamDisk"
+    "time"
 )
 
 func PathFileStick(file string,str string)string{
@@ -316,6 +317,9 @@ func Del_File(file string){   //删除文件
     file=file[0:len(file)-1]
     os.Remove(file)
 }
+func Del_Files(file string){   //删除文件
+    os.Remove(file)
+}
 func New_File(file string){   //无视报错，新建目录
     err := os.MkdirAll(file, 0666)
     if err != nil {
@@ -491,3 +495,17 @@ func VmStart(){
     }
 }
 
+func GetFileModTime(path string) int64 {
+    f, err := os.Open(path)
+    if err != nil {
+        return time.Now().Unix()
+    }
+    defer f.Close()
+
+    fi, err := f.Stat()
+    if err != nil {
+        return time.Now().Unix()
+    }
+
+    return fi.ModTime().Unix()
+}

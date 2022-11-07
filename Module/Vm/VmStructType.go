@@ -3,6 +3,7 @@ package vm
 import(
   "Wsp/Compile"
   "Wsp/Analysis/Lex"
+  "github.com/gorilla/websocket"
   "sync"
 )
 
@@ -94,4 +95,14 @@ type FileValue struct{
     Govm bool
     WgoIdName string
     Func *FuncResTmp
+}
+
+type FileWebSocket struct{
+    Name string
+    Md5 string
+    File string
+}
+
+type ListenSocket struct{
+    WebSokcet *websocket.Conn
 }
