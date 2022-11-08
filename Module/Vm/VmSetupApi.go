@@ -21,7 +21,6 @@ func ReadVmFuncIs()string{
     return VmFuncIs
 }
 
-
 func WspCodeFile()(string){
     Paths, _ := filepath.Split(CodeFilePath)
     return Paths

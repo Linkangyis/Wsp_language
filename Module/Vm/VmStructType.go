@@ -55,6 +55,8 @@ var ClassLock = make(map[string]bool)
 
 var EnvList = make(map[string]FileValue)
 
+var WebSocketLock = make(map[string]bool)
+
 var EnvListLock sync.Mutex
 
 type OpStruct map[int]map[int]compile.Body_Struct_Run
@@ -105,4 +107,9 @@ type FileWebSocket struct{
 
 type ListenSocket struct{
     WebSokcet *websocket.Conn
+}
+
+type ServerSocket struct{
+    WebSokcet *websocket.Conn
+    MsgType int
 }

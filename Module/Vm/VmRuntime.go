@@ -77,13 +77,15 @@ func SetEnv(From TransmitValue)string{
     FormId := Op.Abrk[2].Text
     if FromIp!="this"{
         Value := ReadEnv(FormId)
-        go SyncVar(FromIp,Port)
+        go SyncVar(FromIp,Port,FormId,Value.FILE)
+        go SyncVarSever(FromIp,Port,FormId,Value.FILE)
         *From.VarValue = Value
         return "True"
     }
     Value := ReadEnv(FormId)
     if Port!="0"{
-        go SververSocketClient(Port,Value.FILE)
+        go SververSocketClient(Port,Value.FILE,FormId)
+        go SververSocketClientUser(Port,Value.FILE,FormId)
     }
     *From.VarValue = Value
     return "True"
