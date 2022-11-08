@@ -144,10 +144,10 @@ $a->Test();
 ```
 面向容器编程
 ```php
-CurEnv->31;
+CurEnv->this->5555->31; //公开的容器 ID 31
         $TestArray[0]=10086;
         $All = 0;
-CurEnv->Main;
+CurEnv->this->0->Main;  //不公开的容器 主容器  
         $Pinter = Raflect.OpenCont(31);
         $All = Raflect.ReadCont($Pinter,"All")+1;
         $TestArray = Raflect.ReadCont($Pinter,"TestArray");
