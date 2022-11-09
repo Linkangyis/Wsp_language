@@ -77,6 +77,7 @@ func SetEnv(From TransmitValue)string{
     FormId := Op.Abrk[2].Text
     if FromIp!="this"{
         Value := ReadEnv(FormId)
+        WebSocketWg.Add(2)
         go SyncVar(FromIp,Port,FormId,Value.FILE)
         go SyncVarSever(FromIp,Port,FormId,Value.FILE)
         *From.VarValue = Value
@@ -84,6 +85,7 @@ func SetEnv(From TransmitValue)string{
     }
     Value := ReadEnv(FormId)
     if Port!="0"{
+        WebSocketWg.Add(2)
         go SververSocketClient(Port,Value.FILE,FormId)
         go SververSocketClientUser(Port,Value.FILE,FormId)
     }

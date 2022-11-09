@@ -59,6 +59,10 @@ var WebSocketLock = make(map[string]bool)
 
 var EnvListLock sync.Mutex
 
+var WebSocketWg sync.WaitGroup
+
+var VmEndApis bool = false
+
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
 type TransmitValue struct{

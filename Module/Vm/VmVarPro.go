@@ -486,6 +486,8 @@ func VmEnd(){
     }else{
         Del_Dir("./.<Var_Temps>")
     }
+    VmEndApis = true
+    WebSocketWg.Wait()
 }
 func VmStart(){
     if VarRam{

@@ -11,6 +11,7 @@ import (
 )
 
 func SververSocketClient(Port string,Files string,ContName string){
+    defer WebSocketWg.Done()
     if _,ok:=WebSocketLock[ContName];ok{
         return
     }else{
@@ -29,9 +30,21 @@ func SververSocketClient(Port string,Files string,ContName string){
         for{
             Maps := ReadAllDir(Files)
             for _,Struct := range Maps {
+                StartType := Socket.Read()
+                if StartType=="STOP"{
+                    Socket.Close()
+                    WebSocketWg.Done()
+                    return
+                }
+                if VmEndApis{
+                    Socket.Send("STOP")
+                    Socket.Close()
+                    WebSocketWg.Done()
+                    return
+                }else{
+                    Socket.Send("RUN")
+                }
                 Socket.Read()
-                
-                
                 Socket.Send(Struct.Name)
                 Socket.Send(Struct.Md5)
                 
@@ -57,6 +70,7 @@ func SververSocketClient(Port string,Files string,ContName string){
 
 
 func SververSocketClientUser(Port string,Files string,ContName string){
+    defer WebSocketWg.Done()
     if _,ok:=WebSocketLock[ContName+"_User"];ok{
         return
     }else{
@@ -73,6 +87,20 @@ func SververSocketClientUser(Port string,Files string,ContName string){
             WebSokcet : conn,
         }
         for{
+            StartType := Socket.Read()
+            if StartType=="STOP"{
+                Socket.Close()
+                WebSocketWg.Done()
+            }
+            if VmEndApis{
+                Socket.Send("STOP")
+                Socket.Close()
+                WebSocketWg.Done()
+                break
+            }else{
+                Socket.Send("RUN")
+            }
+            
             Socket.Read()
             File:=Socket.Read()
             if(File=="<YC>"){
@@ -113,6 +141,7 @@ func SververSocketClientUser(Port string,Files string,ContName string){
 }
 
 func SyncVarSever(Ip string,Port string,ContName string,Files string){
+    defer WebSocketWg.Done()
     Socket := ListenSocket{}
     types:=Socket.Client("ws://"+Ip+":"+Port+"/Server_"+ContName+"_User")
     if types!=nil{
@@ -122,6 +151,18 @@ func SyncVarSever(Ip string,Port string,ContName string,Files string){
     for{
         Maps := ReadAllDir(Files)
         for _,Struct := range Maps {
+            if VmEndApis{
+                Socket.Send("STOP")
+                Socket.Close()
+                return
+            }else{
+                Socket.Send("RUN")
+            }
+            ClientType:= Socket.Read()
+            if ClientType=="STOP"{
+                Socket.Close()
+                return
+            }
             Socket.Send("Run")
             Socket.Send(Struct.Name)
             Socket.Send(Struct.Md5)
@@ -142,9 +183,11 @@ func SyncVarSever(Ip string,Port string,ContName string,Files string){
             }
         }
     }
+    return
 }
 
 func SyncVar(Ip string,Port string,ContName string,Files string){
+    defer WebSocketWg.Done()
     Socket := ListenSocket{}
     types:=Socket.Client("ws://"+Ip+":"+Port+"/Server_"+ContName)
     if types!=nil{
@@ -152,6 +195,22 @@ func SyncVar(Ip string,Port string,ContName string,Files string){
         os.Exit(0);
     }
     for{
+        if VmEndApis{
+            Socket.Send("STOP")
+            Socket.Close()
+            break
+        }else{
+            Socket.Send("RUN")
+        }
+        ClientType:= Socket.Read()
+        if ClientType=="STOP"{
+            Socket.Close()
+            break
+        }
+        if VmEndApis{
+            Socket.Close()
+            break
+        }
         Socket.Send("Run")
         File:=Socket.Read()
         if(File=="<YC>"){
@@ -188,6 +247,7 @@ func SyncVar(Ip string,Port string,ContName string,Files string){
             }
         }
     }
+    return
 }
 
 
@@ -242,21 +302,24 @@ func (This *ListenSocket)Client(Host string)error{
     return nil
 }
 
+func (This *ListenSocket)Close(){
+    This.WebSokcet.Close()
+}
 
 func (This *ServerSocket)Send(Text string){
     This.WebSokcet.WriteMessage(This.MsgType, []byte(Text));
 }
 
-
-func (This *ServerSocket)Read()string{
-    msgType, Res ,_ := This.WebSokcet.ReadMessage()
-    This.MsgType = msgType
-    return string(Res)
+func (This *ServerSocket)Close(){
+    This.WebSokcet.Close()
 }
 
-
-
-
-
-
+func (This *ServerSocket)Read()string{
+    msgType, Res ,err := This.WebSokcet.ReadMessage()
+    This.MsgType = msgType
+    if err != nil {
+        return "<YC>"
+    }
+    return string(Res)
+}
 
