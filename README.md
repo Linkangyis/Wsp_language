@@ -144,7 +144,7 @@ $a->Test();
 ```
 面向容器编程
 ```php
-CurEnv->this->5555->31; //公开的容器 ID 31
+CurEnv->this->5555->31; //公开的容器 ID 31  //端口5555
         $TestArray[0]=10086;
         $All = 0;
 CurEnv->this->0->Main;  //不公开的容器 主容器  
