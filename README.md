@@ -1,5 +1,5 @@
 <p align="center"><img src="./logo.png"
-        alt="Logo" width="128" height="128" style="max-width: 100%;"></p>
+         alt="Logo" width="128" height="128" style="max-width: 100%;"></p>
 <h1 align="center">WSP</h1>
 <p align="center">一门解释型语言</p>
 <p align="center">
