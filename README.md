@@ -89,7 +89,7 @@ switch($a){
 ```
 wgo协程
 ```php
-wgo func();//堆栈均共享
+wgo func();//堆栈均共享(可选)
 ```
 class类
 ```php
