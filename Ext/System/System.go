@@ -68,6 +68,7 @@ func Func_Info()(map[int]string){
     info[3] = "Println"
     info[4] = "Stick"
     info[5] = "Exit"
+    info[6] = "Free"
     return info
 }
 
@@ -81,5 +82,16 @@ func Input(value map[int]string)(string){
     fmt.Printf(value[0])
     fmt.Scanln(&text)
     return text
+}
+
+func Free(value map[int]string)(string){
+    varName := value[0]
+    Copy := vm.Mains
+    File:= vm.So_Array_Stick(Copy.FuncName+varName,&Copy)
+    vm.Del_Dir(File+"/")
+    vm.Del_Dir(File)
+    vm.Del_File(File)
+    vm.Del_Files(File)
+    return "<TRUE>"
 }
 //go build -buildmode=plugin -o system.so System.go
