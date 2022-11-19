@@ -6,6 +6,7 @@ import(
     "time"
     "strconv"
     "os"
+    "os/exec"
     "Wsp/Module/GC"
     "Wsp/Module/Vm"
 )
@@ -69,6 +70,9 @@ func Func_Info()(map[int]string){
     info[4] = "Stick"
     info[5] = "Exit"
     info[6] = "Free"
+    info[7] = "Panic"
+    info[8] = "Eval"
+    info[9] = "Exec"
     return info
 }
 
@@ -94,4 +98,22 @@ func Free(value map[int]string)(string){
     vm.Del_Files(File)
     return "<TRUE>"
 }
+
+func Panic(value map[int]string)(string){
+    fmt.Println("WspVm Panic :",value[0])
+    Exit(value)
+    return ""
+}
+
+func Eval(value map[int]string)(string){
+    Copy := vm.Mains
+    vm.RunCode(value[0],&Copy)
+    return ""
+}
+
+func Exec(value map[int]string)(string){
+    out, _ := exec.Command(value[0]).Output()
+    return string(out)
+}
+
 //go build -buildmode=plugin -o system.so System.go
