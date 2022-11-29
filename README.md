@@ -24,6 +24,7 @@ ln -s WSP所在目录/wsp /usr/bin
 ## 开发
 
 ```bash
+wsp [命令行形式]
 wsp ./xxxx.wsp
 ```
 
