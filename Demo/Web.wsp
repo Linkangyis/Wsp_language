@@ -5,9 +5,26 @@ $Prot_List[3]=14589;
 $Test = new Web($Prot_List);
 $Test->SetFunc("Wweb",test);
 $Test->Run();
-
 function test(){
-    Web.Print("123");
+    Web.Header_Set("content-type","text/html; charset=utf-8");
+    Web.Print("<pre>")
+    $Array["Data"] = "OK";
+    $Array["Msg"] = "Next";
+    for($i=0;$i<=20;$i++){
+        $ArrayUser["UserName"] = $i;
+        $ArrayUser["Time"] = Time.Time();
+        $Array["User"][$i] = $ArrayUser;
+    }
+    Web.Print(Seq.Json_encode($Array));
+    Web.Print("</pre>")
+    Web.Print("
+        <h5>Test</h5>
+        <script>
+            alert('1');
+            alert('2');
+            alert('3');
+        </script>
+    ");
 }
 
 class ObjWeb{    //web类

@@ -92,3 +92,14 @@ func SetEnv(From TransmitValue)string{
     *From.VarValue = Value
     return "True"
 }
+
+func Free(From TransmitValue)string{
+    Value := From.Value
+    varName :=Value[1:len(Value)]
+    File:= So_Array_Stick(From.VarValue.FuncName+varName,From.VarValue)
+    Del_Dir(File+"/")
+    Del_Dir(File)
+    Del_File(File)
+    Del_Files(File)
+    return "<TRUE>"
+}
