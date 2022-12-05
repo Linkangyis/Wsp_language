@@ -3,9 +3,10 @@ $Prot_List[1]=18589;
 $Prot_List[2]=11589;
 $Prot_List[3]=14589;
 $Test = new Web($Prot_List);
-$Test->SetFunc("Wweb",test);
+$Test->SetFunc("Wweb",One);
+$Test->SetFunc("TestGet",GetTest)
 $Test->Run();
-function test(){
+function One(){
     Web.Header_Set("content-type","text/html; charset=utf-8");
     Web.Print("<pre>")
     $Array["Data"] = "OK";
@@ -25,6 +26,14 @@ function test(){
             alert('3');
         </script>
     ");
+}
+function GetTest(){
+    Web.Header_Set("content-type","text/json; charset=utf-8");
+    $Array["Data"] = "OK";
+    $Array["Msg"] = "Next";
+    $Array["Get"] = Web.GET("Test");
+    $Array["WebPath"] = Web.WebPath();
+    Web.Print(Seq.Json_encode($Array));
 }
 
 class ObjWeb{    //web类

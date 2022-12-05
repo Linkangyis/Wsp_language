@@ -6,6 +6,7 @@ import(
     "net/http"
     "fmt"
     "path/filepath"
+    "github.com/Linkangyis/Gce_Web"
 )
 
 var list = make(map[string]string)
@@ -18,6 +19,9 @@ func Func_Info()(map[int]string){
     info[4] = "Header_Set"
     info[5] = "New_WebFiles"
     info[6] = "SslGoto"
+    info[7] = "GET"
+    info[8] = "POST"
+    info[9] = "WebPath"
     return info
 }
 
@@ -29,6 +33,22 @@ func Package_Info()(string){
 var Tmps_w http.ResponseWriter
 var Tmps_r *http.Request
 
+func POST(var_arr map[int]string)(string){
+    vaule:=var_arr[0]
+    NewClass:= gce.Init_Web(Tmps_w,Tmps_r)
+    return NewClass.POST(vaule)
+}
+
+func WebPath(var_arr map[int]string)(string){
+    NewClass:= gce.Init_Web(Tmps_w,Tmps_r)
+    return NewClass.WebPath()
+}
+
+func GET(var_arr map[int]string)(string){
+    NewClass:= gce.Init_Web(Tmps_w,Tmps_r)
+    vaule:=var_arr[0]
+    return NewClass.GET(vaule)
+}
 
 func Print(var_arr map[int]string)(string){
     fmt.Fprintf(Tmps_w, var_arr[0])

@@ -3,6 +3,7 @@ module Wsp
 go 1.19
 
 require (
+	github.com/Linkangyis/Gce_Web v1.0.0-beta
 	github.com/gorilla/websocket v1.5.0
 	github.com/peterh/liner v1.2.2
 )
