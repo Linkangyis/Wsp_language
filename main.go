@@ -15,7 +15,7 @@ import(
   "io/ioutil"
   "github.com/peterh/liner"
 )
-const Version = "4.6.1"
+const Version = "4.6.2 BTAE.1"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){

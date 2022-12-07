@@ -149,8 +149,85 @@ func VmStick(From TransmitValue)string{
 }
 
 /* 孤儿函数*/
-func EvalVm(From TransmitValue)string{
+/*func EvalVm(From TransmitValue)string{
     return VarSoAll(From.Value,From.VarValue)
+}*/
+
+func EvalVm(From TransmitValue)string{
+    Lids := From.OpRunId
+    Op := From.Opcode[Lids]
+    BrkList:=Op.Abrk
+    
+    List:=make(map[int]VarSoBrkStruct)
+    ListLen:=0
+    tmp:=""
+    for i:=1;i<=len(BrkList)-1;i++{
+        if BrkList[i].Type==1{
+            tmp+="["+VarSoAll(BrkList[i].Text,From.VarValue)+"]"
+            if BrkList[i+1].Type!=1{
+                List[ListLen] = VarSoBrkStruct{1,tmp}
+                ListLen++
+                tmp = ""
+            }
+        }else if BrkList[i].Type==0{
+            List[ListLen]=VarSoBrkStruct{0,BrkList[i].Text}
+            ListLen++
+        }else if BrkList[i].Type==3{
+            List[ListLen]=VarSoBrkStruct{3,BrkList[i].Text}
+            ListLen++
+        }
+    }
+    Init:=VarSoAll(From.Value,From.VarValue)
+    Tmps:=From.VarValue.FuncName
+    defer From.VarValue.SetFunc(Tmps)
+    for i:=0;i<=len(List)-1;i++{
+        if List[i].Type==1{
+            if Init[0]!='$'&&string(Init[0:2])!="0x"{
+                //Init = Read_Array(Init+List[i].Text)
+                Init = string(Init[TypeInts(List[i].Text[1:len(List[i].Text)-1])]);
+            }else{
+                Init = Read_Array(Init+List[i].Text,From.VarValue)
+            }
+        }else if List[i].Type==3{
+            Name:=List[i].Text+Init
+            i++
+            if List[i].Type==0&&i<len(List){
+                From.VarValue.SetFunc(Tmps)
+                Var := VarAnalysis(List[i].Text,From.VarValue)
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Init)
+                From.VarValue.SetFunc(Name)
+                defer From.VarValue.SetFunc(Tmps)
+                RunCode("$this=\""+Init+"\";",From.VarValue)
+                Init = VmClassUser[Init][Name](Var,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
+                //i++
+            }else{
+                i--
+                Id:=Init
+                Temps:=From.VarValue.AllOverPaths
+                From.VarValue.AllOverPaths=From.VarValue.FILE
+                From.VarValue.RootCd("Class"+Id)
+                Tmps:=From.VarValue.FuncName
+                defer From.VarValue.SetFunc(Tmps)
+                From.VarValue.SetFunc("")
+                Init = Read_Array(List[i].Text,From.VarValue)
+                From.VarValue.AllOverPaths=Temps
+            }
+        }else{
+            From.VarValue.SetFunc(Tmps)
+            Var := VarAnalysis(List[i].Text,From.VarValue)
+            From.VarValue.SetFunc(Init)
+            //fmt.Println(VmFuncUser,"CALL",Init)
+            if _,ok:=VmFuncUser[Init];!ok{
+                ErrorFunc(Init)
+            }
+            Init = VmFuncUser[Init](Var,From.VarValue)
+        }
+    }
+    
+    return Init
 }
 
 /* 计算虚拟机*/
@@ -245,6 +322,7 @@ func FuncVm(From TransmitValue)string{
             From.VarValue.SetFunc(Tmps)
             Var := VarAnalysis(List[i].Text,From.VarValue)
             From.VarValue.SetFunc(Init)
+            //fmt.Println(VmFuncUser,"CALL",Init)
             if _,ok:=VmFuncUser[Init];!ok{
                 ErrorFunc(Init)
             }

@@ -1,7 +1,7 @@
-CurEnv->this->14596->DES;
-for{
-    if($Cont_2_Lock==1){
-        break;
-    }
-}
-Sys.Println($DES)
+$a = (function(){
+    print(1);
+});
+print($a);
+$i=0;
+print(($i++)+1);
+print(($i++)+1);

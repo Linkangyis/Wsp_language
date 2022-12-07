@@ -24,6 +24,7 @@ func VarCompile(Code string)compile.Res_Struct{
     }
     Res := compile.Wsp_Compile(ast.Wsp_Ast(Varlex(Code)))
     OpcodeFuncTmp[Code] = Res
+    FuncList = Res.Func //尝试修复BUG位置CALL
     return Res
 }
 
