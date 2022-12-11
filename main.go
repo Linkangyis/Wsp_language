@@ -13,9 +13,10 @@ import(
   "Wsp/Module/Const"
   "Wsp/Compile"
   "io/ioutil"
+  "strings"
   "github.com/peterh/liner"
 )
-const Version = "4.6.2 BETA.2"
+const Version = "4.6.2 BETA.3"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
@@ -35,6 +36,7 @@ func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
 }
 func Compile(Code string)compile.Res_Struct{
     //fmt.Println(lex.Wsp_Lexical(string(Code+"\n ")))
+    Code = strings.Replace(Code, "\r", "", -1)
     return compile.Wsp_Compile(ast.Wsp_Ast(lex.Wsp_Lexical(string(Code+"\n "))))
 }
 
