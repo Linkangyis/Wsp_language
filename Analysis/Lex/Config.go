@@ -104,6 +104,33 @@ func Token_Contrast_Map_Name(Text string)string{
     //Error("未定义关键词 ["+Text+"] 强制退出")
     return "NULL"
 }
+
+func TabReturn()map[string]int{
+    Maps:=make(map[string]int)
+    Maps["function"]=1
+    Maps["for"]=2
+    Maps["if"]=3
+    Maps["else"]=4
+    Maps["return"]=11
+    Maps["break"]=6
+    Maps["continue"]=10
+    Maps["print"]=7
+    Maps["wgo"]=8
+    Maps["add"]=9
+    Maps["switch"]=12
+    Maps["case"]=13
+    Maps["default"]=14
+    Maps["stick"]=16
+    Maps["class"]=17
+    Maps["new"]=18
+    Maps["extends"]=19
+    Maps["len"]=20
+    Maps["global"]=21
+    Maps["CurEnv"]=22
+    Maps["free"]=23
+    return Maps
+}
+
 func Token_Replace_String(Text string)string{
     Maps:=make(map[string]string)
     Maps["\n"]=""

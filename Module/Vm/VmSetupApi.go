@@ -62,3 +62,10 @@ func ReadEnv(Id string)FileValue{
     EnvListLock.Unlock()
     return Res
 }
+
+func (Tabs *TabList)Add(Name string){
+    Tabs.Maps[len(Tabs.Maps)] = Name
+}
+func (Tabs *TabList)Read()map[int]string{
+    return Tabs.Maps
+}

@@ -63,6 +63,8 @@ var WebSocketWg sync.WaitGroup
 
 var VmEndApis bool = false
 
+var TabStruct = TabList{make(map[int]string)}
+
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
 type TransmitValue struct{
@@ -116,4 +118,8 @@ type ListenSocket struct{
 type ServerSocket struct{
     WebSokcet *websocket.Conn
     MsgType int
+}
+
+type TabList struct{
+    Maps map[int]string
 }

@@ -42,6 +42,7 @@ func UserFuncInit(funclist compile.Func_Struct){
                 return CodeRun(funclist.FuncList[Name],Vales)
             }
         }else if Name[0:2]!="0F"&&Name[0:2]!="9C"{
+            //TabStruct.Add(Name)
             VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
                 if _,ok:=DelFunc[Name];ok{
                     Errors("函数"+Name+"被禁用")
@@ -107,6 +108,7 @@ func UserClassInit(Class compile.ClassStruct,Id string,Vales *FileValue){
 
 
 func UserFuncInitManual(Name string){
+    //TabStruct.Add(Name)
     funclist := FuncList
     VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{
         if _,ok:=DelFunc[Name];ok{
@@ -134,6 +136,7 @@ func UserFuncInitManual(Name string){
 }
 
 func UserFuncInitManual_9C(Name string){
+    //TabStruct.Add(Name)
     funclist := FuncList
     Names:="9C"+Name
     VmFuncUser[Name]=func(Var map[int]string,Vales *FileValue)string{

@@ -16,7 +16,7 @@ import(
   "strings"
   "github.com/peterh/liner"
 )
-const Version = "4.6.2 BETA.3"
+const Version = "4.6.2 BETA.4"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
@@ -79,6 +79,11 @@ func main(){
         go gc.GC_Runtime()
         FilesStruct := vm.FileValue{}
         var TmpCode string
+        MapsLexTab:=lex.TabReturn();
+        for k,_ := range MapsLexTab{
+            vm.TabStruct.Add(k)
+        }
+        
         for{
             printfText := "" 
             if ConsoleCodeCheck(TmpCode){
@@ -87,6 +92,20 @@ func main(){
                 printfText = "   "
             }
             lineTmp := liner.NewLiner()
+            
+            lineTmp.SetCompleter(func(line string) (c []string) {
+                if line==""{
+                    return 
+                }
+                Maps:=vm.TabStruct.Read()
+                for _, n := range Maps {
+                    if strings.HasPrefix(n, strings.ToLower(line)) {
+                        c = append(c, n)
+                    }
+                }
+                return
+            })
+            
             Codebyte,_:= lineTmp.Prompt(printfText);
             lineTmp.Close()
             Code := string(Codebyte)
