@@ -155,7 +155,7 @@ CurEnv->this->0->Main;  //不公开的容器 主容器
         Sys.Println($All);
         Sys.Println($TestArray[0]);
 ```
-## 扩展开发 （未来会进行修改 待定）
+## 扩展开发 （未来会进行修改 [待定]）
 可以查看 Ext/Test 测试插件作为实例
 ```golang
 package main
