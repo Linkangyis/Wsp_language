@@ -10,6 +10,7 @@ $Test->SetFunc("/",function(){
     Web.Print("<h4>Hello World!");
     Web.Print("</h4>");
 });
+//$Test->SetFunc("RunCode",Eval);
 $Test->Run();
 
 function One(){
@@ -24,6 +25,10 @@ function One(){
     }
     Web.Print(Seq.Json_encode($Array));
     Web.Print("</pre>")
+}
+function Eval(){
+    $Code = Web.POST("Code");
+    Web.Print(Sys.Eval($Code));
 }
 function GetTest(){
     Web.Header_Set("content-type","text/json; charset=utf-8");

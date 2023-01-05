@@ -16,7 +16,7 @@ import(
   "strings"
   "github.com/peterh/liner"
 )
-const Version = "4.6.2"
+const Version = "4.6.3"
 func RunCode(Code string,FilesStruct vm.FileValue)vm.FileValue{
     Opcode:=Compile(Code)
     if ini.DebugsIf(){
