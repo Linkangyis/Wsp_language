@@ -1,5 +1,0 @@
-for ($t=10;$t<=20;$t=$t+1){
-    print($t);
-    print($t);
-    continue;
-}

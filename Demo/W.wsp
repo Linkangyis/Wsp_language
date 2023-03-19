@@ -1,6 +1,0 @@
-function as($a,$b){
-    print($a);
-    print($b)
-}
-
-as(1+1,6+9);

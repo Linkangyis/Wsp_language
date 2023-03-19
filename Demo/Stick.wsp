@@ -1,5 +1,0 @@
-$a = 123;
-$b = 456;
-$c = stick($a,$b,789);
-print($c)
-print($c*8);
