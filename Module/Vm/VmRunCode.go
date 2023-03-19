@@ -1,0 +1,5 @@
+package vm
+
+func WspVm(){
+    
+}
