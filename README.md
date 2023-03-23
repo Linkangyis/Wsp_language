@@ -15,8 +15,10 @@
 
 ## 安装WSP
 //此版本不支持安装 使用方法如下
+```shell
 go run main.go xxx.wsp
 ./main xxx.wsp
+```
 ## 介绍
 
 基于golang开发的解释型语言 使用wsp虚拟机，效率极高,有PHP的简单 Python的实用 Golang的效率
