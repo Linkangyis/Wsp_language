@@ -6,6 +6,10 @@ import (
 	"Wsp/Module/Ini"
 )
 
+func init() {
+	go StartRPC()
+}
+
 func Wsp_Vm(OpcodeStruct compile.Res_Struct) {
 	ClassLock = OpcodeStruct.ClassLock
 	Mains = InitVar("Main", 0, FileValue{})
@@ -123,7 +127,7 @@ func CodeBlockRun(OpcodeStructCd map[int]compile.Body_Struct_Run, Vales *FileVal
 						OpRunId:  i,
 						VarValue: &Tmp,
 					})
-					gc.GC_Queue(Tmp.FILE)
+					//gc.GC_Queue(Tmp.FILE)
 				}(i)
 				Vales.Govm = true //关闭多线程
 			}

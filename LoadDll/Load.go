@@ -44,7 +44,7 @@ func (GoDLLfile DLLFILE) ReadConfig() map[int]string {
 	for k, v := range TmpMap {
 		if len(v) > 15 {
 
-		} else if len(v) < 10 {
+		} else if len(v) < 100 {
 			ResMap[k] = string(v)
 		} else {
 			a := string(v)

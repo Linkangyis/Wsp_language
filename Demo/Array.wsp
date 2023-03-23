@@ -19,3 +19,6 @@ switch($b[1]){
                 print(3);
         }
 }
+for($i=0;$i<=100;$i++){
+   wgo Sys.Println($i);
+}

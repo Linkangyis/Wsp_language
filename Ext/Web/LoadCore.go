@@ -4,8 +4,13 @@ import "C"
 import (
 	public "Wsp/Public"
 	"fmt"
+	"net/rpc"
 	"unsafe"
 )
+
+func init() {
+	initVm()
+}
 
 //export INITGODLL
 func INITGODLL(Map uintptr, LoadFuncName uintptr) uintptr {
@@ -67,6 +72,47 @@ func PtrMap(ptr uintptr) map[int]string {
 
 func MapPtr(m *map[int][]byte) uintptr {
 	return uintptr(unsafe.Pointer(m))
+}
+
+type UserFuncRunVm struct {
+	FuncName string
+	Value    map[int]string
+}
+
+type FilePathReadVm struct {
+	Value string
+}
+
+type Struct struct{}
+
+type vmStruct struct {
+	UserFuncRun  func(string, map[int]string) string
+	WspCodeFile  func() string
+	FilePathRead func(string) string
+}
+
+var vm = vmStruct{}
+
+func initVm() {
+	client, _ := rpc.DialHTTP("tcp", "127.0.0.1:25000")
+	vm.UserFuncRun = func(Funcname string, Value map[int]string) string {
+		args := &UserFuncRunVm{Funcname, Value}
+		var reply string
+		client.Call("RPCc.UserFuncRun", args, &reply)
+		return reply
+	}
+	vm.WspCodeFile = func() string {
+		args := &vmStruct{}
+		var reply string
+		client.Call("RPCc.WspCodeFile", args, &reply)
+		return reply
+	}
+	vm.FilePathRead = func(Value string) string {
+		args := &FilePathReadVm{Value}
+		var reply string
+		client.Call("RPCc.FilePathRead", args, &reply)
+		return reply
+	}
 }
 
 func main() {
