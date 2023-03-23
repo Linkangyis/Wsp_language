@@ -40,10 +40,10 @@ func PathFileStick(file string,str string)string{
 func InitVar(Id string,ifs int,Father FileValue)FileValue{
     if ifs==0{
         return FileValue{
-            FILE : "./.<Var_Temps>/For"+Id+"/",
-            AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
-            paths  : "./.<Var_Temps>/For"+Id+"/Main/",
-            TmpPaths  : "./.<Var_Temps>/For"+Id+"/Main/",
+            FILE : "./.Var_Temps/For"+Id+"/",
+            AllOverPaths  : "./.Var_Temps/For"+Id+"/",
+            paths  : "./.Var_Temps/For"+Id+"/Main/",
+            TmpPaths  : "./.Var_Temps/For"+Id+"/Main/",
             FuncName  : "Main",
             TmpFuncName  : "Main",
             AllCodeStop : false,
@@ -53,7 +53,7 @@ func InitVar(Id string,ifs int,Father FileValue)FileValue{
         }
     }else if ifs==1{
         return FileValue{
-            FILE : "./.<Var_Temps>/For"+Id+"/",
+            FILE : "./.Var_Temps/For"+Id+"/",
             AllOverPaths  : PathFileStick(Mains.AllOverPaths,Id),
             paths  : PathFileStick(Mains.paths,Id),
             TmpPaths  : PathFileStick(Mains.TmpPaths,Id),
@@ -66,10 +66,10 @@ func InitVar(Id string,ifs int,Father FileValue)FileValue{
         }
     }else if ifs==4{
         return FileValue{
-            FILE : "./.<Var_Temps>/For"+Id+"/",
-            AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
-            paths  : "./.<Var_Temps>/For"+Id+"/"+Id+"-Main/",
-            TmpPaths  : "./.<Var_Temps>/For"+Id+"/"+Id+"-Main/",
+            FILE : "./.Var_Temps/For"+Id+"/",
+            AllOverPaths  : "./.Var_Temps/For"+Id+"/",
+            paths  : "./.Var_Temps/For"+Id+"/"+Id+"-Main/",
+            TmpPaths  : "./.Var_Temps/For"+Id+"/"+Id+"-Main/",
             FuncName  : Id+"-Main",
             TmpFuncName  : Id+"-Main",
             AllCodeStop : false,
@@ -79,7 +79,7 @@ func InitVar(Id string,ifs int,Father FileValue)FileValue{
         }
     }else if ifs==5{
         return FileValue{
-            FILE : "./.<Var_Temps>/For"+Id+"/",
+            FILE : "./.Var_Temps/For"+Id+"/",
             AllOverPaths  : PathFileStick(Father.AllOverPaths,Id),
             paths  : PathFileStick(Father.paths,Id),
             TmpPaths  : PathFileStick(Father.TmpPaths,Id),
@@ -92,10 +92,10 @@ func InitVar(Id string,ifs int,Father FileValue)FileValue{
         }
     }
     return FileValue{
-        FILE : "./.<Var_Temps>/For"+Id+"/",
-        AllOverPaths  : "./.<Var_Temps>/For"+Id+"/",
-        paths  : "./.<Var_Temps>/For"+Id+"/Main/",
-        TmpPaths  : "./.<Var_Temps>/For"+Id+"/Main/",
+        FILE : "./.Var_Temps/For"+Id+"/",
+        AllOverPaths  : "./.Var_Temps/For"+Id+"/",
+        paths  : "./.Var_Temps/For"+Id+"/Main/",
+        TmpPaths  : "./.Var_Temps/For"+Id+"/Main/",
         FuncName  : "Main",
         TmpFuncName  : "Main",
         AllCodeStop : false,
@@ -482,18 +482,18 @@ func CopyArrayStudio(Values map[string]interface{},Path string){
 
 func VmEnd(){
     if VarRam{
-        ramdisk.Del("./.<Var_Temps>")
+        ramdisk.Del("./.Var_Temps")
     }else{
-        Del_Dir("./.<Var_Temps>")
+        Del_Dir("./.Var_Temps")
     }
     VmEndApis = true
     WebSocketWg.Wait()
 }
 func VmStart(){
     if VarRam{
-        ramdisk.New(1024,"./.<Var_Temps>")
+        ramdisk.New(1024,"./.Var_Temps")
     }else{
-        Del_Dir("./.<Var_Temps>")
+        Del_Dir("./.Var_Temps")
     }
 }
 

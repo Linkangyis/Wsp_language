@@ -1,7 +1,7 @@
-$Prot_List[0]=19589;
-$Prot_List[1]=18589;
-$Prot_List[2]=11589;
-$Prot_List[3]=14589;
+$Prot_List[0]=15001;
+$Prot_List[1]=15002;
+$Prot_List[2]=15003;
+$Prot_List[3]=15004;
 $Test = new Web($Prot_List);
 $Test->SetFunc("Json",One);
 $Test->SetFunc("TestGet",GetTest)
@@ -10,7 +10,6 @@ $Test->SetFunc("/",function(){
     Web.Print("<h4>Hello World!");
     Web.Print("</h4>");
 });
-//$Test->SetFunc("RunCode",Eval);
 $Test->Run();
 
 function One(){
@@ -25,10 +24,6 @@ function One(){
     }
     Web.Print(Seq.Json_encode($Array));
     Web.Print("</pre>")
-}
-function Eval(){
-    $Code = Web.POST("Code");
-    Web.Print(Sys.Eval($Code));
 }
 function GetTest(){
     Web.Header_Set("content-type","text/json; charset=utf-8");
