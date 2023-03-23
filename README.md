@@ -1,31 +1,22 @@
 <p align="center"><img src="./logo.png"
          alt="Logo" width="128" height="128" style="max-width: 100%;"></p>
 <h1 align="center">WSP</h1>
-<p align="center">一门解释型语言(5.0版本正在开发)</p>
+<p align="center">一门解释型语言(此分支为Windows插件技术预览)</p>
 <p align="center">
     <a href="https://github.com/Linkangyis/Wsp_language/blob/LICENSE">
         <img src="https://img.shields.io/github/license/Ice-Hazymoon/MikuTools.svg" alt="MIT License" />
     </a>
 </p>
 
-## Wsp5.0.0进度（已经在新的分支公开开发阶段）
-1. Lex       完成  （进度100%）
-2. Ast       完成  （进度100%）
-3. Compile   进行中（进度50%）
-4. VarModule 完成  （进度100%）
-5. WspVm     未开始（进度0%）
-6. GcModule  未开始（进度0%）
-7. 其他      未开始（进度0%）
+## 已知问题
+1. 如果插件调用Vm内部函数，将会出现空Vm现象，该问题由Windows特性所导致，（v5.0.0） 将来会选择虚拟vm包(利用rpc进行实现)进行修补
+2. 此版本基于v4.6.2-beta.1开发 因其极其不稳定，所以不推荐进行长期使用，短期测试随便
+3. 因Linux遗留问题 GC 快速变量等功能将完全不会受支持，请勿手贱开启
 
 ## 安装WSP
-
-```bash
-vi /ect/profile
-export WSPPATH=WSP所在目录
-```
-```bash
-ln -s WSP所在目录/wsp /usr/bin
-```
+//此版本不支持安装 使用方法如下
+go run main.go xxx.wsp
+./main xxx.wsp
 ## 介绍
 
 基于golang开发的解释型语言 使用wsp虚拟机，效率极高,有PHP的简单 Python的实用 Golang的效率
