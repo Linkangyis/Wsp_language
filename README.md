@@ -14,7 +14,7 @@
 3. 因Linux遗留问题 GC 快速变量等功能将完全不会受支持，请勿手贱开启
 
 ## 安装WSP
-//此版本不支持安装 使用方法如下
+此版本不支持安装 使用方法如下
 ```shell
 go run main.go xxx.wsp
 ./main xxx.wsp
