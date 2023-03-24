@@ -8,15 +8,18 @@ import (
 	"unsafe"
 )
 
-func init() {
-	initVm()
-}
+var inittype = false
 
 //export INITGODLL
-func INITGODLL(Map uintptr, LoadFuncName uintptr) uintptr {
+func INITGODLL(Map uintptr, LoadFuncName uintptr, RpcPtr uintptr) uintptr {
 	INITS()
 	TmpMap := PtrMap(Map)
 	FuncName := uintptrToString(LoadFuncName)
+	RpcPort := uintptrToString(RpcPtr)
+	if !inittype {
+		initVm(RpcPort)
+		inittype = true
+	}
 	if _, ok := ConfigMap[FuncName]; ok {
 		TmpRes := ConfigMap[FuncName](TmpMap)
 		fmt.Scanln(TmpRes)
@@ -93,8 +96,8 @@ type vmStruct struct {
 
 var vm = vmStruct{}
 
-func initVm() {
-	client, _ := rpc.DialHTTP("tcp", "127.0.0.1:25000")
+func initVm(RpcPort string) {
+	client, _ := rpc.DialHTTP("tcp", "127.0.0.1:"+RpcPort)
 	vm.UserFuncRun = func(Funcname string, Value map[int]string) string {
 		args := &UserFuncRunVm{Funcname, Value}
 		var reply string

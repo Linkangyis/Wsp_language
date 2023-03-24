@@ -19,12 +19,12 @@ func InitFuncUserExt() {
 func InitFuncUserExtL(file string) {
 	Tmp := load.OpenDLL(file)
 	AddFunc := Tmp.ReadConfig()
-	TmpName := Tmp.LoadFunc("LOADINIT")(make(map[int]string)).Text
+	TmpName := Tmp.LoadFunc("LOADINIT", RpcPort)(make(map[int]string)).Text
 	for i := 0; i <= len(AddFunc)-1; i++ {
 		Name := TmpName + "." + AddFunc[i]
 		TNmae := AddFunc[i]
 		VmFuncUser[Name] = func(Value map[int]string, Varls *FileValue) string {
-			return Tmp.LoadFunc(TNmae)(Value).Text
+			return Tmp.LoadFunc(TNmae, RpcPort)(Value).Text
 		}
 	}
 }

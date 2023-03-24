@@ -7,7 +7,15 @@ import (
 )
 
 func init() {
-	go StartRPC()
+	Port := 25000
+	for {
+		if IfPort(Port) {
+			break
+		}
+		Port++
+	}
+	RpcPort = Port
+	go StartRPC(Port)
 }
 
 func Wsp_Vm(OpcodeStruct compile.Res_Struct) {

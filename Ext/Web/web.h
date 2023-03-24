@@ -74,7 +74,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern __declspec(dllexport) GoUintptr INITGODLL(GoUintptr Map, GoUintptr LoadFuncName);
+extern __declspec(dllexport) GoUintptr INITGODLL(GoUintptr Map, GoUintptr LoadFuncName, GoUintptr RpcPtr);
 extern __declspec(dllexport) GoUintptr INITREADALL();
 
 #ifdef __cplusplus

@@ -33,11 +33,21 @@ func (t *RPCc) FilePathRead(args *FilePathReadVm, res *string) error {
 	return nil
 }
 
-func StartRPC() {
+func IfPort(Port int) bool {
+	port := TypeStrings(Port)
+	conn, err := net.Dial("tcp", ":"+port)
+	if err != nil {
+		return true
+	}
+	conn.Close()
+	return false
+}
+
+func StartRPC(Port int) {
 	arith := new(RPCc)
 	rpc.Register(arith)
 	rpc.HandleHTTP()
-	l, e := net.Listen("tcp", ":25000")
+	l, e := net.Listen("tcp", ":"+TypeStrings(Port))
 	if e != nil {
 		log.Fatal("listen error:", e)
 	}

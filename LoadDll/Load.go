@@ -3,6 +3,7 @@ package load
 import (
 	"Wsp/Public"
 	"fmt"
+	"strconv"
 	"syscall"
 )
 
@@ -25,14 +26,19 @@ func OpenDLL(File string) DLLFILE {
 	return DLLFILE(File)
 }
 
-func (GoDLLfile DLLFILE) LoadFunc(funcName string) func(map[int]string) public.TypeDLL {
+func Strings(a int) string {
+	return strconv.Itoa(a)
+}
+
+func (GoDLLfile DLLFILE) LoadFunc(funcName string, Rpc int) func(map[int]string) public.TypeDLL {
+	RpcPort := Strings(Rpc)
 	return func(Value map[int]string) public.TypeDLL {
 		ValueByte := make(map[int][]byte)
 		for k, v := range Value {
 			ValueByte[k] = []byte(v)
 		}
 		TmpfuncName := &funcName
-		Res, _, _ := MessageBoxW.Call(CtsrPtr(string(GoDLLfile)), CtsrPtr("INITGODLL"), StrPtr(TmpfuncName), uintptrToMapS_I(&ValueByte))
+		Res, _, _ := MessageBoxW.Call(CtsrPtr(string(GoDLLfile)), CtsrPtr("INITGODLL"), StrPtr(TmpfuncName), uintptrToMapS_I(&ValueByte), StrPtr(&RpcPort))
 		return FuncRes(Res)
 	}
 }

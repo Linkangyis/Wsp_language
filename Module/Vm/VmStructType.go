@@ -1,17 +1,17 @@
 package vm
 
-import(
-  "Wsp/Compile"
-  "Wsp/Analysis/Lex"
-  "github.com/gorilla/websocket"
-  "sync"
+import (
+	"Wsp/Analysis/Lex"
+	"Wsp/Compile"
+	"github.com/gorilla/websocket"
+	"sync"
 )
 
-var VmFuncRoot = make(map[int]func(TransmitValue)string)
+var VmFuncRoot = make(map[int]func(TransmitValue) string)
 
-var VmFuncUser = make(map[string]func(map[int]string,*FileValue)string)
+var VmFuncUser = make(map[string]func(map[int]string, *FileValue) string)
 
-var VmClassUser = make(map[string]map[string]func(map[int]string,*FileValue)string)
+var VmClassUser = make(map[string]map[string]func(map[int]string, *FileValue) string)
 
 var VmFuncIs string = "Main"
 
@@ -28,10 +28,12 @@ var LexOpFuncTmp = make(map[string]map[int]lex.Lex_Struct)
 var LexOpFuncLock sync.Mutex
 var OpcodeFuncLock sync.Mutex
 
-var IfStickTmpA  = make(map[string]map[int]string)
-var IfStickTmpB  = make(map[string]map[int]string)
+var IfStickTmpA = make(map[string]map[int]string)
+var IfStickTmpB = make(map[string]map[int]string)
 
 var DelFunc = make(map[string]int)
+
+var RpcPort int
 
 var OverLine int
 
@@ -65,55 +67,55 @@ var VmEndApis bool = false
 
 type OpStruct map[int]map[int]compile.Body_Struct_Run
 
-type TransmitValue struct{
-    Value string
-    Opcode map[int]compile.Body_Struct_Run
-    OpRunId int
-    VarValue *FileValue
+type TransmitValue struct {
+	Value    string
+	Opcode   map[int]compile.Body_Struct_Run
+	OpRunId  int
+	VarValue *FileValue
 }
 
-type FuncResTmp struct{
-    Name string
-    Res string
-    IfRes int
+type FuncResTmp struct {
+	Name  string
+	Res   string
+	IfRes int
 }
 
-type VarSoBrkStruct struct{
-    Type int
-    Text string
+type VarSoBrkStruct struct {
+	Type int
+	Text string
 }
 
-type CrunTmpStruct struct{
-    Type int
-    Text string
+type CrunTmpStruct struct {
+	Type int
+	Text string
 }
 
-type FileValue struct{
-    FILE string
-    AllOverPaths string
-    paths string
-    TmpPaths string
-    FuncName string
-    TmpFuncName  string
-    LockBreakList string
-    AllCodeStop bool
-    ResLock bool
-    Govm bool
-    WgoIdName string
-    Func *FuncResTmp
+type FileValue struct {
+	FILE          string
+	AllOverPaths  string
+	paths         string
+	TmpPaths      string
+	FuncName      string
+	TmpFuncName   string
+	LockBreakList string
+	AllCodeStop   bool
+	ResLock       bool
+	Govm          bool
+	WgoIdName     string
+	Func          *FuncResTmp
 }
 
-type FileWebSocket struct{
-    Name string
-    Md5 string
-    File string
+type FileWebSocket struct {
+	Name string
+	Md5  string
+	File string
 }
 
-type ListenSocket struct{
-    WebSokcet *websocket.Conn
+type ListenSocket struct {
+	WebSokcet *websocket.Conn
 }
 
-type ServerSocket struct{
-    WebSokcet *websocket.Conn
-    MsgType int
+type ServerSocket struct {
+	WebSokcet *websocket.Conn
+	MsgType   int
 }
