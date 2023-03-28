@@ -6,6 +6,7 @@ type AstStruct struct{
     Name string
     Line int
     ValueList map[int]ValueStruct
+    ClassExtends map[int]string
 }
 
 type ValueStruct struct{
