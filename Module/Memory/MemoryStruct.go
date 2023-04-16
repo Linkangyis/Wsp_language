@@ -1,10 +1,14 @@
 package memory
 
-type MemoryStruct struct{
-    ReadTime int64
-    SetTime int64
-    NewTime int64
-    Value interface{}
+import "sync"
+
+type MemoryStruct struct {
+	ReadTime int64
+	SetTime  int64
+	NewTime  int64
+	Value    interface{}
 }
 
-var MemoryLoad []map[int]*MemoryStruct
+var MemoryLoad []sync.Map
+
+var Lock sync.Mutex
