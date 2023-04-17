@@ -18,6 +18,8 @@ func main() {
         2023/2/19
     */
 
+
+    /*
     function TestFunc($a){
         Sys.Println($a);
     }
@@ -67,6 +69,11 @@ func main() {
     }else{
         Sys.Println(3);
     }
+    */
+
+    1+a(123);
+
+
 
     `
 	id := memory.Malloc()

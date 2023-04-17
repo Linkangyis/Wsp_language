@@ -2,6 +2,7 @@ package ast
 
 import (
 	"Wsp/Analysis/Lexical"
+	"strconv"
 )
 
 var SeparateConfigMap map[string]bool
@@ -26,6 +27,11 @@ func init() {
 	SeparateConfigMap["!"] = true
 	SeparateConfigMap["&"] = true
 	SeparateConfigMap["|"] = true
+}
+
+func isNumeric(s string) bool {
+    _, err := strconv.ParseFloat(s, 64)
+    return err == nil
 }
 
 func AstCode(LexCode map[int]*lex.LexicalStruct) map[int]AstStruct {
@@ -264,7 +270,7 @@ func AstCode(LexCode map[int]*lex.LexicalStruct) map[int]AstStruct {
 				Line:  ThisNext.Line,
 			}
 			Res[ResLine] = ResStruct
-		} else if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && This.Type == 501 && ThisNext.Type == 0) {
+		} else if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && This.Type == 501 && ThisNext.Type == 0) && isNumeric(ThisNext.Text) {
 			i++
 			ResStruct := AstStruct{
 				Type:  0,
@@ -274,7 +280,7 @@ func AstCode(LexCode map[int]*lex.LexicalStruct) map[int]AstStruct {
 			}
 			//ResLine--
 			Res[ResLine] = ResStruct
-		} else if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && This.Type == 500 && ThisNext.Type == 0) {
+		} else if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && This.Type == 500 && ThisNext.Type == 0)  && isNumeric(ThisNext.Text) {
 			i++
 			ResStruct := AstStruct{
 				Type:  0,
@@ -284,7 +290,50 @@ func AstCode(LexCode map[int]*lex.LexicalStruct) map[int]AstStruct {
 			}
 			//ResLine--
 			Res[ResLine] = ResStruct
-		} else if ResLine > 1 && Res[ResLine-1].Type == 412 && (This.Type == 500 && ThisNext.Type == 500) {
+		} else if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && (This.Type == 501||This.Type == 500)) {
+			//i++
+
+			if This.Type==501{
+				ResStruct := AstStruct{
+					Type:  0,
+					UName: "TEXT",
+					Name:  "-1",
+					Line:  ThisNext.Line,
+				}
+				//ResLine--
+				Res[ResLine] = ResStruct
+
+
+				ResStruct = AstStruct{
+					Type:  502,
+					UName: "YOUHUACHENG",
+					Name:  "*",
+					Line:  ThisNext.Line,
+				}
+				ResLine++
+				Res[ResLine] = ResStruct
+			}else{
+				ResStruct := AstStruct{
+					Type:  0,
+					UName: "TEXT",
+					Name:  "1",
+					Line:  ThisNext.Line,
+				}
+				//ResLine--
+				Res[ResLine] = ResStruct
+
+
+				ResStruct = AstStruct{
+					Type:  502,
+					UName: "YOUHUACHENG",
+					Name:  "*",
+					Line:  ThisNext.Line,
+				}
+				ResLine++
+				Res[ResLine] = ResStruct
+			}
+
+		}else if ResLine > 1 && Res[ResLine-1].Type == 412 && (This.Type == 500 && ThisNext.Type == 500) {
 			i++
 			if i != 0 && (SeparateConfigMap[(*LexCode[i-1]).Text] && (*LexCode[i]).Type == 500 && (*LexCode[i+1]).Type == 0) {
 				ErrorPrint((*LexCode[i]).Line, "未定义行为")
