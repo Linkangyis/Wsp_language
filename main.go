@@ -5,11 +5,14 @@ import (
 	"Wsp/Compile"
 	"Wsp/Module/InitCode"
 	"Wsp/Module/Memory"
+	vm "Wsp/Module/Vm"
 	"fmt"
 )
 
 func main() {
 	Code := `
+
+	Println("TestPrint")
     /*
         这些是注释
         这些是注释
@@ -71,8 +74,9 @@ func main() {
     }
     */
 
+/*
     1+a(123);
-
+*/
 
 
     `
@@ -93,5 +97,8 @@ func main() {
 	fmt.Println("-----------------------------------------------")
 	fmt.Println(Opcode.ClassList)
 	fmt.Println("-----------------------------------------------")
+
+	vm.WspVm(Opcode)
+
 	memory.FreeAll()
 }

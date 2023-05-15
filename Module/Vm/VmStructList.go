@@ -10,6 +10,8 @@ type vmStruct struct {
 	runCodeLine int                   //执行到第几行
 	memory      []memory.MallocSTRING //这个线程创建的所有内存
 
+	tmpRootFuncList map[int]func(map[int]compile.OpRun, int, *vmStruct) interface{} //缓存器，防止多线程同时read map
+
 	*stack   //这个线程的堆栈
 	*vmStats //这个线程的状态   （系统内存 会变）
 	*opcode  //这个线程的中间码 （系统内存 会变）
