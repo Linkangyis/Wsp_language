@@ -1,25 +1,49 @@
 package main
 
 import (
-	memory "Wsp/Module/Memory"
 	"fmt"
-	"sync"
+	"time"
 )
 
-func main() {
-	var wg sync.WaitGroup
-	for i := 0; i <= 512; i++ {
-		wg.Add(1)
-		go func() {
-			memory.Malloc()
-			wg.Done()
-		}()
+type Error struct {
+	ErrorType int
+	ErrorRes  interface{}
+}
+
+var StopChan = make(chan int, 1)
+
+func endThread() {
+	panic(Error{1, "Exit"})
+}
+
+func newThread() {
+	defer func() {
+		if r := recover(); r != nil {
+			if r.(Error).ErrorType == 1 {
+				fmt.Println("信道关闭")
+			}
+		}
+	}()
+	for {
+		time.Sleep(1 * time.Second)
+		fmt.Println("信道")
+		if len(StopChan) > 0 {
+			endThread()
+		}
+		/*
+			select {
+			default:
+			case <-StopChan:
+				endThread()
+			}
+		*/
 	}
-	wg.Wait()
-	a := memory.Malloc()
-	a.Open().SetValue("你好")
-	fmt.Println((*a.Open().Read()).(string))
-	a.Open().SetValue("不好")
-	fmt.Println((*a.Open().Read()).(string))
-	memory.FreeAll()
+}
+
+func main() {
+	go newThread()
+	time.Sleep(5 * time.Second)
+	StopChan <- 20
+	for {
+	}
 }

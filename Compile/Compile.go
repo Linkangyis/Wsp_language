@@ -112,7 +112,7 @@ func Trim(Opcode map[int]map[int]OpRun) map[int]map[int]OpRun {
 
 var funcListMap = make(map[int]FuncStruct)
 var ClassList = make(map[string]ClassStruct)
-var classComileLock = false
+var classCompileLock = false
 var classUserFunc map[string]FuncStruct
 
 func Compile(Ast map[int]ast.AstStruct) CompileStruct {
@@ -188,7 +188,7 @@ func Compile(Ast map[int]ast.AstStruct) CompileStruct {
 			}
 
 		case 200:
-			if !classComileLock {
+			if !classCompileLock {
 				ThisFuncOpocde := codeForOpcode(Ast[i].ValueList[1].Value, Ast[i].Line)
 				funcListMap[len(funcListMap)] = FuncStruct{
 					Name:     Ast[i].Name,
@@ -233,12 +233,12 @@ func Compile(Ast map[int]ast.AstStruct) CompileStruct {
 				}
 			}
 
-			classComileLock = true
+			classCompileLock = true
 			tmpOpcode := codeForOpcode(Ast[i].ValueList[0].Value, Ast[i].Line)
 			for oi := 0; oi <= len(tmpOpcode)-1; oi++ {
 				OpcodeTmp[len(OpcodeTmp)] = tmpOpcode[oi]
 			}
-			classComileLock = false
+			classCompileLock = false
 
 			ClassList[Ast[i].Name] = ClassStruct{
 				ClassName:     Ast[i].Name,

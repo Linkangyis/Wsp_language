@@ -141,7 +141,6 @@ func (this *MemoryStruct) Read() *interface{} {
 }
 func (this *MemoryStruct) Free() {
 	this.Value = "<FREE>"
-	this = nil
 }
 
 func FreeAll() {

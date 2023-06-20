@@ -13,6 +13,10 @@ func main() {
 	Code := `
 
 	Println("TestPrint")
+	Println("TestPrint")
+	Println("TestPrint")
+	Println("TestPrint")
+	Println("TestPrint")
     /*
         这些是注释
         这些是注释
@@ -82,6 +86,9 @@ func main() {
     `
 	id := memory.Malloc()
 	id.Open().SetValue(initCode.Complex(Code).Ast)
+
+	fmt.Println("-----------------------------------------------")
+	fmt.Println("Debug Log")
 	fmt.Println("-----------------------------------------------")
 	for i := 0; i <= len((*id.Open().Read()).(map[int]ast.AstStruct)); i++ {
 		fmt.Println(i, (*id.Open().Read()).(map[int]ast.AstStruct)[i])
@@ -97,8 +104,8 @@ func main() {
 	fmt.Println("-----------------------------------------------")
 	fmt.Println(Opcode.ClassList)
 	fmt.Println("-----------------------------------------------")
-
 	vm.WspVm(Opcode)
+	fmt.Println("-----------------------------------------------")
 
 	memory.FreeAll()
 }
